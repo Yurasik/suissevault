@@ -1,0 +1,255 @@
+/*!
+Theme Name:   SuisseVault
+Theme URI:    http://suissevault.asper.pro/
+Author:       AsperPro
+Author URI:   https://www.asper.pro/
+Description:  SuisseVault is the perfect theme for your WooCommerce project. Designed and developed by asper.pro developers.
+Version:      1.0.0
+Tested up to: 5.8.0
+Requires PHP: 5.6.0
+License:      GNU General Public License v3 or later
+License URI:  https://www.gnu.org/licenses/gpl-3.0.html
+Text Domain:  suissevault
+Tags:         e-commerce, sidebar, custom-menu, featured-images, full-width-template, footer-widgets, theme-options, editor-style
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+
+FontAwesome License: SIL Open Font License - http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+Images License: GNU General Public License v2 or later
+*/
+
+input[type="checkbox"], input[type="radio"] {
+  display: inline-block;
+  width: auto;
+  min-height: auto;
+  appearance: auto;
+}
+
+/*
+ * Default WP Alignment Classes
+ *****************************************************************************/
+
+.aligncenter, .alignleft, .alignright {
+  display: block;
+  padding: 0;
+}
+
+.aligncenter {
+  float: none;
+  margin: .5em auto 1em;
+}
+
+.alignright {
+  float: right;
+  margin: .5em 0 1em 1em;
+}
+
+.alignleft {
+  float: left;
+  margin: .5em 1em 1em 0;
+}
+
+.wp-caption {
+  padding: 5px 0;
+  border: 1px solid #555;
+  background: #444;
+  text-align: center;
+}
+
+.wp-caption img {
+  display: inline;
+}
+
+.wp-caption p.wp-caption-text {
+  margin: 5px 0 0;
+  padding: 0;
+  text-align: center;
+  font-size: 75%;
+  font-weight: 100;
+  font-style: italic;
+  color: #ddd;
+}
+
+/* CLASSES WHAT NEED TO BE CHANGED */
+
+/* Buy. */
+/* Buy_content. */
+
+.buy_top,
+.woocommerce-products-header {
+  grid-column: 2/3;
+}
+
+.buy_content_items,
+.products {
+  grid-gap: 60px 20px;
+  margin-top: 32px;
+}
+
+.buy_content_item_name,
+.woocommerce-loop-product__title {
+  font-size: 18px;
+  margin-top: 20px;
+  font-family: var(--font2);
+}
+
+.buy_content_item_price,
+.product .price {
+  margin-top: 8px;
+  display: block;
+}
+
+.buy_content_pagination,
+.woocommerce-pagination {
+  margin-top: 60px;
+}
+
+.buy_bottom,
+.page-description {
+  grid-column: 2/3;
+  margin-top: 132px;
+}
+
+.buy_bottom .subtitle,
+.page-description .subtitle {
+  --color: var(--gray_dark);
+  font-size: 10px;
+}
+
+.buy_bottom h2,
+.page-description h2 {
+  margin-top: 28px;
+}
+
+.buy_bottom p,
+.page-description p {
+  --color: var(--gray_dark);
+  margin-top: 28px;
+  line-height: 2;
+}
+
+.buy_bottom p b,
+.page-description p b {
+  position: relative;
+  font-weight: 500;
+}
+
+.buy_bottom p b:before,
+.page-description p b:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -.2em;
+  border-bottom: 2px solid var(--color);
+}
+
+.buy_name_right .product_title {
+  font-size: 36px;
+}
+
+.buy_name_drops li table th {
+  width: 50%;
+  font-weight: 400;
+}
+
+.buy_name_drops li table th:first-child {
+  text-transform: uppercase;
+}
+
+/* Pagination. */
+
+.pagination span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size);
+  height: var(--size);
+  font-size: var(--h5);
+  font-weight: 300;
+  font-family: var(--font2);
+  color: var(--gray);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color .43s, border-color .43s, color .43s;
+}
+
+.pagination a:hover,
+.pagination .current {
+  color: var(--black);
+}
+
+.pagination .next,
+.pagination .prev {
+  margin: var(--inner);
+  background-color: #F3F3F3;
+}
+
+.pagination .next:hover,
+.pagination .prev:hover {
+  --color: var(--white);
+  background-color: var(--black);
+}
+
+/* Pagination. */
+
+/* Modals */
+
+.modal-link {
+  cursor: pointer;
+}
+
+/* Modals */
+
+/* Cart */
+
+.lock_cart .close {
+  display: block;
+}
+
+.lock_gold_error,
+.lock_gold_error.lock_gold label input[type=checkbox] + span:before {
+  border-color: red;
+}
+
+/* Cart */
+
+/* Checkout */
+
+.checkout .checkout_total_price strong {
+  font-weight: normal;
+}
+
+.checkout .checkout_total_left.icon .modal-link {
+  position: absolute;
+  top: -4px;
+  right: 0;
+}
+
+.checkout .checkout_total_left.icon .modal-link img {
+  width: 12px;
+  height: 12px;
+}
+
+.checkout #billing_address_2_field {
+  margin-top: 12px;
+}
+
+.checkout .checkout_total_price .includes_tax {
+  display: none;
+}
+
+.checkout #place_order {
+  display: none;
+}
+
+.checkout #wc-stripe-cc-form {
+  border: none;
+}
+
+.checkout .payment-title {
+  margin-top: 48px;
+}
+
+/* Checkout */
