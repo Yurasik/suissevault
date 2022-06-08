@@ -135,12 +135,12 @@ $cart_delivery_method = WC()->session->get( 'cart_delivery_method' );
 				$more_than_5k_class      = ( $more_than_5k )
 					? "icon icon-total"
 					: "";
-				$more_than_5k_popup_link = "<a href";
+				$more_than_5k_popup_link = ( $more_than_5k ) ? '<a class="modal-link" data-modal-name="identification"><img src="'. get_template_directory_uri() . '/assets/images/icon/i.svg" alt="Identification"></a>' : '';
 				$total_title             = ( wc_tax_enabled() && WC()->cart->display_prices_including_tax() )
 					? "Total (inc. VAT)"
 					: "Total"; ?>
-				<div class="checkout_total_left <?php echo "$more_than_5k_class"; ?>"><?php echo $total_title; ?>
-					<a class="modal-link" data-modal-name="identification"><img src="<?php echo get_template_directory_uri() . '/assets/images/icon/i.svg'; ?>" alt="Identification"></a>
+				<div class="checkout_total_left <?php echo "$more_than_5k_class"; ?>"><?php echo "$total_title $more_than_5k_popup_link"; ?>
+
 				</div>
 				<div class="checkout_total_price"><?php wc_cart_totals_order_total_html(); ?></div>
 			</div>

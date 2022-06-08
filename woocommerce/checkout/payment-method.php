@@ -30,27 +30,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if( $gateway->id == 'stripe'): ?>
 			<h2 class="payment-title">Payment Details</h2>
 
-			<!--<div class="form_wrapper">
-				<div class="form_label">Card Type *</div>
-				<div class="grid grid__twoo">
-					<label>
-						<input type="radio" name="stripe_card_type" value="visa" class="input__hidden" checked required>
-						<span>Visa</span>
-					</label>
-					<label>
-						<input type="radio" name="stripe_card_type" value="mastercard" class="input__hidden">
-						<span>Mastercard</span>
-					</label>
-					<label>
-						<input type="radio" name="stripe_card_type" value="maestro_uk" class="input__hidden">
-						<span>Maestro UK</span>
-					</label>
-					<label>
-						<input type="radio" name="stripe_card_type" value="maestro_int" class="input__hidden">
-						<span>Maestro Int.</span>
-					</label>
+			<?php $display_card_type = false; ?>
+			<?php if( $display_card_type ): ?>
+				<div class="form_wrapper">
+					<div class="form_label">Card Type *</div>
+					<div class="grid grid__twoo">
+						<label>
+							<input type="radio" name="stripe_card_type" value="visa" class="input__hidden" checked required>
+							<span>Visa</span>
+						</label>
+						<label>
+							<input type="radio" name="stripe_card_type" value="mastercard" class="input__hidden">
+							<span>Mastercard</span>
+						</label>
+						<label>
+							<input type="radio" name="stripe_card_type" value="maestro_uk" class="input__hidden">
+							<span>Maestro UK</span>
+						</label>
+						<label>
+							<input type="radio" name="stripe_card_type" value="maestro_int" class="input__hidden">
+							<span>Maestro Int.</span>
+						</label>
+					</div>
 				</div>
-			</div>-->
+			<?php endif; ?>
+
 		<?php endif; ?>
 		<div class="payment_box payment_method_<?php echo esc_attr( $gateway->id ); ?>" <?php if ( ! $gateway->chosen ) : /* phpcs:ignore Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace */ ?>style="display:none;"<?php endif; /* phpcs:ignore Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace */ ?>>
 			<?php $gateway->payment_fields(); ?>
