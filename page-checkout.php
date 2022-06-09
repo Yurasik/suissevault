@@ -77,6 +77,7 @@ get_header();
 									<div class="select">
 										<select name="country">
 											<option value="1">United Kingdom</option>
+											<option value="2">United States</option>
 										</select>
 									</div>
 								</div>

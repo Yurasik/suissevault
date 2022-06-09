@@ -138,7 +138,11 @@ function suissevault_delivery_method() {
 	if ( $delivery_method == 'shipping' ) {
 		$cart_delivery_method[ 'value' ] = sanitize_text_field( $_POST[ 'shipping_method' ] );
 	}
+	elseif ( $delivery_method == 'storage' ) {
+		$cart_delivery_method[ 'value' ] = 'local_pickup:6';
+	}
 
+	WC()->session->set( 'chosen_shipping_methods', array( $cart_delivery_method[ 'value' ] ) );
 	WC()->session->set( 'cart_delivery_method', $cart_delivery_method );
 	$response[ 'cart_delivery_method' ] = $cart_delivery_method;
 

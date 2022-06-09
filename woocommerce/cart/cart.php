@@ -175,8 +175,8 @@ $storage_delivery_method_checked = ( isset( $cart_delivery_method['method'] ) &&
 		<p class="lock_radio_label">Delivery option:</p>
 		<div class="select">
 			<select name="shipping">
-				<option value="free_shipping" <?php echo ( isset( $cart_delivery_method['value'] ) && $cart_delivery_method['value'] == 'free_shipping' ) ? "selected" : ""; ?>>Free Insured Special Delivery (£0.00)</option>
-				<option value="flat_rate" <?php echo ( isset( $cart_delivery_method['value'] ) && $cart_delivery_method['value'] == 'flat_rate' ) ? "selected" : ""; ?>>Fast Delivery (£10.00)</option>
+				<option value="free_shipping:4" <?php echo ( isset( $cart_delivery_method['value'] ) && $cart_delivery_method['value'] == 'free_shipping' ) ? "selected" : ""; ?>>Free Insured Special Delivery (£0.00)</option>
+				<option value="flat_rate:5" <?php echo ( isset( $cart_delivery_method['value'] ) && $cart_delivery_method['value'] == 'flat_rate' ) ? "selected" : ""; ?>>Fast Delivery (£10.00)</option>
 			</select>
 		</div>
 	</li>
