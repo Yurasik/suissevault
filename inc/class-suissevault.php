@@ -343,10 +343,6 @@ if ( !class_exists( 'Suissevault' ) ) :
 			wp_dequeue_script( 'jquery-core' );
 			wp_dequeue_script( 'jquery-migrate' );
 
-			/*wp_dequeue_style( 'select2' );
-			wp_dequeue_script( 'select2');
-			wp_dequeue_script( 'selectWoo' );*/
-
 			//wp_register_script( "jquery", get_template_directory_uri() . "/assets/js/libraries/jquery.min.js", [], false, true );
 			wp_register_script( 'jquery', false, array(), false, true );
 			wp_register_script( 'jquery-core', false, array(), false, true );
