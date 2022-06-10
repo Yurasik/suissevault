@@ -58,6 +58,9 @@ function ajax_register() {
 	$meta[ 'title' ]         = sanitize_text_field( $_POST[ 'title' ] );
 	$meta[ 'initial' ]       = sanitize_text_field( $_POST[ 'initial' ] );
 	$meta[ 'where' ]         = sanitize_text_field( $_POST[ 'where' ] );
+	$meta[ 'birth_day' ]     = sanitize_text_field( $_POST[ 'birth_day' ] );
+	$meta[ 'birth_month' ]   = sanitize_text_field( $_POST[ 'birth_month' ] );
+	$meta[ 'birth_year' ]    = sanitize_text_field( $_POST[ 'birth_year' ] );
 	$meta[ 'birthday_date' ] = date( 'd-m-Y', strtotime( "$_POST[birth_day]-$_POST[birth_month]-$_POST[birth_year]" ) );
 	$meta[ 'newsletter' ]    = sanitize_text_field( $_POST[ 'newsletter' ] );
 
