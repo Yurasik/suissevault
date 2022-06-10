@@ -117,11 +117,11 @@ $cart_delivery_method = WC()->session->get( 'cart_delivery_method' );
 
 		<?php if ( isset( $cart_delivery_method[ 'method' ] ) ): ?>
 			<li>
-				<?php if( $cart_delivery_method[ 'method' ] == 'shipping' && $cart_delivery_method[ 'value' ] == 'free_shipping' ): ?>
+				<?php if( $cart_delivery_method[ 'method' ] == 'shipping' && $cart_delivery_method[ 'value' ] == 'free_shipping:4' ): ?>
 					<p class="flex__center"><span>Delivery (Free Insured UK Delivery)</span>Free</p>
-				<?php elseif( $cart_delivery_method[ 'method' ] == 'shipping' && $cart_delivery_method[ 'value' ] == 'flat_rate' ): ?>
+				<?php elseif( $cart_delivery_method[ 'method' ] == 'shipping' && $cart_delivery_method[ 'value' ] == 'flat_rate:5' ): ?>
 					<p class="flex__center"><span>Fast Delivery</span><?php echo wc_price(10); ?></p>
-				<?php elseif( $cart_delivery_method[ 'method' ] == 'storage' ): ?>
+				<?php elseif( $cart_delivery_method[ 'method' ] == 'storage' && $cart_delivery_method[ 'value' ] == 'local_pickup:6' ): ?>
 					<p class="flex__center"><span>Storage</span><?php echo wc_price(10); ?> per month</p>
 				<?php endif; ?>
 			</li>

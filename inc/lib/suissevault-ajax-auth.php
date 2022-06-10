@@ -58,13 +58,18 @@ function ajax_register() {
 	$meta[ 'title' ]         = sanitize_text_field( $_POST[ 'title' ] );
 	$meta[ 'initial' ]       = sanitize_text_field( $_POST[ 'initial' ] );
 	$meta[ 'where' ]         = sanitize_text_field( $_POST[ 'where' ] );
+	$meta[ 'birth_day' ]     = sanitize_text_field( $_POST[ 'birth_day' ] );
+	$meta[ 'birth_month' ]   = sanitize_text_field( $_POST[ 'birth_month' ] );
+	$meta[ 'birth_year' ]    = sanitize_text_field( $_POST[ 'birth_year' ] );
 	$meta[ 'birthday_date' ] = date( 'd-m-Y', strtotime( "$_POST[birth_day]-$_POST[birth_month]-$_POST[birth_year]" ) );
 	$meta[ 'newsletter' ]    = sanitize_text_field( $_POST[ 'newsletter' ] );
 
 	// Get User billing meta data
-	$meta[ 'billing_phone' ]     = sanitize_text_field( $_POST[ 'billing_phone' ] );
-	$meta[ 'billing_country' ]   = sanitize_text_field( $_POST[ 'billing_country' ] );
-	$meta[ 'billing_address_1' ] = sanitize_text_field( $_POST[ 'billing_address_1' ] );
+	$meta[ 'billing_first_name' ] = sanitize_user( $_POST[ 'first_name' ] );
+	$meta[ 'billing_last_name' ]  = sanitize_text_field( $_POST[ 'last_name' ] );
+	$meta[ 'billing_phone' ]      = sanitize_text_field( $_POST[ 'billing_phone' ] );
+	$meta[ 'billing_country' ]    = sanitize_text_field( $_POST[ 'billing_country' ] );
+	$meta[ 'billing_address_1' ]  = sanitize_text_field( $_POST[ 'billing_address_1' ] );
 
 	// Register the user
 	$user_id = user_register( $info );

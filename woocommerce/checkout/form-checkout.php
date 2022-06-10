@@ -18,6 +18,11 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 $without_login = is_user_logged_in() || 'no' === get_option( 'woocommerce_enable_checkout_login_reminder' );
+$current_payment_method = WC()->session->get( 'chosen_payment_method' );
+if ( !$current_payment_method ) {
+	$current_payment_method = 'stripe';
+	WC()->session->set( 'chosen_payment_method', $current_payment_method );
+}
 ?>
 
 <div class="checkout_net grid grid__twoo">
