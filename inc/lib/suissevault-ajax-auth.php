@@ -62,9 +62,11 @@ function ajax_register() {
 	$meta[ 'newsletter' ]    = sanitize_text_field( $_POST[ 'newsletter' ] );
 
 	// Get User billing meta data
-	$meta[ 'billing_phone' ]     = sanitize_text_field( $_POST[ 'billing_phone' ] );
-	$meta[ 'billing_country' ]   = sanitize_text_field( $_POST[ 'billing_country' ] );
-	$meta[ 'billing_address_1' ] = sanitize_text_field( $_POST[ 'billing_address_1' ] );
+	$meta[ 'billing_first_name' ] = sanitize_user( $_POST[ 'first_name' ] );
+	$meta[ 'billing_last_name' ]  = sanitize_text_field( $_POST[ 'last_name' ] );
+	$meta[ 'billing_phone' ]      = sanitize_text_field( $_POST[ 'billing_phone' ] );
+	$meta[ 'billing_country' ]    = sanitize_text_field( $_POST[ 'billing_country' ] );
+	$meta[ 'billing_address_1' ]  = sanitize_text_field( $_POST[ 'billing_address_1' ] );
 
 	// Register the user
 	$user_id = user_register( $info );

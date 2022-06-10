@@ -17,7 +17,7 @@
 
     // Select
     if ($('select').length) {
-        $('select').not('#billing_country, #billing_state').knotSelect();
+        $('select').not('.checkout #billing_country, .checkout #billing_state').knotSelect();
     }
 
     // Currency click
