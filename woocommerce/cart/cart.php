@@ -16,7 +16,17 @@
 defined( 'ABSPATH' ) || exit;
 
 $current_payment_method = WC()->session->get( 'chosen_payment_method' );
+if ( !$current_payment_method ) {
+	$current_payment_method = 'stripe';
+	WC()->session->set( 'chosen_payment_method', $current_payment_method );
+}
 $cart_delivery_method = WC()->session->get( 'cart_delivery_method' );
+if ( !$cart_delivery_method ) {
+	$cart_delivery_method['method'] = 'storage';
+	$cart_delivery_method['value'] = 'local_pickup:6';
+	WC()->session->set( 'chosen_shipping_methods', array( $cart_delivery_method[ 'value' ] ) );
+	WC()->session->set( 'cart_delivery_method', $cart_delivery_method );
+}
 $shipping_delivery_method_checked = ( isset( $cart_delivery_method['method'] ) && $cart_delivery_method['method'] == 'shipping' ) ? "checked" : "";
 $storage_delivery_method_checked = ( isset( $cart_delivery_method['method'] ) && $cart_delivery_method['method'] == 'storage' ) ? "checked" : "";
 ?>
