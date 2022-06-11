@@ -293,5 +293,12 @@ input[type=checkbox], input[type=radio] {
 }
 
 /* Checkout */
+/* My Account */
+.cabinet .woocommerce {
+  grid-gap: 48px;
+  grid-template-columns: 260px 1fr;
+  margin-top: 32px;
+  display: grid;
+}
 
 /*# sourceMappingURL=style.css.map */

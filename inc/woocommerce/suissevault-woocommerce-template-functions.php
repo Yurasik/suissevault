@@ -5,6 +5,21 @@
  * @package suissevault
  */
 
+if ( !function_exists( 'suissevault_customer_login_redirect' ) ) {
+	function suissevault_customer_login_redirect( $redirect, $user ) {
+
+		if ( wc_user_has_role( $user, 'customer' ) ) {
+			$redirect = get_home_url(); // homepage
+			//$redirect = wc_get_page_permalink( 'shop' ); // shop page
+			//$redirect = '/custom_url'; // custom URL same site
+			//$redirect = 'https://custom.url'; // custom URL other site
+			//$redirect = add_query_arg( 'password-reset', 'true', wc_get_page_permalink( 'myaccount' ) ); // custom My Account tab
+		}
+
+		return $redirect;
+	}
+}
+
 if ( !function_exists( 'suissevault_woo_cart_available' ) ) {
 	/**
 	 * Validates whether the Woo Cart instance is available in the request
@@ -439,7 +454,8 @@ if ( !function_exists( 'suissevault_customize_cart_shipping_method_full_label' )
 				$label_array                              = explode( ":", $label );
 				$label_array[ count( $label_array ) - 1 ] = " (" . trim( $label_array[ count( $label_array ) - 1 ] ) . ")";
 				$label                                    = implode( "", $label_array );
-			} else {
+			}
+			else {
 				$label_array                              = explode( ":", $label );
 				$label_array[ count( $label_array ) - 1 ] = " (" . trim( $label_array[ count( $label_array ) - 1 ] ) . ")";
 				$label                                    = implode( ":", $label_array );
@@ -456,6 +472,74 @@ if ( !function_exists( 'suissecault_cart_item_subtotal' ) ) {
 		$product_subtotal = str_replace( '<small class="tax_label">(incl. VAT)</small>', '', $product_subtotal );
 
 		return $product_subtotal;
+	}
+}
+
+if ( !function_exists( 'suissevault_add_custom_endpoints' ) ) {
+	function suissevault_add_custom_endpoints() {
+		add_rewrite_endpoint( 'password', EP_ROOT | EP_PAGES );
+		add_rewrite_endpoint( 'storage', EP_ROOT | EP_PAGES );
+		add_rewrite_endpoint( 'refer', EP_ROOT | EP_PAGES );
+	}
+}
+
+if ( !function_exists( 'suissevault_custom_endpoints_query_vars' ) ) {
+	function suissevault_custom_endpoints_query_vars( $vars ) {
+
+		$vars[] = 'password';
+		$vars[] = 'storage';
+		$vars[] = 'refer';
+
+		return $vars;
+	}
+}
+
+if ( !function_exists( 'suissevault_account_menu_items' ) ) {
+	function suissevault_account_menu_items( $items, $endpoints ) {
+
+		// Unnecessary
+		unset( $items[ 'downloads' ] );
+
+		// Reorder
+		unset( $items[ 'dashboard' ] );
+		unset( $items[ 'edit-account' ] );
+		unset( $items[ 'orders' ] );
+		unset( $items[ 'payment-methods' ] );
+		unset( $items[ 'edit-address' ] );
+
+		// Rename
+		$items[ 'customer-logout' ] = 'Exit';
+
+		$reorder_items = [
+			'dashboard' => 'My Account',
+			'orders' => 'Order history',
+			'edit-account' => 'Change Password',
+			'storage' => 'Storage',
+			'payment-methods' => 'Billing & Payments',
+			'refer' => 'Refer a friend',
+		];
+
+		$items = array_merge( $reorder_items, $items );
+
+		return $items;
+	}
+}
+
+if ( !function_exists( 'suissevault_password_content' ) ) {
+	function suissevault_password_content() {
+		echo "password";
+	}
+}
+
+if ( !function_exists( 'suissevault_storage_content' ) ) {
+	function suissevault_storage_content() {
+		echo "storage";
+	}
+}
+
+if ( !function_exists( 'suissevault_refer_content' ) ) {
+	function suissevault_refer_content() {
+		echo "refer";
 	}
 }
 

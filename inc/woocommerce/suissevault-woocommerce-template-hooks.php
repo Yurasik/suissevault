@@ -6,6 +6,11 @@
  */
 
 /**
+ * Login
+ */
+add_filter( 'woocommerce_login_redirect', 'suissevault_customer_login_redirect', 9999, 2 );
+
+/**
  * Layout
  *
  * @see  suissevault_shop_messages()
@@ -53,7 +58,6 @@ add_action( 'woocommerce_single_product_summary', 'suissevault_quantities_list',
 add_action( 'woocommerce_after_add_to_cart_quantity', 'woocommerce_template_single_price', 31 );
 add_action( 'woocommerce_before_quantity_input_field', 'suissevault_before_quantity_input_field', 10 );
 add_action( 'woocommerce_after_quantity_input_field', 'suissevault_after_quantity_input_field', 10 );
-
 add_filter( 'woocommerce_product_tabs', 'suissevault_terms_delivery_tab', 10, 1 );
 add_action( 'suissevault_output_related_products', 'woocommerce_output_related_products', 10 );
 add_filter( 'woocommerce_output_related_products_args', 'suissevault_related_products_args', 20 );
@@ -80,8 +84,23 @@ remove_action( 'woocommerce_checkout_order_review', 'woocommerce_checkout_paymen
 add_action( 'suissevault_payment_details', 'woocommerce_checkout_payment', 10 );
 add_filter( 'woocommerce_checkout_fields', 'suissevault_checkout_fields', 10, 1 );
 add_action( 'woocommerce_checkout_update_order_meta', 'suissevault_checkout_field_update_order_meta', 10, 1 );
-add_action('woocommerce_checkout_process', 'suissevault_checkout_fields_process');
+add_action( 'woocommerce_checkout_process', 'suissevault_checkout_fields_process' );
 add_filter( 'woocommerce_form_field', 'suissevault_customize_form_field', 10, 4 );
 // JQuery: Needed for checkout fields to Remove "(optional)" from our non required fields
-add_filter( 'wp_footer' , 'suissevault_remove_checkout_optional_fields_label_script' );
+add_filter( 'wp_footer', 'suissevault_remove_checkout_optional_fields_label_script' );
 add_filter( 'woocommerce_form_field_args', 'suissevault_add_form_field_args', 10, 3 );
+
+
+/**
+ * My Account
+ */
+// Register new endpoint (URL) for My Account page
+add_action( 'init', 'suissevault_add_custom_endpoints' );
+// Add new query var
+add_filter( 'query_vars', 'suissevault_custom_endpoints_query_vars', 0 );
+// Insert the new endpoint into the My Account menu
+add_filter( 'woocommerce_account_menu_items', 'suissevault_account_menu_items', 10, 2 );
+// Add content to the new tabs (Note: add_action must follow 'woocommerce_account_{your-endpoint-slug}_endpoint' format)
+add_action( 'woocommerce_account_password_endpoint', 'suissevault_password_content' );
+add_action( 'woocommerce_account_storage_endpoint', 'suissevault_storage_content' );
+add_action( 'woocommerce_account_refer_endpoint', 'suissevault_refer_content' );

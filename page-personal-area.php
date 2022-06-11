@@ -17,26 +17,26 @@ get_header();
 			<!--<div class="cabinet_net grid">
 				<div class="cabinet_bar">
 					<ul>
-						<li>
-							<a class="cabinet_bar_li active" href="/cabinet">My Account</a>
+						<li class="cabinet_bar_li is-active">
+							<a href="/cabinet">My Account</a>
 						</li>
-						<li>
-							<a class="cabinet_bar_li" href="/cabinet/order">Order history</a>
+						 <li class="cabinet_bar_li">
+							<a href="/cabinet/order">Order history</a>
 						</li>
-						<li>
-							<a class="cabinet_bar_li" href="/cabinet/change">Change Password</a>
+						 <li class="cabinet_bar_li">
+							<a href="/cabinet/change">Change Password</a>
 						</li>
-						<li>
-							<a class="cabinet_bar_li" href="/cabinet/storage">Storage</a>
+						 <li class="cabinet_bar_li">
+							<a href="/cabinet/storage">Storage</a>
 						</li>
-						<li>
-							<a class="cabinet_bar_li" href="/cabinet/billing">Billing & Payments</a>
+						 <li class="cabinet_bar_li">
+							<a href="/cabinet/billing">Billing & Payments</a>
 						</li>
-						<li>
-							<a class="cabinet_bar_li" href="/cabinet/refer">Refer a friend</a>
+						 <li class="cabinet_bar_li">
+							<a href="/cabinet/refer">Refer a friend</a>
 						</li>
-						<li>
-							<div class="cabinet_bar_li">Exit</div>
+						 <li class="cabinet_bar_li">
+							<a>Exit</a>
 						</li>
 					</ul>
 				</div>
@@ -78,9 +78,7 @@ get_header();
 				</div>
 			</div>-->
 
-			<div class="cabinet_net grid">
-				<?php the_content(); ?>
-			</div>
+			<?php the_content(); ?>
 		</div>
 	</div>
 
