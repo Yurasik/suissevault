@@ -13,6 +13,7 @@ class Suissevault_Form_Handler
 	 */
 	public static function init() {
 		add_action( 'template_redirect', array( __CLASS__, 'save_my_account' ) );
+		add_action( 'template_redirect', array( __CLASS__, 'save_changed_password' ) );
 	}
 
 	public static function save_my_account() {
@@ -136,6 +137,83 @@ class Suissevault_Form_Handler
 			do_action( 'woocommerce_save_my_account', $user->ID );
 
 			wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
+			exit;
+		}
+	}
+
+	/**
+	 * Save the password/account details and redirect back to the my account page.
+	 */
+	public static function save_changed_password() {
+		$nonce_value = wc_get_var( $_REQUEST['save-changed-password-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) ); // @codingStandardsIgnoreLine.
+
+		if ( ! wp_verify_nonce( $nonce_value, 'save_changed_password' ) ) {
+			return;
+		}
+
+		if ( empty( $_POST['action'] ) || 'save_changed_password' !== $_POST['action'] ) {
+			return;
+		}
+
+		wc_nocache_headers();
+
+		$user_id = get_current_user_id();
+
+		if ( $user_id <= 0 ) {
+			return;
+		}
+
+		$pass_cur             = ! empty( $_POST['password_current'] ) ? $_POST['password_current'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		$pass1                = ! empty( $_POST['password_1'] ) ? $_POST['password_1'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		$pass2                = ! empty( $_POST['password_2'] ) ? $_POST['password_2'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		$save_pass            = true;
+
+		// Current user data.
+		$current_user       = get_user_by( 'id', $user_id );
+
+		// New user data.
+		$user               = new stdClass();
+		$user->ID           = $user_id;
+
+		if ( ! empty( $pass_cur ) && empty( $pass1 ) && empty( $pass2 ) ) {
+			wc_add_notice( __( 'Please fill out all password fields.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		} elseif ( ! empty( $pass1 ) && empty( $pass_cur ) ) {
+			wc_add_notice( __( 'Please enter your current password.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		} elseif ( ! empty( $pass1 ) && empty( $pass2 ) ) {
+			wc_add_notice( __( 'Please re-enter your password.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		} elseif ( ( ! empty( $pass1 ) || ! empty( $pass2 ) ) && $pass1 !== $pass2 ) {
+			wc_add_notice( __( 'New passwords do not match.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		} elseif ( ! empty( $pass1 ) && ! wp_check_password( $pass_cur, $current_user->user_pass, $current_user->ID ) ) {
+			wc_add_notice( __( 'Your current password is incorrect.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		}
+
+		if ( $pass1 && $save_pass ) {
+			$user->user_pass = $pass1;
+		}
+
+		// Allow plugins to return their own errors.
+		$errors = new WP_Error();
+		do_action_ref_array( 'woocommerce_save_account_details_errors', array( &$errors, &$user ) );
+
+		if ( $errors->get_error_messages() ) {
+			foreach ( $errors->get_error_messages() as $error ) {
+				wc_add_notice( $error, 'error' );
+			}
+		}
+
+		if ( wc_notice_count( 'error' ) === 0 ) {
+			wp_update_user( $user );
+
+			wc_add_notice( __( 'Password changed successfully.', 'suissevault' ) );
+
+			do_action( 'woocommerce_save_changed_password', $user->ID );
+
+			wp_safe_redirect( wc_get_account_endpoint_url( 'password' ) );
 			exit;
 		}
 	}

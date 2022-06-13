@@ -513,7 +513,7 @@ if ( !function_exists( 'suissevault_account_menu_items' ) ) {
 		$reorder_items = [
 			'dashboard' => 'My Account',
 			'orders' => 'Order history',
-			'edit-account' => 'Change Password',
+			'password' => 'Change Password',
 			'storage' => 'Storage',
 			'payment-methods' => 'Billing & Payments',
 			'refer' => 'Refer a friend',
@@ -527,7 +527,7 @@ if ( !function_exists( 'suissevault_account_menu_items' ) ) {
 
 if ( !function_exists( 'suissevault_password_content' ) ) {
 	function suissevault_password_content() {
-		echo "password";
+		wc_get_template( 'myaccount/form-change-password.php', array( 'user' => get_user_by( 'id', get_current_user_id() ) ) );
 	}
 }
 

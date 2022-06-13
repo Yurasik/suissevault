@@ -19,11 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<?php do_action( 'woocommerce_before_my_account' ); ?>
-
 <?php wc_get_template( 'myaccount/form-my-account.php', array( 'user' => get_user_by( 'id', get_current_user_id() ) ) ); ?>
-
-<?php do_action( 'woocommerce_after_my_account' ); ?>
 
 <?php
 /**
