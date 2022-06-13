@@ -31,6 +31,7 @@ if ( suissevault_is_woocommerce_activated() ) {
 	require 'inc/woocommerce/suissevault-woocommerce-template-hooks.php';
 	require 'inc/woocommerce/suissevault-woocommerce-template-functions.php';
 	require 'inc/woocommerce/suissevault-woocommerce-functions.php';
+	require 'inc/woocommerce/class-suissevault-form-handler.php';
 }
 
 if ( is_admin() ) {

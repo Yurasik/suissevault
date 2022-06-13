@@ -301,4 +301,10 @@ input[type=checkbox], input[type=radio] {
   display: grid;
 }
 
+.cabinet .cabinet_content .title {
+  margin-top: 0;
+}
+
+/* My Account */
+
 /*# sourceMappingURL=style.css.map */
