@@ -328,10 +328,7 @@ get_header();
 			<div class="sell_three">
 				<div class="sell_three_bg">
 					<?php if ( $sell_steps[ 'background' ] ) {
-						$image_data = suissevault_get_image_data( $sell_steps[ 'background' ] );
-						$picture    = suissevault_get_picture_html( $image_data );
-
-						echo $picture;
+						echo suissevault_get_picture_html( $sell_steps[ 'background' ] );
 					} ?>
 				</div>
 				<div class="bone">

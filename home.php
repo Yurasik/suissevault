@@ -17,12 +17,9 @@ $page_for_posts = get_option( 'page_for_posts' );
 			$title            = get_field( 'title', $banner );
 			$subtitle         = get_field( 'subtitle', $banner ); ?>
 			<div class="banner">
-				<?php if ( has_post_thumbnail( $banner ) ):
-					$thumbnail_id = get_post_thumbnail_id( $banner );
-					$image_data = suissevault_get_image_data( $thumbnail_id );
-					$picture = suissevault_get_picture_html( $image_data ); ?>
+				<?php if ( has_post_thumbnail( $banner ) ): ?>
 					<div class="banner_bg">
-						<?php echo $picture; ?>
+						<?php echo suissevault_get_picture_html( get_post_thumbnail_id( $banner ) ); ?>
 					</div>
 				<?php endif; ?>
 

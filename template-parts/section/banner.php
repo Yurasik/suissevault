@@ -10,8 +10,7 @@ if ( $banner_display ):
 	<div class="property">
 		<?php if ( has_post_thumbnail( $banner ) ):
 			$thumbnail_id = get_post_thumbnail_id( $banner );
-			$image_data = suissevault_get_image_data( $thumbnail_id );
-			$picture = suissevault_get_picture_html( $image_data ); ?>
+			$picture = suissevault_get_picture_html( $thumbnail_id ); ?>
 			<div class="property_bg">
 				<?php echo $picture; ?>
 			</div>

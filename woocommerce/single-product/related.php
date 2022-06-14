@@ -35,19 +35,7 @@ if ( $related_products ) :
 
 						<div class="product_item">
 							<div class="product_item_img">
-								<?php
-								$thumbnail_id = $related_product->get_image_id();
-								if ( $thumbnail_id ) {
-									$thumbnail_image_data   = suissevault_get_image_data( $thumbnail_id );
-									$thumbnail_picture_html = suissevault_get_picture_html( $thumbnail_image_data );
-								}
-								else {
-									$placeholder_img_src    = esc_url( wc_placeholder_img_src( 'woocommerce_single' ) );
-									$placeholder_alt        = esc_html__( 'Awaiting product image', 'woocommerce' );
-									$thumbnail_picture_html = "<picture><source srcset='$placeholder_img_src' type='image/webp'><img src='$placeholder_img_src' alt='$placeholder_alt'></picture>";
-								}
-
-								echo $thumbnail_picture_html; ?>
+								<?php echo suissevault_get_picture_html( $related_product->get_image_id() ); ?>
 							</div>
 							<div class="product_item_name"><?php the_title(); ?></div>
 							<div class="product_item_price"><?php echo $related_product->get_price_html(); ?></div>

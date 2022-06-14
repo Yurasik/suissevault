@@ -17,12 +17,9 @@ get_header(); ?>
 
 			<h1><?php the_title(); ?></h1>
 
-			<?php if ( has_post_thumbnail() ):
-				$thumbnail_id = get_post_thumbnail_id();
-				$image_data = suissevault_get_image_data( $thumbnail_id );
-				$picture = suissevault_get_picture_html( $image_data ); ?>
+			<?php if ( has_post_thumbnail() ): ?>
 				<div class="news_img_shadow">
-					<?php echo $picture; ?>
+					<?php echo suissevault_get_picture_html( get_post_thumbnail_id() ); ?>
 				</div>
 			<?php endif; ?>
 

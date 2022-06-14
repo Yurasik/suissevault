@@ -12,12 +12,9 @@ if ( $banners_slider_display && $banners_slider ): ?>
 				$link      = get_field( 'link' );
 				$link_html = get_acf_link_html( $link, "main_href more", "", "<span></span>" ); ?>
 				<li class="main_slid">
-					<?php if ( has_post_thumbnail() ):
-						$thumbnail_id = get_post_thumbnail_id();
-						$image_data = suissevault_get_image_data( $thumbnail_id );
-						$picture = suissevault_get_picture_html( $image_data ); ?>
+					<?php if ( has_post_thumbnail() ): ?>
 						<div class="main_slid_bg">
-							<?php echo $picture; ?>
+							<?php echo suissevault_get_picture_html( get_post_thumbnail_id() ); ?>
 							<div class="main_grid">
 								<div class="main_grid_horizontal">
 									<span></span> <span></span> <span></span>
@@ -31,12 +28,10 @@ if ( $banners_slider_display && $banners_slider ): ?>
 
 					<div class="bone">
 						<?php if ( get_field( 'with_product' ) ):
-							$product = get_field( 'product' );
-							$image_data = suissevault_get_image_data( $product[ 'image' ] );
-							$picture = suissevault_get_picture_html( $image_data ); ?>
+							$product = get_field( 'product' ); ?>
 							<div class="main_slid_net flex__center">
 								<div class="main_slid_img">
-									<?php echo $picture; ?>
+									<?php echo suissevault_get_picture_html( $product[ 'image' ] ); ?>
 								</div>
 								<div class="main_slid_info">
 									<div class="subtitle"><?php echo $title; ?></div>

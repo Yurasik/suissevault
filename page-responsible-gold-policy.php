@@ -12,11 +12,7 @@ get_header();
 		<div class="banner">
 			<div class="banner_bg">
 				<?php if ( has_post_thumbnail() ) {
-					$thumbnail_id = get_post_thumbnail_id();
-					$image_data   = suissevault_get_image_data( $thumbnail_id );
-					$picture      = suissevault_get_picture_html( $image_data );
-
-					echo $picture;
+					echo suissevault_get_picture_html( get_post_thumbnail_id() );
 				} ?>
 			</div>
 			<div class="bone">

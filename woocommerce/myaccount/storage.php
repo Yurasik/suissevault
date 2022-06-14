@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 
 <div class="cabinet_content_top flex__center">
-	<h2>Order history</h2>
+	<h2>Stored packages</h2>
 	<?php if ( $has_orders ) : ?>
 		<div class="cabinet_content_print icon icon-print">Print</div>
 	<?php endif; ?>
@@ -38,7 +38,7 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 			$order                 = wc_get_order( $customer_order ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			$order_shipping_method = $order->get_shipping_method();
 			$order_shipping_total  = $order->get_shipping_total();
-			if ( $order_shipping_method == 'Storage' )
+			if ( $order_shipping_method !== 'Storage' )
 				continue;
 			?>
 			<div class="cabinet_row grid status-<?php echo esc_attr( $order->get_status() ); ?> order">

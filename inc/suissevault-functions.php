@@ -53,20 +53,21 @@ function suissevault_get_image_data( $id ): array {
 }
 
 /**
- * @param $image_data
+ * @param $thumbnail_id
  *
  * @return string
  */
-function suissevault_get_picture_html( $image_data ): string {
+function suissevault_get_picture_html( $thumbnail_id ) {
 
-	return "<picture><source srcset='$image_data[src]' type='image/webp'><img src='$image_data[src]' alt='$image_data[alt]' srcset='$image_data[srcset]'></picture>";
-}
+	if ( (bool) $thumbnail_id ) {
+		$image_data = suissevault_get_image_data( $thumbnail_id );
+		$picture = "<picture><source srcset='$image_data[src]' type='image/webp'><img src='$image_data[src]' alt='$image_data[alt]' srcset='$image_data[srcset]'></picture>";
+	} else {
+		$image_data = wc_placeholder_img_src();
+		$picture = "<picture><source srcset='$image_data' type='image/webp'><img src='$image_data' alt='$image_data' srcset='$image_data'></picture>";
+	}
 
-function suissevault_get_placeholder_picture_html() {
-
-	$image = wc_placeholder_img_src();
-
-	return "<picture><source srcset='$image' type='image/webp'><img src='$image' alt='$image' srcset='$image'></picture>";
+	return $picture;
 }
 
 /**

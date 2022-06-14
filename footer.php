@@ -471,9 +471,8 @@ $footer   = get_field( 'footer', 'options' );
 <div class="footer">
 	<div class="bone">
 		<div class="footer_net flex__start">
-			<?php if ( $footer[ 'logo' ] || $footer[ 'text' ] ):
-				$image_data = suissevault_get_image_data( $footer[ 'logo' ] );
-				$picture = suissevault_get_picture_html( $image_data ); ?>
+			<?php if ( $footer[ 'logo' ] || $footer[ 'text' ] ) :
+				$picture = suissevault_get_picture_html( $footer[ 'logo' ] ); ?>
 				<div class="footer_column">
 					<?php if ( $footer[ 'logo' ] ): ?>
 						<div class="footer_logo">
@@ -524,10 +523,7 @@ $footer   = get_field( 'footer', 'options' );
 				<?php if ( $footer[ 'payments' ] ): ?>
 					<ul class="footer_pay flex__align">
 						<?php foreach ( $footer[ 'payments' ] as $payment ) {
-							$image_data = suissevault_get_image_data( $payment[ 'payment' ] );
-							$picture    = suissevault_get_picture_html( $image_data );
-
-							echo $picture;
+							echo suissevault_get_picture_html( $payment[ 'payment' ] );
 						} ?>
 					</ul>
 				<?php endif; ?>

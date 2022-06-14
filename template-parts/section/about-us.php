@@ -12,8 +12,7 @@ if ( $about_us_display && have_rows( 'about_us' ) ):
 				<div class="suisse_net flex__center">
 					<div class="suisse_left flex">
 						<?php if ( $left_image ):
-							$image_data = suissevault_get_image_data( $left_image );
-							$picture = suissevault_get_picture_html( $image_data ); ?>
+							$picture = suissevault_get_picture_html( $left_image ); ?>
 							<div class="suisse_left_img">
 								<?php echo $picture; ?>
 							</div>
@@ -33,8 +32,7 @@ if ( $about_us_display && have_rows( 'about_us' ) ):
 						</div>
 					</div>
 					<?php if ( $right_image ):
-						$image_data = suissevault_get_image_data( $right_image );
-						$picture = suissevault_get_picture_html( $image_data ); ?>
+						$picture = suissevault_get_picture_html( $right_image ); ?>
 						<div class="suisse_img">
 							<?php echo $picture; ?>
 						</div>

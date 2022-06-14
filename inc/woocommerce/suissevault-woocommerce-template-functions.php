@@ -112,34 +112,22 @@ if ( !function_exists( 'suissevault_show_product_images' ) ) {
 			<div class="active_slider">
 				<?php
 				if ( $thumbnail_id ) {
-					$thumbnail_image_data   = suissevault_get_image_data( $thumbnail_id );
-					$thumbnail_picture_html = suissevault_get_picture_html( $thumbnail_image_data );
-
-					echo $thumbnail_picture_html;
+					echo suissevault_get_picture_html( $thumbnail_id );
 				}
 				if ( $attachment_ids ) {
 					foreach ( $attachment_ids as $attachment_id ) {
-						$attachment_image_data   = suissevault_get_image_data( $attachment_id );
-						$attachment_picture_html = suissevault_get_picture_html( $attachment_image_data );
-
-						echo $attachment_picture_html;
+						echo suissevault_get_picture_html( $attachment_id );
 					}
 				} ?>
 			</div>
 			<div class="slider">
 				<?php
 				if ( $thumbnail_id ) {
-					$thumbnail_image_data   = suissevault_get_image_data( $thumbnail_id );
-					$thumbnail_picture_html = suissevault_get_picture_html( $thumbnail_image_data );
-
-					echo "<div class='slid'>$thumbnail_picture_html</div>";
+					echo "<div class='slid'>" . suissevault_get_picture_html( $thumbnail_id ) . "</div>";
 				}
 				if ( $attachment_ids ) {
 					foreach ( $attachment_ids as $attachment_id ) {
-						$attachment_image_data   = suissevault_get_image_data( $attachment_id );
-						$attachment_picture_html = suissevault_get_picture_html( $attachment_image_data );
-
-						echo "<div class='slid'>$attachment_picture_html</div>";
+						echo "<div class='slid'>" . suissevault_get_picture_html( $attachment_id ) . "</div>";
 					}
 				} ?>
 			</div>
@@ -532,8 +520,21 @@ if ( !function_exists( 'suissevault_password_content' ) ) {
 }
 
 if ( !function_exists( 'suissevault_storage_content' ) ) {
-	function suissevault_storage_content() {
-		echo "storage";
+	function suissevault_storage_content( $current_page ) {
+		$current_page    = empty( $current_page )
+			? 1
+			: absint( $current_page );
+		$customer_orders = wc_get_orders( array(
+			'customer' => get_current_user_id(),
+			'page'     => $current_page,
+			'paginate' => true,
+		) );
+
+		wc_get_template( 'myaccount/storage.php', array(
+			'current_page'    => absint( $current_page ),
+			'customer_orders' => $customer_orders,
+			'has_orders'      => 0 < $customer_orders->total,
+		) );
 	}
 }
 

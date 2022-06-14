@@ -26,12 +26,10 @@ if ( $product_categories_display ): ?>
 				<div class="browse_slider">
 					<?php foreach ( $product_categories as $product_category ):
 						$thumbnail_id = get_term_meta( $product_category->term_id, 'thumbnail_id', true );
-						$image_data = suissevault_get_image_data( $thumbnail_id );
-						$picture = suissevault_get_picture_html( $image_data );
 						$min_product_category_price = suissevault_get_min_price_per_product_cat( $product_category->term_id ); ?>
 						<div class="browse_slid">
 							<a class="browse_slid_img" href="<?php echo get_category_link( $product_category ); ?>">
-								<?php echo $picture; ?>
+								<?php echo suissevault_get_picture_html( $thumbnail_id ); ?>
 							</a>
 							<div class="browse_slid_bottom flex__center">
 								<span><?php echo $product_category->name; ?></span> <span><?php echo "from  £$min_product_category_price"; ?></span>

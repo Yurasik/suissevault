@@ -14,10 +14,7 @@
 					<div class="market_net grid grid__twoo">
 						<?php while ( have_rows( 'categories' ) ): the_row();
 							$category = get_sub_field( 'category' );
-
 							$thumbnail_id = get_field( 'catalogue_image', $category );
-							$image_data   = suissevault_get_image_data( $thumbnail_id );
-							$picture      = suissevault_get_picture_html( $image_data );
 
 							$exploded_name = explode( ' ', $category->name );
 							$market_name   = "";
@@ -28,7 +25,7 @@
 							} ?>
 							<div class="market_item">
 								<div class="market_bg">
-									<?php echo "$picture"; ?>
+									<?php echo suissevault_get_picture_html( $thumbnail_id ); ?>
 								</div>
 								<h2 class="market_name"><?php echo $market_name; ?></h2>
 								<a href="<?php echo get_category_link( $category ); ?>" class="more-line">Buy <?php echo $category->name; ?></a>
@@ -65,12 +62,9 @@
 								<div class="product_items grid grid__three">
 									<?php foreach ( $products as $product_id ):
 										$product = wc_get_product( $product_id );
-										$thumbnail_id = get_post_thumbnail_id( $product_id );
-										$image_data = suissevault_get_image_data( $thumbnail_id );
-										$picture = suissevault_get_picture_html( $image_data );
 										?>
 										<div class="product_item">
-											<div class="product_item_img"><?php echo $picture; ?></div>
+											<div class="product_item_img"><?php echo suissevault_get_picture_html( get_post_thumbnail_id( $product_id ) ); ?></div>
 											<div class="product_item_name"><?php echo $product->get_title(); ?></div>
 											<div class="product_item_price"><?php echo $product->get_price_html(); ?></div>
 											<div class="product_item_btn">

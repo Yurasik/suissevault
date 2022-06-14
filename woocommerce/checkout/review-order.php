@@ -29,12 +29,7 @@ $cart_delivery_method = WC()->session->get( 'cart_delivery_method' );
 				<li class="<?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
 					<div class="checkout_totals_item flex">
 						<div class="checkout_totals_item_img">
-							<?php
-							$thumbnail_id = $_product->get_image_id();
-							$image_data   = suissevault_get_image_data( $thumbnail_id );
-							$picture      = suissevault_get_picture_html( $image_data );
-
-							echo $picture; ?>
+							<?php echo suissevault_get_picture_html( $_product->get_image_id() ); ?>
 						</div>
 						<div class="checkout_totals_item_info">
 							<div class="checkout_totals_item_name"><?php echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) ) . '&nbsp;'; ?></div>

@@ -8,13 +8,8 @@
 		<div class="bone">
 			<h2>Our <i>Suppliers</i></h2>
 			<div class="our_net flex__center">
-				<?php foreach ( $suppliers as $post ) {
-					setup_postdata( $post );
-					$thumbnail_id = get_post_thumbnail_id();
-					$image_data   = suissevault_get_image_data( $thumbnail_id );
-					$picture      = suissevault_get_picture_html( $image_data );
-
-					echo $picture;
+				<?php foreach ( $suppliers as $post ) { setup_postdata( $post );
+					echo suissevault_get_picture_html( get_post_thumbnail_id() );
 				}
 				wp_reset_postdata(); ?>
 			</div>
