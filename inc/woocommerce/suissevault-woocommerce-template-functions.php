@@ -254,7 +254,7 @@ if ( !function_exists( 'suissevault_header_cart_link' ) ) {
 
 if ( !function_exists( 'suissevault_price_filter' ) ) {
 	function suissevault_price_filter( $price ) {
-		if ( is_checkout() || is_cart() ) {
+		if ( /*is_checkout() || is_cart()*/ true ) {
 			$price = str_replace( [
 				'<span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">',
 				'</span>',
@@ -511,12 +511,12 @@ if ( !function_exists( 'suissevault_account_menu_items' ) ) {
 		$items[ 'customer-logout' ] = 'Exit';
 
 		$reorder_items = [
-			'dashboard' => 'My Account',
-			'orders' => 'Order history',
-			'password' => 'Change Password',
-			'storage' => 'Storage',
+			'dashboard'       => 'My Account',
+			'orders'          => 'Order history',
+			'password'        => 'Change Password',
+			'storage'         => 'Storage',
 			'payment-methods' => 'Billing & Payments',
-			'refer' => 'Refer a friend',
+			'refer'           => 'Refer a friend',
 		];
 
 		$items = array_merge( $reorder_items, $items );
@@ -540,6 +540,17 @@ if ( !function_exists( 'suissevault_storage_content' ) ) {
 if ( !function_exists( 'suissevault_refer_content' ) ) {
 	function suissevault_refer_content() {
 		echo "refer";
+	}
+}
+
+if ( !function_exists( 'suissevault_account_orders_columns' ) ) {
+	function suissevault_account_orders_columns( $columns ) {
+
+		$columns[ 'order-number' ]  = 'Order number';
+		$columns[ 'order-total' ]   = 'Total amount';
+		$columns[ 'order-actions' ] = '';
+
+		return $columns;
 	}
 }
 

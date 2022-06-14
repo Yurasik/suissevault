@@ -60,7 +60,13 @@ function suissevault_get_image_data( $id ): array {
 function suissevault_get_picture_html( $image_data ): string {
 
 	return "<picture><source srcset='$image_data[src]' type='image/webp'><img src='$image_data[src]' alt='$image_data[alt]' srcset='$image_data[srcset]'></picture>";
+}
 
+function suissevault_get_placeholder_picture_html() {
+
+	$image = wc_placeholder_img_src();
+
+	return "<picture><source srcset='$image' type='image/webp'><img src='$image' alt='$image' srcset='$image'></picture>";
 }
 
 /**

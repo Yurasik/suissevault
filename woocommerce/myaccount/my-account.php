@@ -24,7 +24,7 @@ do_action( 'woocommerce_account_navigation' );
 
 $cabinet_classes = [
 	'personal-area'                 => 'cabinet_account',
-	'personal-area/orders'          => '',
+	'personal-area/orders'          => 'cabinet_order',
 	'personal-area/password'        => 'cabinet_change',
 	'personal-area/storage'         => '',
 	'personal-area/payment-methods' => '',

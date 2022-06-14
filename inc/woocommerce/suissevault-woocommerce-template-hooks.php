@@ -104,3 +104,5 @@ add_filter( 'woocommerce_account_menu_items', 'suissevault_account_menu_items', 
 add_action( 'woocommerce_account_password_endpoint', 'suissevault_password_content' );
 add_action( 'woocommerce_account_storage_endpoint', 'suissevault_storage_content' );
 add_action( 'woocommerce_account_refer_endpoint', 'suissevault_refer_content' );
+// Orders
+add_filter( 'woocommerce_account_orders_columns', 'suissevault_account_orders_columns', 10, 1 );
