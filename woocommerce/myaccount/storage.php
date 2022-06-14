@@ -18,18 +18,21 @@ defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 
-<div class="cabinet_content_top flex__center">
-	<h2>Stored packages</h2>
-	<?php if ( $has_orders ) : ?>
-		<div class="cabinet_content_print icon icon-print">Print</div>
-	<?php endif; ?>
-</div>
+<h2>Stored packages</h2>
 
 <?php if ( $has_orders ) : ?>
 
 	<div class="cabinet_info">
 		<div class="cabinet_head grid">
-			<?php foreach ( wc_get_account_orders_columns() as $column_id => $column_name ) : ?>
+			<?php
+			$storage_columns = array(
+				'order-number'   => __( 'Order', 'suissevault' ),
+				'order-product'  => __( 'Product', 'suissevault' ),
+				'order-quantity' => __( 'Quantity', 'suissevault' ),
+				'order-date'     => __( 'Date Stored From', 'suissevault' ),
+				'order-actions'  => __( '', 'suissevault' )
+			);
+			foreach ( $storage_columns as $column_id => $column_name ) : ?>
 				<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>"><?php echo esc_html( $column_name ); ?></div>
 			<?php endforeach; ?>
 		</div>
@@ -37,84 +40,52 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 		<?php foreach ( $customer_orders->orders as $customer_order ) {
 			$order                 = wc_get_order( $customer_order ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			$order_shipping_method = $order->get_shipping_method();
-			$order_shipping_total  = $order->get_shipping_total();
-			if ( $order_shipping_method !== 'Storage' )
-				continue;
-			?>
-			<div class="cabinet_row grid status-<?php echo esc_attr( $order->get_status() ); ?> order">
-				<?php foreach ( wc_get_account_orders_columns() as $column_id => $column_name ) : ?>
-					<?php if ( has_action( 'woocommerce_my_account_my_orders_column_' . $column_id ) ) : ?>
-						<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
-							<?php do_action( 'woocommerce_my_account_my_orders_column_' . $column_id, $order ); ?>
-						</div>
-					<?php elseif ( 'order-number' === $column_id ) : ?>
-						<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
-							<?php echo esc_html( $order->get_order_number() ); ?>
-						</div>
-					<?php elseif ( 'order-date' === $column_id ) : ?>
-						<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
-							<time datetime="<?php echo esc_attr( $order->get_date_created()->date( 'c' ) ); ?>"><?php echo esc_html( wc_format_datetime( $order->get_date_created(), 'd.m.Y' ) ); ?></time>
-						</div>
-					<?php elseif ( 'order-status' === $column_id ) : ?>
-						<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
-							<?php echo esc_html( wc_get_order_status_name( $order->get_status() ) ); ?>
-						</div>
-					<?php elseif ( 'order-total' === $column_id ) : ?>
-						<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
-							<?php echo $order->get_formatted_order_total(); ?>
-						</div>
-					<?php elseif ( 'order-actions' === $column_id ) : ?>
-						<div class="cabinet_order_toggle"></div>
-					<?php endif; ?>
-				<?php endforeach; ?>
-
-
-				<div class="cabinet_order_table">
-					<table>
-						<?php foreach ( $order->get_items() as $item_id => $item ):
-							$product = $item->get_product();
-							$product_name = $item->get_name();
-							$product_price_including_tax = $product->get_price_including_tax();
-							$product_thumbnail_id = $product->get_image_id();
-							$thumbnail_picture_html = suissevault_get_picture_html( $product_thumbnail_id );
-							$qty = $item->get_quantity();
-							$refunded_qty = $order->get_qty_refunded_for_item( $item_id );
-							if ( $refunded_qty ) {
-								$qty_display = '<del>' . esc_html( $qty ) . '</del> <ins>' . esc_html( $qty - ( $refunded_qty * -1 ) ) . '</ins>';
-							}
-							else {
-								$qty_display = esc_html( $qty );
-							}
-							$items_subtotal = $order->get_formatted_line_subtotal( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							?>
-							<tr>
-								<td class="_img">
-									<div><?php echo $thumbnail_picture_html; ?></div>
-								</td>
-								<td class="_info">
-									<div class="flex__start">
-										<div class="name"><?php echo $product_name . ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', $qty_display ) . '</strong>'; ?></div>
-										<div>
-											<span>Shipping method</span> <?php echo $order_shipping_method; ?>
-										</div>
-									</div>
-								</td>
-								<td class="_price">
-									<span>Unit price:</span> <?php echo wc_price( $product_price_including_tax ); ?>
-								</td>
-							</tr>
-						<?php endforeach; ?>
-						<tr>
-							<td class="_total" colspan="3">
-								<div>
-									<span>Total:</span> <?php echo wc_price( $order->get_total() ); ?>
-								</div>
-							</td>
-						</tr>
-					</table>
+			if ( $order_shipping_method != 'Storage' ) continue; ?>
+			<?php foreach ( $order->get_items() as $item_id => $item ):
+				$product = $item->get_product();
+				$qty               = $item->get_quantity();
+				$refunded_qty      = $order->get_qty_refunded_for_item( $item_id );
+				$qty_display       = ( $refunded_qty )
+					? '<del>' . esc_html( $qty ) . '</del> <ins>' . esc_html( $qty - ( $refunded_qty * -1 ) ) . '</ins>'
+					: esc_html( $qty ); ?>
+				<div class="cabinet_row grid status-<?php echo esc_attr( $order->get_status() ); ?> order">
+					<?php foreach ( $storage_columns as $column_id => $column_name ) : ?>
+						<?php if ( 'order-number' === $column_id ) : ?>
+							<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
+								<?php echo esc_html( $order->get_order_number() ); ?>
+							</div>
+						<?php elseif ( 'order-product' === $column_id ) : ?>
+							<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
+								<?php echo $product->get_name(); ?>
+							</div>
+						<?php elseif ( 'order-quantity' === $column_id ) : ?>
+							<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
+								<?php echo $qty_display; ?>
+							</div>
+						<?php elseif ( 'order-date' === $column_id ) : ?>
+							<div class="cabinet_col cabinet_col-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
+								<time datetime="<?php echo esc_attr( $order->get_date_created()->date( 'c' ) ); ?>"><?php echo esc_html( wc_format_datetime( $order->get_date_created(), 'd.m.Y' ) ); ?></time>
+							</div>
+						<?php elseif ( 'order-actions' === $column_id ) : ?>
+							<div class="cabinet_storage_print icon icon-eye"></div>
+						<?php endif; ?>
+					<?php endforeach; ?>
 				</div>
-			</div>
+			<?php endforeach; ?>
 		<?php } ?>
+	</div>
+
+	<h2>Storage Invoices</h2>
+	<div class="cabinet_info">
+		<div class="cabinet_head grid">
+			<div class="cabinet_col">References</div>
+			<div class="cabinet_col">Date</div>
+			<div class="cabinet_col">Period</div>
+			<div class="cabinet_col">Total</div>
+		</div>
+		<div class="cabinet_row grid _one">
+			<div class="cabinet_col">You don’t have any storage invoices.</div>
+		</div>
 	</div>
 
 	<?php do_action( 'woocommerce_before_account_orders_pagination' ); ?>

@@ -36,11 +36,7 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 
 		<?php foreach ( $customer_orders->orders as $customer_order ) {
 			$order                 = wc_get_order( $customer_order ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-			$order_shipping_method = $order->get_shipping_method();
-			$order_shipping_total  = $order->get_shipping_total();
-			if ( $order_shipping_method == 'Storage' )
-				continue;
-			?>
+			$order_shipping_method = $order->get_shipping_method(); ?>
 			<div class="cabinet_row grid status-<?php echo esc_attr( $order->get_status() ); ?> order">
 				<?php foreach ( wc_get_account_orders_columns() as $column_id => $column_name ) : ?>
 					<?php if ( has_action( 'woocommerce_my_account_my_orders_column_' . $column_id ) ) : ?>
@@ -73,34 +69,25 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 					<table>
 						<?php foreach ( $order->get_items() as $item_id => $item ):
 							$product = $item->get_product();
-							$product_name = $item->get_name();
-							$product_price_including_tax = $product->get_price_including_tax();
-							$product_thumbnail_id = $product->get_image_id();
-							$thumbnail_picture_html = suissevault_get_picture_html( $product_thumbnail_id );
 							$qty = $item->get_quantity();
 							$refunded_qty = $order->get_qty_refunded_for_item( $item_id );
-							if ( $refunded_qty ) {
-								$qty_display = '<del>' . esc_html( $qty ) . '</del> <ins>' . esc_html( $qty - ( $refunded_qty * -1 ) ) . '</ins>';
-							}
-							else {
-								$qty_display = esc_html( $qty );
-							}
-							$items_subtotal = $order->get_formatted_line_subtotal( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							?>
+							$qty_display = ( $refunded_qty )
+								? '<del>' . esc_html( $qty ) . '</del> <ins>' . esc_html( $qty - ( $refunded_qty * -1 ) ) . '</ins>'
+								: esc_html( $qty ); ?>
 							<tr>
 								<td class="_img">
-									<div><?php echo $thumbnail_picture_html; ?></div>
+									<div><?php echo suissevault_get_picture_html( $product->get_image_id() ); ?></div>
 								</td>
 								<td class="_info">
 									<div class="flex__start">
-										<div class="name"><?php echo $product_name . ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', $qty_display ) . '</strong>'; ?></div>
+										<div class="name"><?php echo $product->get_name() . ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', $qty_display ) . '</strong>'; ?></div>
 										<div>
 											<span>Shipping method</span> <?php echo $order_shipping_method; ?>
 										</div>
 									</div>
 								</td>
 								<td class="_price">
-									<span>Unit price:</span> <?php echo wc_price( $product_price_including_tax ); ?>
+									<span>Unit price:</span> <?php echo wc_price( $product->get_price_including_tax() ); ?>
 								</td>
 							</tr>
 						<?php endforeach; ?>

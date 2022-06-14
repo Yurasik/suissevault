@@ -26,7 +26,7 @@ $cabinet_classes = [
 	'personal-area'                 => 'cabinet_account',
 	'personal-area/orders'          => 'cabinet_order',
 	'personal-area/password'        => 'cabinet_change',
-	'personal-area/storage'         => '',
+	'personal-area/storage'         => 'cabinet_storage',
 	'personal-area/payment-methods' => '',
 	'personal-area/refer'           => '',
 ];
