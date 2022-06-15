@@ -106,3 +106,5 @@ add_action( 'woocommerce_account_storage_endpoint', 'suissevault_storage_content
 add_action( 'woocommerce_account_refer_endpoint', 'suissevault_refer_content' );
 // Orders
 add_filter( 'woocommerce_account_orders_columns', 'suissevault_account_orders_columns', 10, 1 );
+// Payment And Billing
+add_filter( 'woocommerce_account_payment_methods_columns', 'suissevault_account_payment_methods_columns', 10, 1 );

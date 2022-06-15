@@ -5313,7 +5313,7 @@ table.black tr td:not(:first-child) {
   text-align: center;
 }
 
-.cabinet_col._delete {
+.cabinet_col .action_btn {
   --color: var(--gold);
   margin-right: calc(var(--inner) * -1);
   font-weight: 500;
@@ -5321,9 +5321,11 @@ table.black tr td:not(:first-child) {
   letter-spacing: .2em;
   cursor: pointer;
   transition: color .43s;
+
+  display: block;
 }
 
-.cabinet_col._delete:hover {
+.cabinet_col .action_btn:hover {
   --color: var(--red);
 }
 

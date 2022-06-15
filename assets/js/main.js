@@ -286,9 +286,24 @@
         }
     });
 
+    // Steps
     $(document).on('click', '.faq_tab', function () {
         steps(this, 'faq');
-    })
+    });
+
+    $(document).on('click', '.cabinet_content_tab', function () {
+        steps(this, 'billing');
+    });
+
+    function steps(e, step_name, all) {
+        var e = $(e),
+            step = $('.step-' + step_name).eq(e.index());
+
+        if (!e.hasClass(a)) {
+            e.addClass(a).siblings().removeClass(a);
+            step.slideDown().siblings('.step-' + step_name).slideUp();
+        }
+    }
 
     // Total price
     /*$(document).ready(function () {

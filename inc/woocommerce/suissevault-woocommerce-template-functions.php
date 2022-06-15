@@ -555,6 +555,22 @@ if ( !function_exists( 'suissevault_account_orders_columns' ) ) {
 	}
 }
 
+if ( !function_exists( 'suissevault_account_payment_methods_columns' ) ) {
+	function suissevault_account_payment_methods_columns( $columns ) {
+
+		// Unset for reorder
+		unset( $columns['actions'] );
+
+		// New Fields with reorder fields
+		$columns[ 'method' ]  = 'Type';
+		$columns[ 'expires' ] = 'Details';
+		$columns[ 'primary' ] = 'Primary';
+		$columns[ 'actions' ] = '&nbsp;';
+
+		return $columns;
+	}
+}
+
 
 if ( false ) {
 	if ( !function_exists( 'suissevault_cart_link_fragment' ) ) {

@@ -27,8 +27,8 @@ $cabinet_classes = [
 	'personal-area/orders'          => 'cabinet_order',
 	'personal-area/password'        => 'cabinet_change',
 	'personal-area/storage'         => 'cabinet_storage',
-	'personal-area/payment-methods' => '',
-	'personal-area/refer'           => '',
+	'personal-area/payment-methods' => 'cabinet_billing',
+	'personal-area/refer'           => 'cabinet_refer',
 ];
 global $wp;
 $cabinet_class = ( array_key_exists( $wp->request, $cabinet_classes ) )
