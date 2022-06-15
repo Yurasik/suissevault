@@ -25,6 +25,16 @@ input[type=checkbox], input[type=radio] {
   appearance: auto;
 }
 
+.hidden {
+  display: none;
+}
+
+.clear {
+  content: "";
+  display: block;
+  clear: both;
+}
+
 /*
  * Default WP Alignment Classes
  *****************************************************************************/
@@ -193,6 +203,15 @@ input[type=checkbox], input[type=radio] {
   cursor: pointer;
 }
 
+.modal .errors_wrapper {
+  display: none;
+}
+
+.modal .errors_wrapper.error {
+  display: block;
+  color: red;
+}
+
 /* Modals */
 /* Cart */
 .lock_cart .close {
@@ -292,7 +311,33 @@ input[type=checkbox], input[type=radio] {
   position: relative;
 }
 
+.checkout .wc_payment_method label {
+  display: none;
+}
+
 /* Checkout */
+/* Payment */
+#payment fieldset {
+  border: none;
+}
+
+#payment .payment_method_stripe .form-row-first {
+  width: 45%;
+  float: left;
+  margin-right: 5%;
+}
+
+#payment .payment_method_stripe .form-row-last {
+  width: 45%;
+  float: left;
+  margin-left: 5%;
+}
+
+#payment .wc-stripe-elements-field.invalid {
+  border-color: red;
+}
+
+/* Payment */
 /* My Account */
 .cabinet .woocommerce {
   grid-gap: 48px;

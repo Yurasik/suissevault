@@ -215,7 +215,7 @@ textarea::placeholder {
 
 /* Global. */
 
-html.hidden {
+html.html-hidden {
   overflow: hidden;
 }
 

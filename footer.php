@@ -6,8 +6,11 @@
  * @package suissevault
  */
 
-$contacts = get_field( 'contacts', 'options' );
-$footer   = get_field( 'footer', 'options' );
+$contacts    = get_field( 'contacts', 'options' );
+$footer      = get_field( 'footer', 'options' );
+$current_url = ( isset( $_SERVER[ 'HTTPS' ] )
+		? "https"
+		: "http" ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
 
 <style>
@@ -351,121 +354,142 @@ $footer   = get_field( 'footer', 'options' );
 	<!-- Modal-allocated. -->
 <?php endif; ?>
 
-<!-- Modal-payment. -->
-<div class="modal modal-payment">
-	<div class="modal_wrapper">
-		<div class="modal_top">
-			<span class="close"></span> Add payment method
-		</div>
-		<div class="modal_scroll">
-			<fomm class="form">
-				<div class="form_wrapper">
-					<div class="form_label">Card number</div>
-					<div class="input">
-						<input type="text"> <span class="error_text">Error text</span>
-					</div>
-				</div>
-				<div class="grid grid__twoo">
-					<div class="form_wrapper">
-						<div class="form_label">Expiration</div>
-						<div class="input error">
-							<input type="text"> <span class="error_text">Error text</span>
-						</div>
-					</div>
-					<div class="form_wrapper">
-						<div class="form_label">Cvv</div>
-						<div class="input">
-							<input type="text"> <span class="error_text">Error text</span>
-						</div>
-					</div>
-				</div>
-				<p>If you add a payment method, all future renewals will be charged on that new payment method</p>
-				<div class="modal_btn">
-					<div class="btn">Add new credit card</div>
-				</div>
-				<div class="modal_under">
-					<div class="hover__line">Add new pay pal account</div>
-				</div>
-			</fomm>
-		</div>
-	</div>
-	<div class="modal_viel"></div>
-</div>
-<!-- Modal-payment. -->
+<?php if ( is_account_page() && is_user_logged_in() && wc_get_endpoint_url( 'payment-methods' ) == $current_url ): ?>
+	<!-- Modal-payment. -->
+	<div class="modal modal-payment">
+		<div class="modal_wrapper">
+			<div class="modal_top">
+				<span class="close"></span> Add payment method
+			</div>
+			<div class="modal_scroll">
+				<?php
+				$available_gateways = WC()->payment_gateways->get_available_payment_gateways();
+				if ( $available_gateways ) : ?>
+					<div class="errors_wrapper"></div>
+					<form id="add_payment_method" class="form" method="post">
+						<?php wp_nonce_field( 'woocommerce-add-payment-method', 'woocommerce-add-payment-method-nonce' ); ?>
+						<input type="hidden" name="woocommerce_add_payment_method" id="woocommerce_add_payment_method" value="1" />
 
-<!-- Modal-billing. -->
-<div class="modal modal-billing">
-	<div class="modal_wrapper">
-		<div class="modal_top">
-			<span class="close"></span> Edit Billing Address
+						<div id="payment" class="woocommerce-Payment">
+							<ul class="woocommerce-PaymentMethods payment_methods methods">
+								<?php
+								// Chosen Method.
+								if ( count( $available_gateways ) ) {
+									current( $available_gateways )->set_current();
+								}
+
+								foreach ( $available_gateways as $gateway ) { ?>
+									<li class="woocommerce-PaymentMethod woocommerce-PaymentMethod--<?php echo esc_attr( $gateway->id ); ?> payment_method_<?php echo esc_attr( $gateway->id ); ?>">
+										<div class="<?php echo ( count( $available_gateways ) == 1 )
+											? "hidden"
+											: ""; ?>">
+											<input id="payment_method_<?php echo esc_attr( $gateway->id ); ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" <?php checked( $gateway->chosen, true ); ?> />
+											<label for="payment_method_<?php echo esc_attr( $gateway->id ); ?>"><?php echo wp_kses_post( $gateway->get_title() ); ?><?php echo wp_kses_post( $gateway->get_icon() ); ?></label>
+										</div>
+
+										<?php
+										if ( $gateway->has_fields() || $gateway->get_description() ) {
+											echo '<div class="woocommerce-PaymentBox woocommerce-PaymentBox--' . esc_attr( $gateway->id ) . ' payment_box payment_method_' . esc_attr( $gateway->id ) . '" style="display: none;">';
+											$gateway->payment_fields();
+											echo '</div>';
+										}
+										?>
+									</li>
+								<?php } ?>
+							</ul>
+
+							<?php do_action( 'woocommerce_add_payment_method_form_bottom' ); ?>
+
+							<p>If you add a payment method, all future renewals will be charged on that new payment method</p>
+
+							<div class="modal_btn">
+								<button type="submit" class="woocommerce-Button woocommerce-Button--alt button btn alt" id="add_payment_method_submit" value="<?php esc_attr_e( 'Add payment method', 'woocommerce' ); ?>"><?php esc_html_e( 'Add new credit card', 'suissevault' ); ?></button>
+							</div>
+						</div>
+					</form>
+				<?php else : ?>
+					<p class="woocommerce-notice woocommerce-notice--info woocommerce-info"><?php esc_html_e( 'New payment methods can only be added during checkout. Please contact us if you require assistance.', 'woocommerce' ); ?></p>
+				<?php endif; ?>
+			</div>
 		</div>
-		<div class="modal_scroll">
-			<fomm class="form">
-				<div class="grid grid__twoo">
-					<div class="form_wrapper">
-						<div class="form_label">First name</div>
-						<div class="input">
-							<input type="text"> <span class="error_text">Error text</span>
-						</div>
-					</div>
-					<div class="form_wrapper">
-						<div class="form_label">Last name</div>
-						<div class="input">
-							<input type="text"> <span class="error_text">Error text</span>
-						</div>
-					</div>
-					<div class="form_wrapper">
-						<div class="form_label">Address Line 1</div>
-						<div class="input">
-							<input type="text"> <span class="error_text">Error text</span>
-						</div>
-					</div>
-					<div class="form_wrapper">
-						<div class="form_label">Address Line 2</div>
-						<div class="input">
-							<input type="text"> <span class="error_text">Error text</span>
-						</div>
-					</div>
-					<div class="form_wrapper">
-						<div class="form_label">City</div>
-						<div class="input">
-							<input type="text"> <span class="error_text">Error text</span>
-						</div>
-					</div>
-					<div class="form_wrapper">
-						<div class="form_label">State</div>
-						<div class="select">
-							<select name="where">
-								<option value="hidden"></option>
-								<option value="1">State 1</option>
-								<option value="2">State 2</option>
-								<option value="3">State 3</option>
-								<option value="4">State 4</option>
-							</select>
-						</div>
-					</div>
-					<div class="form_wrapper">
-						<div class="form_label">ZIP Code</div>
-						<div class="input">
-							<input type="text"> <span class="error_text">Error text</span>
-						</div>
-					</div>
-					<div class="form_wrapper">
-						<div class="form_label">Phone Number</div>
-						<div class="input">
-							<input type="text"> <span class="error_text">Error text</span>
-						</div>
-					</div>
-				</div>
-				<div class="modal_btn">
-					<div class="btn">Save</div>
-				</div>
-			</fomm>
-		</div>
+		<div class="modal_viel"></div>
 	</div>
-	<div class="modal_viel"></div>
-</div>
-<!-- Modal-billing. -->
+	<!-- Modal-payment. -->
+
+	<!-- Modal-billing. -->
+	<div class="modal modal-billing">
+		<div class="modal_wrapper">
+			<div class="modal_top">
+				<span class="close"></span> Edit Billing Address
+			</div>
+			<div class="modal_scroll">
+				<fomm class="form">
+					<div class="grid grid__twoo">
+						<div class="form_wrapper">
+							<div class="form_label">First name</div>
+							<div class="input">
+								<input type="text"> <span class="error_text">Error text</span>
+							</div>
+						</div>
+						<div class="form_wrapper">
+							<div class="form_label">Last name</div>
+							<div class="input">
+								<input type="text"> <span class="error_text">Error text</span>
+							</div>
+						</div>
+						<div class="form_wrapper">
+							<div class="form_label">Address Line 1</div>
+							<div class="input">
+								<input type="text"> <span class="error_text">Error text</span>
+							</div>
+						</div>
+						<div class="form_wrapper">
+							<div class="form_label">Address Line 2</div>
+							<div class="input">
+								<input type="text"> <span class="error_text">Error text</span>
+							</div>
+						</div>
+						<div class="form_wrapper">
+							<div class="form_label">City</div>
+							<div class="input">
+								<input type="text"> <span class="error_text">Error text</span>
+							</div>
+						</div>
+						<div class="form_wrapper">
+							<div class="form_label">State</div>
+							<div class="select">
+								<select name="where">
+									<option value="hidden"></option>
+									<option value="1">State 1</option>
+									<option value="2">State 2</option>
+									<option value="3">State 3</option>
+									<option value="4">State 4</option>
+								</select>
+							</div>
+						</div>
+						<div class="form_wrapper">
+							<div class="form_label">ZIP Code</div>
+							<div class="input">
+								<input type="text"> <span class="error_text">Error text</span>
+							</div>
+						</div>
+						<div class="form_wrapper">
+							<div class="form_label">Phone Number</div>
+							<div class="input">
+								<input type="text"> <span class="error_text">Error text</span>
+							</div>
+						</div>
+					</div>
+					<div class="modal_btn">
+						<div class="btn">Save</div>
+					</div>
+				</fomm>
+			</div>
+		</div>
+		<div class="modal_viel"></div>
+	</div>
+	<!-- Modal-billing. -->
+<?php endif; ?>
 
 <!-- Footer. -->
 <div class="footer">

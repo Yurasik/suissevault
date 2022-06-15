@@ -53,7 +53,7 @@
         $(this).toggleClass(a);
         $('.header').toggleClass('burger_active');
         $('.burger_wrapper').slideToggle();
-        $('html').toggleClass('hidden');
+        $('html').toggleClass('html-hidden');
     });
 
     // Slider
@@ -325,12 +325,12 @@
         $('.modal').removeClass(a);
         $(modal).addClass(a);
 
-        $('html').addClass('hidden');
+        $('html').addClass('html-hidden');
     });
 
     $(document).on('click', '.modal_viel, .modal .close, .modal .close-btn', function () {
         $(this).parents('.modal').removeClass(a);
-        $('html').removeClass('hidden');
+        $('html').removeClass('html-hidden');
     })
 
     // Cabinet
@@ -399,6 +399,14 @@
 
     });
 
+    // Checkout submit form button role
+    $('#place_order_btn').on('click', function (){
+        $('#place_order').click();
+    });
+
+
+    // AJAX
+
     // Cart Payment method change
     $(document).on( 'change', '#cart-payment-form [name=payment_method]', function (){
         $.ajax({
@@ -444,11 +452,6 @@
                 console.log(textStatus);
             }
         });
-    });
-
-    // Checkout submit form button role
-    $('#place_order_btn').on('click', function (){
-        $('#place_order').click();
     });
 
 }(jQuery));

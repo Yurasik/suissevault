@@ -57,7 +57,7 @@ do_action( 'woocommerce_before_account_payment_methods', $has_methods ); ?>
 											/* translators: 1: credit card type 2: last 4 digits */
 											echo sprintf( esc_html__( '**** **** **** %1$s', 'woocommerce' ), esc_html( $method[ 'method' ][ 'last4' ] ) );
 										}
-										echo "-" . DateTime::createFromFormat('m/s', esc_html( $method[ 'expires' ] ))->format('m/Y');
+										echo "-" . DateTime::createFromFormat('m/y', esc_html( $method[ 'expires' ] ))->format('m/Y');
 									}
 									elseif ( 'primary' === $column_id ) {
 										echo ( $method['is_default'] ) ? "Yes" : "";
@@ -78,9 +78,8 @@ do_action( 'woocommerce_before_account_payment_methods', $has_methods ); ?>
 
 			<?php do_action( 'woocommerce_after_account_payment_methods', $has_methods ); ?>
 		</div>
-
 		<?php if ( WC()->payment_gateways->get_available_payment_gateways() ) : ?>
-			<a class="button btn btn-line" href="<?php echo esc_url( wc_get_endpoint_url( 'add-payment-method' ) ); ?>"><?php esc_html_e( 'Add new card', 'suissevault' ); ?></a>
+			<a class="button btn btn-line modal-link" data-modal-name="payment"><?php esc_html_e( 'Add new card', 'suissevault' ); ?></a>
 		<?php endif; ?>
 	</div>
 
