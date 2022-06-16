@@ -20,17 +20,19 @@ $saved_methods = wc_get_customer_saved_methods_list( get_current_user_id() );
 $has_methods   = (bool)$saved_methods;
 $types         = wc_get_account_payment_methods_types();
 
+$tab = get_query_var('payment-methods');
+
 do_action( 'woocommerce_before_account_payment_methods', $has_methods ); ?>
 
 <h2>Billing & Payments</h2>
 
 <div class="cabinet_content_tabs flex__align">
-	<div class="cabinet_content_tab active">Payment method</div>
-	<div class="cabinet_content_tab">Billing address</div>
+	<div class="cabinet_content_tab <?php echo ( !$tab ) ? "active" : ""; ?>">Payment method</div>
+	<div class="cabinet_content_tab <?php echo ( $tab == "billing" ) ? "active" : ""; ?>">Billing address</div>
 </div>
 
 <div class="cabinet_content_steps">
-	<div class="cabinet_content_step step-billing">
+	<div class="cabinet_content_step step-billing" <?php echo ( $tab ) ? "style='display: none;'" : ""; ?>>
 		<div class="cabinet_info">
 			<?php if ( $has_methods ) : ?>
 				<div class="cabinet_head grid _four">
@@ -81,7 +83,7 @@ do_action( 'woocommerce_before_account_payment_methods', $has_methods ); ?>
 		<?php endif; ?>
 	</div>
 
-	<div class="cabinet_content_step step-billing" style="display: none;">
+	<div class="cabinet_content_step step-billing" <?php echo ( $tab != "billing" ) ? "style='display: none;'" : ""; ?>>
 		<?php wc_get_template( 'myaccount/my-address.php' ); ?>
 	</div>
 </div>

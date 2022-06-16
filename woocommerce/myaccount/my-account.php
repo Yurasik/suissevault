@@ -23,17 +23,16 @@ defined( 'ABSPATH' ) || exit;
 do_action( 'woocommerce_account_navigation' );
 
 $cabinet_classes = [
-	'personal-area'                 => 'cabinet_account',
-	'personal-area/orders'          => 'cabinet_order',
-	'personal-area/password'        => 'cabinet_change',
-	'personal-area/storage'         => 'cabinet_storage',
-	'personal-area/payment-methods' => 'cabinet_billing',
-	'personal-area/refer'           => 'cabinet_refer',
+	'personal-area'                         => 'cabinet_account',
+	'personal-area/orders'                  => 'cabinet_order',
+	'personal-area/password'                => 'cabinet_change',
+	'personal-area/storage'                 => 'cabinet_storage',
+	'personal-area/payment-methods'         => 'cabinet_billing',
+	'personal-area/payment-methods/billing' => 'cabinet_billing',
+	'personal-area/refer'                   => 'cabinet_refer',
 ];
 global $wp;
-$cabinet_class = ( array_key_exists( $wp->request, $cabinet_classes ) )
-	? $cabinet_classes[ $wp->request ]
-	: ""; ?>
+$cabinet_class = ( array_key_exists( $wp->request, $cabinet_classes ) ) ? $cabinet_classes[ $wp->request ] : ""; ?>
 
 <div class="woocommerce-MyAccount-content cabinet_content <?php echo $cabinet_class; ?>">
 	<?php

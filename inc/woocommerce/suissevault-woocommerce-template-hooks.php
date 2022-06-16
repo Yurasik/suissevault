@@ -110,4 +110,5 @@ add_filter( 'woocommerce_account_orders_columns', 'suissevault_account_orders_co
 add_filter( 'woocommerce_account_payment_methods_columns', 'suissevault_account_payment_methods_columns', 10, 1 );
 // Billing fields on my account edit-addresses and checkout
 add_filter( 'woocommerce_billing_fields', 'suissevault_billing_fields_conditions' );
+add_filter( 'woocommerce_customer_save_address', 'suissevault_customer_save_address', 10, 2 );
 

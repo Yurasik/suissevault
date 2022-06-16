@@ -350,7 +350,7 @@ $current_url = ( isset( $_SERVER[ 'HTTPS' ] ) ? "https" : "http" ) . "://$_SERVE
 	<!-- Modal-allocated. -->
 <?php endif; ?>
 
-<?php if ( is_account_page() && is_user_logged_in() && wc_get_endpoint_url( 'payment-methods' ) == $current_url ): ?>
+<?php if ( is_account_page() && is_user_logged_in() && ( wc_get_endpoint_url( 'payment-methods' ) == $current_url || wc_get_endpoint_url( 'payment-methods', 'billing' ) == $current_url ) ) : ?>
 	<!-- Modal-payment. -->
 	<div class="modal modal-payment">
 		<div class="modal_wrapper">

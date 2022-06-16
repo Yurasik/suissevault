@@ -584,6 +584,18 @@ if ( !function_exists( 'suissevault_billing_fields_conditions' ) ) {
 	}
 }
 
+if ( !function_exists( 'suissevault_customer_save_address' ) ) {
+	function suissevault_customer_save_address( $user_id, $load_address ) {
+
+		$current_url = ( isset( $_SERVER[ 'HTTPS' ] ) ? "https" : "http" ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+		if ( is_account_page() && ( wc_get_endpoint_url( 'payment-methods' ) == $current_url || wc_get_endpoint_url( 'payment-methods', 'billing' ) == $current_url ) ) {
+			wp_safe_redirect( wc_get_endpoint_url( 'payment-methods', 'billing', wc_get_page_permalink( 'myaccount' ) ) );
+			exit;
+		}
+	}
+}
+
 
 if ( false ) {
 	if ( !function_exists( 'suissevault_cart_link_fragment' ) ) {
