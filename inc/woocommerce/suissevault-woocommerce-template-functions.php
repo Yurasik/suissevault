@@ -104,7 +104,7 @@ if ( !function_exists( 'suissevault_show_product_images' ) ) {
 	 */
 	function suissevault_show_product_images() {
 		global $product;
-		$thumbnail_id   = $product->get_image_id();
+		$thumbnail_id = $product->get_image_id();
 		$attachment_ids = $product->get_gallery_image_ids();
 		?>
 		<div class="buy_name_left">
@@ -196,8 +196,8 @@ if ( !function_exists( 'suissevault_terms_delivery_tab' ) ) {
 		);
 
 		$tabs[ 'additional_information' ][ 'priority' ] = 10;
-		$tabs[ 'description' ][ 'priority' ]            = 20;
-		$tabs[ 'terms_delivery' ][ 'priority' ]         = 30;
+		$tabs[ 'description' ][ 'priority' ] = 20;
+		$tabs[ 'terms_delivery' ][ 'priority' ] = 30;
 
 		return $tabs;
 	}
@@ -217,7 +217,7 @@ if ( !function_exists( 'suissevault_related_products_args' ) ) {
 	function suissevault_related_products_args( $args ) {
 
 		$args[ 'posts_per_page' ] = 3;
-		$args[ 'columns' ]        = 1;
+		$args[ 'columns' ] = 1;
 
 		return $args;
 	}
@@ -271,7 +271,7 @@ if ( !function_exists( 'suissevault_checkout_fields' ) ) {
 	function suissevault_checkout_fields( $fields ) {
 
 		// Add New fields
-		$fields[ 'billing' ][ 'birth_day' ]   = [
+		$fields[ 'billing' ][ 'birth_day' ] = [
 			'type'         => 'number',
 			'label'        => 'DATE OF BIRTHD (DD)',
 			'placeholder'  => '',
@@ -291,7 +291,7 @@ if ( !function_exists( 'suissevault_checkout_fields' ) ) {
 			'label_class'  => 'form_label',
 			'priority'     => 22
 		];
-		$fields[ 'billing' ][ 'birth_year' ]  = [
+		$fields[ 'billing' ][ 'birth_year' ] = [
 			'type'         => 'number',
 			'label'        => 'YEAR (YYYY)',
 			'placeholder'  => '',
@@ -347,7 +347,7 @@ if ( !function_exists( 'suissevault_checkout_fields_process' ) ) {
 if ( !function_exists( 'suissevault_customize_form_field' ) ) {
 	function suissevault_customize_form_field( $field, $key, $args, $value ) {
 
-		if ( is_checkout() && !is_wc_endpoint_url() ) {
+		if ( is_checkout() || is_wc_endpoint_url() ) {
 			$optional = '&nbsp;<span class="optional">(' . esc_html__( 'optional', 'woocommerce' ) . ')</span>';
 
 			$field = str_replace( [
@@ -373,7 +373,9 @@ if ( !function_exists( 'suissevault_customize_form_field' ) ) {
 				'woocommerce-input-wrapper input"><input',
 				'woocommerce-input-wrapper select"><select',
 			], $field );
+		}
 
+		if ( is_checkout() ) {
 			if ( $key == "billing_first_name" || $key == "billing_phone" ) {
 				$field = '<div class="grid grid__twoo">' . $field;
 			}
@@ -423,7 +425,7 @@ if ( !function_exists( 'suissevault_remove_checkout_optional_fields_label_script
 if ( !function_exists( 'suissevault_add_form_field_args' ) ) {
 	function suissevault_add_form_field_args( $args, $key, $value ) {
 
-		if ( is_checkout() ) {
+		if ( is_checkout() || is_wc_endpoint_url() ) {
 			$args[ 'label_class' ] = [ 'form_label' ];
 		}
 
@@ -439,14 +441,14 @@ if ( !function_exists( 'suissevault_customize_cart_shipping_method_full_label' )
 				$label .= " (" . get_woocommerce_currency_symbol() . $method->get_cost() . ")";
 			}
 			elseif ( $method->get_method_id() == 'flat_rate' ) {
-				$label_array                              = explode( ":", $label );
+				$label_array = explode( ":", $label );
 				$label_array[ count( $label_array ) - 1 ] = " (" . trim( $label_array[ count( $label_array ) - 1 ] ) . ")";
-				$label                                    = implode( "", $label_array );
+				$label = implode( "", $label_array );
 			}
 			else {
-				$label_array                              = explode( ":", $label );
+				$label_array = explode( ":", $label );
 				$label_array[ count( $label_array ) - 1 ] = " (" . trim( $label_array[ count( $label_array ) - 1 ] ) . ")";
-				$label                                    = implode( ":", $label_array );
+				$label = implode( ":", $label_array );
 			}
 		}
 
@@ -521,9 +523,7 @@ if ( !function_exists( 'suissevault_password_content' ) ) {
 
 if ( !function_exists( 'suissevault_storage_content' ) ) {
 	function suissevault_storage_content( $current_page ) {
-		$current_page    = empty( $current_page )
-			? 1
-			: absint( $current_page );
+		$current_page = empty( $current_page ) ? 1 : absint( $current_page );
 		$customer_orders = wc_get_orders( array(
 			'customer' => get_current_user_id(),
 			'page'     => $current_page,
@@ -547,8 +547,8 @@ if ( !function_exists( 'suissevault_refer_content' ) ) {
 if ( !function_exists( 'suissevault_account_orders_columns' ) ) {
 	function suissevault_account_orders_columns( $columns ) {
 
-		$columns[ 'order-number' ]  = 'Order number';
-		$columns[ 'order-total' ]   = 'Total amount';
+		$columns[ 'order-number' ] = 'Order number';
+		$columns[ 'order-total' ] = 'Total amount';
 		$columns[ 'order-actions' ] = '';
 
 		return $columns;
@@ -559,15 +559,28 @@ if ( !function_exists( 'suissevault_account_payment_methods_columns' ) ) {
 	function suissevault_account_payment_methods_columns( $columns ) {
 
 		// Unset for reorder
-		unset( $columns['actions'] );
+		unset( $columns[ 'actions' ] );
 
 		// New Fields with reorder fields
-		$columns[ 'method' ]  = 'Type';
+		$columns[ 'method' ] = 'Type';
 		$columns[ 'expires' ] = 'Details';
 		$columns[ 'primary' ] = 'Primary';
 		$columns[ 'actions' ] = '&nbsp;';
 
 		return $columns;
+	}
+}
+
+if ( !function_exists( 'suissevault_billing_fields_conditions' ) ) {
+	function suissevault_billing_fields_conditions( $fields ) {
+
+		if ( is_account_page() ) {
+			unset( $fields[ 'billing_company' ] );
+			unset( $fields[ 'billing_country' ] );
+			unset( $fields[ 'billing_email' ] );
+		}
+
+		return $fields;
 	}
 }
 

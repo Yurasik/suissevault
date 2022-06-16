@@ -108,3 +108,6 @@ add_action( 'woocommerce_account_refer_endpoint', 'suissevault_refer_content' );
 add_filter( 'woocommerce_account_orders_columns', 'suissevault_account_orders_columns', 10, 1 );
 // Payment And Billing
 add_filter( 'woocommerce_account_payment_methods_columns', 'suissevault_account_payment_methods_columns', 10, 1 );
+// Billing fields on my account edit-addresses and checkout
+add_filter( 'woocommerce_billing_fields', 'suissevault_billing_fields_conditions' );
+

@@ -1,7 +1,9 @@
 <?php
 /**
  * Add payment method form form
+ *
  * This template can be overridden by copying it to yourtheme/woocommerce/myaccount/form-add-payment-method.php.
+ *
  * HOWEVER, on occasion WooCommerce will need to update template files and you
  * (the theme developer) will need to copy the new files to your theme to
  * maintain compatibility. We try to do this as little as possible, but it does
@@ -19,8 +21,6 @@ $available_gateways = WC()->payment_gateways->get_available_payment_gateways();
 
 if ( $available_gateways ) : ?>
 	<form id="add_payment_method" class="form" method="post">
-		<?php wp_nonce_field( 'suissevault-add-payment-method', 'suissevault-add-payment-method-nonce' ); ?>
-
 		<div id="payment" class="woocommerce-Payment">
 			<ul class="woocommerce-PaymentMethods payment_methods methods">
 				<?php
@@ -54,10 +54,12 @@ if ( $available_gateways ) : ?>
 			<p>If you add a payment method, all future renewals will be charged on that new payment method</p>
 
 			<div class="modal_btn">
-				<button type="submit" class="woocommerce-Button woocommerce-Button--alt button btn alt" id="place_order" value="<?php esc_attr_e( 'Add payment method', 'woocommerce' ); ?>"><?php esc_html_e( 'Add new credit card', 'suissevault' ); ?></button>
+				<?php wp_nonce_field( 'woocommerce-add-payment-method', 'woocommerce-add-payment-method-nonce' ); ?>
+				<button type="submit" class="woocommerce-Button woocommerce-Button--alt button btn alt" id="add_payment_method_submit" value="<?php esc_attr_e( 'Add payment method', 'woocommerce' ); ?>"><?php esc_html_e( 'Add new credit card', 'suissevault' ); ?></button>
+				<input type="hidden" name="woocommerce_add_payment_method" id="woocommerce_add_payment_method" value="1" />
 			</div>
 		</div>
 	</form>
 <?php else : ?>
 	<p class="woocommerce-notice woocommerce-notice--info woocommerce-info"><?php esc_html_e( 'New payment methods can only be added during checkout. Please contact us if you require assistance.', 'woocommerce' ); ?></p>
-<?php endif; ?>
+<?php endif;

@@ -10,9 +10,7 @@ if ( !function_exists( 'suissevault_is_woocommerce_activated' ) ) {
 	 * Query WooCommerce activation
 	 */
 	function suissevault_is_woocommerce_activated() {
-		return class_exists( 'WooCommerce' )
-			? true
-			: false;
+		return class_exists( 'WooCommerce' ) ? true : false;
 	}
 }
 
@@ -85,9 +83,7 @@ function get_acf_link_html( $link, $link_class, $before_title = "", $after_title
 	if ( $link ) {
 		$link_url    = $link[ 'url' ];
 		$link_title  = $link[ 'title' ];
-		$link_target = $link[ 'target' ]
-			? $link[ 'target' ]
-			: '_self';
+		$link_target = $link[ 'target' ] ? $link[ 'target' ] : '_self';
 
 		$link_html = "<a class='$link_class' href='" . esc_url( $link_url ) . "' target='" . esc_attr( $link_target ) . "'>$before_title" . esc_html( $link_title ) . "$after_title</a>";
 	}
@@ -157,81 +153,3 @@ function suissevault_delivery_method() {
 	wp_send_json( $response );
 	die();
 }
-
-add_action( 'wp_ajax_suissevault_add_payment_method', 'suissevault_add_payment_method' );
-add_action( 'wp_ajax_nopriv_suissevault_add_payment_method', 'suissevault_add_payment_method' );
-function suissevault_add_payment_method() {
-
-	wc_nocache_headers();
-
-	check_ajax_referer( 'suissevault-add-payment-method', 'security' );
-
-	$response = [];
-
-	// Test rate limit.
-	$current_user_id = get_current_user_id();
-	$rate_limit_id   = 'add_payment_method_' . $current_user_id;
-	$delay           = (int)apply_filters( 'woocommerce_payment_gateway_add_payment_method_delay', 20 );
-
-	if ( WC_Rate_Limiter::retried_too_soon( $rate_limit_id ) ) {
-		wc_add_notice( sprintf( /* translators: %d number of seconds */ _n( 'You cannot add a new payment method so soon after the previous one. Please wait for %d second.', 'You cannot add a new payment method so soon after the previous one. Please wait for %d seconds.', $delay, 'woocommerce' ), $delay ), 'error' );
-		//return_response_notices();
-		var_dump( 'WC_Rate_Limiter' );
-		wp_die();
-	}
-
-	WC_Rate_Limiter::set_rate_limit( $rate_limit_id, $delay );
-
-	ob_start();
-
-	$payment_method_id  = wc_clean( wp_unslash( $_POST[ 'payment_method' ] ) );
-	$available_gateways = WC()->payment_gateways->get_available_payment_gateways();
-
-	if ( isset( $available_gateways[ $payment_method_id ] ) ) {
-		$gateway = $available_gateways[ $payment_method_id ];
-
-		if ( !$gateway->supports( 'add_payment_method' ) && !$gateway->supports( 'tokenization' ) ) {
-			wc_add_notice( __( 'Invalid payment gateway.', 'woocommerce' ), 'error' );
-			//return_response_notices();
-			var_dump( 'add_payment_method' );
-			wp_die();
-		}
-
-		$gateway->validate_fields();
-
-		if ( wc_notice_count( 'error' ) > 0 ) {
-			//return_response_notices();
-			var_dump( 'wc_notice_count' );
-			wp_die();
-		}
-
-		$result = $gateway->add_payment_method();
-		var_dump( $result );
-		wp_die();
-
-		if ( 'success' === $result[ 'result' ] ) {
-			wc_add_notice( __( 'Payment method successfully added.', 'woocommerce' ) );
-		}
-
-		if ( 'failure' === $result[ 'result' ] ) {
-			wc_add_notice( __( 'Unable to add payment method to your account.', 'woocommerce' ), 'error' );
-		}
-
-		if ( !empty( $result[ 'redirect' ] ) ) {
-			wp_redirect( $result[ 'redirect' ] ); //phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
-			exit();
-		}
-	}
-
-	wp_send_json( $response );
-	die();
-}
-function return_response_notices() {
-
-	$notices = wc_get_notices();
-	//wc_clear_notices();
-
-	wp_send_json( $notices );
-	die();
-}
-

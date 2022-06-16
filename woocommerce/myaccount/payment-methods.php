@@ -40,9 +40,7 @@ do_action( 'woocommerce_before_account_payment_methods', $has_methods ); ?>
 				</div>
 				<?php foreach ( $saved_methods as $type => $methods ) : // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited ?>
 					<?php foreach ( $methods as $method ) : ?>
-						<div class="cabinet_row grid _four payment-method<?php echo !empty( $method[ 'is_default' ] )
-							? ' default-payment-method'
-							: ''; ?>">
+						<div class="cabinet_row grid _four payment-method<?php echo !empty( $method[ 'is_default' ] ) ? ' default-payment-method' : ''; ?>">
 							<?php foreach ( wc_get_account_payment_methods_columns() as $column_id => $column_name ) : ?>
 								<div class="cabinet_col woocommerce-PaymentMethod woocommerce-PaymentMethod--<?php echo esc_attr( $column_id ); ?> payment-method-<?php echo esc_attr( $column_id ); ?>" data-title="<?php echo esc_attr( $column_name ); ?>">
 									<?php
@@ -57,10 +55,10 @@ do_action( 'woocommerce_before_account_payment_methods', $has_methods ); ?>
 											/* translators: 1: credit card type 2: last 4 digits */
 											echo sprintf( esc_html__( '**** **** **** %1$s', 'woocommerce' ), esc_html( $method[ 'method' ][ 'last4' ] ) );
 										}
-										echo "-" . DateTime::createFromFormat('m/y', esc_html( $method[ 'expires' ] ))->format('m/Y');
+										echo "-" . DateTime::createFromFormat( 'm/y', esc_html( $method[ 'expires' ] ) )->format( 'm/Y' );
 									}
 									elseif ( 'primary' === $column_id ) {
-										echo ( $method['is_default'] ) ? "Yes" : "";
+										echo ( $method[ 'is_default' ] ) ? "Yes" : "";
 									}
 									elseif ( 'actions' === $column_id ) {
 										foreach ( $method[ 'actions' ] as $key => $action ) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
@@ -84,41 +82,7 @@ do_action( 'woocommerce_before_account_payment_methods', $has_methods ); ?>
 	</div>
 
 	<div class="cabinet_content_step step-billing" style="display: none;">
-		<table>
-			<tr>
-				<td>First name</td>
-				<td>John</td>
-			</tr>
-			<tr>
-				<td>Last name</td>
-				<td>Smith</td>
-			</tr>
-			<tr>
-				<td>Address Line 1</td>
-				<td>7 Lewis Circle</td>
-			</tr>
-			<tr>
-				<td>Address Line 2</td>
-				<td>Ste.328571</td>
-			</tr>
-			<tr>
-				<td>City</td>
-				<td>Wilmington</td>
-			</tr>
-			<tr>
-				<td>State</td>
-				<td>Delaware</td>
-			</tr>
-			<tr>
-				<td>ZIP Code</td>
-				<td>19804</td>
-			</tr>
-			<tr>
-				<td>Phone Number</td>
-				<td>(484)5400835</td>
-			</tr>
-		</table>
-		<div class="btn btn-line">Edit billing address</div>
+		<?php wc_get_template( 'myaccount/my-address.php' ); ?>
 	</div>
 </div>
 
