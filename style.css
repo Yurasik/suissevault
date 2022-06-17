@@ -369,6 +369,13 @@ input[type=checkbox], input[type=radio] {
   margin-top: 0;
 }
 
+.cabinet_order_table .invoice_col {
+  display: flex;
+  justify-content: right;
+  padding: 24px 32px;
+  border-top: 1px solid #DEDEDE;
+}
+
 #billing_state_field .select:before {
   content: "";
   position: absolute;

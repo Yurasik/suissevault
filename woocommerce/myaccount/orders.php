@@ -20,7 +20,8 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 
 <div class="cabinet_content_top flex__center">
 	<h2>Order history</h2>
-	<?php if ( $has_orders ) : ?>
+	<?php $display_print = false;
+	if ( $has_orders && $display_print ) : ?>
 		<div class="cabinet_content_print icon icon-print">Print</div>
 	<?php endif; ?>
 </div>
@@ -60,12 +61,26 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 							<?php echo $order->get_formatted_order_total(); ?>
 						</div>
 					<?php elseif ( 'order-actions' === $column_id ) : ?>
-						<div class="cabinet_order_toggle"></div>
+						<?php $actions = wc_get_account_orders_actions( $order );
+						if ( ! empty( $actions ) ) {
+							$invoice = "";
+							foreach ( $actions as $key => $action ) { // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+								if ( $key == 'view' ) {
+									echo '<div class="cabinet_order_toggle"></div>';
+								} elseif ( $key == 'invoice' ) {
+									$invoice = '<a href="' . esc_url( $action['url'] ) . '" class="cabinet_content_print icon icon-print woocommerce-button button ' . sanitize_html_class( $key ) . '" target="_blank">Print</a>';
+								} else {
+									echo '<a href="' . esc_url( $action['url'] ) . '" class="woocommerce-button button ' . sanitize_html_class( $key ) . '">' . esc_html( $action['name'] ) . '</a>';
+								}
+							}
+						} ?>
 					<?php endif; ?>
 				<?php endforeach; ?>
 
-
 				<div class="cabinet_order_table">
+					<?php if( isset( $invoice ) ) : ?>
+						<div class="invoice_col"><?php echo $invoice; ?></div>
+					<?php endif; ?>
 					<table>
 						<?php foreach ( $order->get_items() as $item_id => $item ):
 							$product = $item->get_product();
