@@ -331,13 +331,13 @@ if ( !function_exists( 'suissevault_checkout_field_update_order_meta' ) ) {
 if ( !function_exists( 'suissevault_checkout_fields_process' ) ) {
 	function suissevault_checkout_fields_process( $fields ) {
 
-		if ( !preg_match( '/^(0[1-9]|[1-2][0-9]|3[0-1])$/', $_POST[ 'birth_day' ] ) ) {
+		if ( !empty( $_POST[ 'birth_day' ] ) && !preg_match( '/^(0[1-9]|[1-2][0-9]|3[0-1])$/', $_POST[ 'birth_day' ] ) ) {
 			wc_add_notice( __( '<strong>DATE OF BIRTHD (DD)</strong> Invalid date format' ), 'error' );
 		}
-		if ( !preg_match( '/^(0[1-9]|1[0-2])$/', $_POST[ 'birth_month' ] ) ) {
+		if ( !empty( $_POST[ 'birth_month' ] ) && !preg_match( '/^(0[1-9]|1[0-2])$/', $_POST[ 'birth_month' ] ) ) {
 			wc_add_notice( __( '<strong>MONTH (MM)</strong> Invalid date format' ), 'error' );
 		}
-		if ( !preg_match( '/^[0-9]{4}$/', $_POST[ 'birth_year' ] ) ) {
+		if ( !empty( $_POST[ 'birth_year' ] ) && !preg_match( '/^[0-9]{4}$/', $_POST[ 'birth_year' ] ) ) {
 			wc_add_notice( __( '<strong>YEAR (YYYY)</strong> Invalid date format' ), 'error' );
 		}
 

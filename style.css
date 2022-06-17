@@ -214,6 +214,34 @@ input[type=checkbox], input[type=radio] {
   border-color: red;
 }
 
+.cart_net {
+  margin-top: 24px;
+}
+
+.cart_net .btn {
+  padding-left: 40px;
+  padding-right: 40px;
+  background-color: var(--gray_dark);
+}
+
+.cart_code_label {
+  --color: #4F4F4F;
+  text-transform: uppercase;
+}
+
+.cart_code_input {
+  margin-top: 6px;
+}
+
+.cart_code_input input {
+  width: 244px;
+  min-height: var(--btn_height);
+}
+
+.cart_code_input .input.error {
+  margin-bottom: 0;
+}
+
 /* Cart */
 /* Checkout */
 .checkout .checkout_total_price strong {
