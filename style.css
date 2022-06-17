@@ -203,15 +203,6 @@ input[type=checkbox], input[type=radio] {
   cursor: pointer;
 }
 
-.modal .errors_wrapper {
-  display: none;
-}
-
-.modal .errors_wrapper.error {
-  display: block;
-  color: red;
-}
-
 /* Modals */
 /* Cart */
 .lock_cart .close {
@@ -348,6 +339,26 @@ input[type=checkbox], input[type=radio] {
 
 .cabinet .cabinet_content .title {
   margin-top: 0;
+}
+
+#billing_state_field .select:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: var(--selcet_arrow_inner);
+  width: var(--selcet_arrow_size);
+  height: var(--selcet_arrow_size);
+  background-image: url("assets/images/icon/select_arrow.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: translate3d(0, -50%, 0px);
+  transition: transform 0.43s;
+  z-index: 1;
+}
+
+#billing_state_field .select.active:before {
+  transform: rotate(-200grad) translate3d(0, 50%, 0px);
 }
 
 /* My Account */

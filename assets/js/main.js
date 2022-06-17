@@ -20,6 +20,19 @@
         $('select').not('.checkout #billing_country, .checkout #billing_state, .modal-billing #billing_state').knotSelect();
     }
 
+    $(".select select").on({
+        'focus': function () {
+            $(this).parent('.select').addClass('active');
+        },
+        "blur": function () {
+            $(this).parent('.select').removeClass('active');
+        },
+        "keyup": function (e) {
+            if (e.keyCode == 27)
+                $(this).parent('.select').addClass('active');
+        }
+    });
+
     // Currency click
     $(document).on('click', '.header_price_currency svg', function () {
         var e = $(this);
@@ -371,6 +384,7 @@
     $(document).on('change', '.lock .qty', function (e) {
         update_cart();
     });
+
     function update_cart() {
         let update_cart_btn = $('[name=update_cart]'),
             is_disabled = update_cart_btn.attr('aria-disabled');
@@ -390,7 +404,7 @@
             terms_wrapper = $('.lock_gold'),
             url = $(this).attr('href');
 
-        if ( ! terms.is(':checked') ) {
+        if (!terms.is(':checked')) {
             terms_wrapper.addClass('lock_gold_error');
         } else {
             terms_wrapper.removeClass('lock_gold_error');
@@ -400,7 +414,7 @@
     });
 
     // Checkout submit form button role
-    $('#place_order_btn').on('click', function (){
+    $('#place_order_btn').on('click', function () {
         $('#place_order').click();
     });
 
@@ -408,7 +422,7 @@
     // AJAX
 
     // Cart Payment method change
-    $(document).on( 'change', '#cart-payment-form [name=payment_method]', function (){
+    $(document).on('change', '#cart-payment-form [name=payment_method]', function () {
         $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -428,15 +442,15 @@
     });
 
     // Cart Delivery method change
-    $(document).on( 'change', '#cart-delivery-form [name=delivery_method], select[name="shipping"]', function (){
+    $(document).on('change', '#cart-delivery-form [name=delivery_method], select[name="shipping"]', function () {
         let delivery_method = $('input[name=delivery_method]:checked').val(),
             data = {
                 'action': 'suissevault_delivery_method',
-                'delivery_method' : delivery_method,
+                'delivery_method': delivery_method,
                 'security': $('#delivery-security').val(),
             };
 
-        if ( delivery_method === 'shipping' ) {
+        if (delivery_method === 'shipping') {
             data.shipping_method = $('select[name="shipping"]').val();
         }
 

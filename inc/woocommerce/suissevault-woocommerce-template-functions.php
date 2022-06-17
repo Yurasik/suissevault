@@ -540,7 +540,7 @@ if ( !function_exists( 'suissevault_storage_content' ) ) {
 
 if ( !function_exists( 'suissevault_refer_content' ) ) {
 	function suissevault_refer_content() {
-		echo "refer";
+		wc_get_template( 'myaccount/refer.php' );
 	}
 }
 
@@ -578,6 +578,8 @@ if ( !function_exists( 'suissevault_billing_fields_conditions' ) ) {
 			unset( $fields[ 'billing_company' ] );
 			unset( $fields[ 'billing_country' ] );
 			unset( $fields[ 'billing_email' ] );
+
+			//$fields[ 'billing_state' ]['autocomplete'] = '';
 		}
 
 		return $fields;

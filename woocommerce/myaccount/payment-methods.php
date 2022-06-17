@@ -24,7 +24,7 @@ $tab = get_query_var('payment-methods');
 
 do_action( 'woocommerce_before_account_payment_methods', $has_methods ); ?>
 
-<h2>Billing & Payments</h2>
+<h2 class="title">Billing & Payments</h2>
 
 <div class="cabinet_content_tabs flex__align">
 	<div class="cabinet_content_tab <?php echo ( !$tab ) ? "active" : ""; ?>">Payment method</div>

@@ -24,6 +24,7 @@ require 'inc/suissevault-functions.php';
 require 'inc/suissevault-template-hooks.php';
 require 'inc/suissevault-template-functions.php';
 require 'inc/suissevault-shortcodes.php';
+require 'inc/class-suissevault-form-handler.php';
 
 if ( suissevault_is_woocommerce_activated() ) {
 	$suissevault->woocommerce = require 'inc/woocommerce/class-suissevault-woocommerce.php';
@@ -31,7 +32,6 @@ if ( suissevault_is_woocommerce_activated() ) {
 	require 'inc/woocommerce/suissevault-woocommerce-template-hooks.php';
 	require 'inc/woocommerce/suissevault-woocommerce-template-functions.php';
 	require 'inc/woocommerce/suissevault-woocommerce-functions.php';
-	require 'inc/woocommerce/class-suissevault-form-handler.php';
 }
 
 if ( is_admin() ) {

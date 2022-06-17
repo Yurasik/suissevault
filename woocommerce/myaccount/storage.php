@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 
-<h2>Stored packages</h2>
+<h2 class="title">Stored packages</h2>
 
 <?php if ( $has_orders ) : ?>
 

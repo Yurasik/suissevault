@@ -326,6 +326,8 @@ if ( !class_exists( 'Suissevault' ) ) :
 		public function enqueue() {
 			global $suissevault_version;
 
+			$current_url = ( isset( $_SERVER[ 'HTTPS' ] ) ? "https" : "http" ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
 			/**
 			 * Styles
 			 */
@@ -338,6 +340,12 @@ if ( !class_exists( 'Suissevault' ) ) :
 			$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
 				? ''
 				: '.min';
+
+			if ( wc_get_endpoint_url( 'payment-methods' ) == $current_url || wc_get_endpoint_url( 'payment-methods', 'billing' ) == $current_url ) {
+				wp_dequeue_style( 'select2' );
+				wp_dequeue_script( 'select2');
+				wp_dequeue_script( 'selectWoo' );
+			}
 
 			wp_dequeue_script( 'jquery' );
 			wp_dequeue_script( 'jquery-core' );
