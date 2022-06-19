@@ -370,6 +370,15 @@ if ( !class_exists( 'Suissevault' ) ) :
 			wp_enqueue_script( "slick" );
 			wp_enqueue_script( "main" );
 
+			// Widgets
+			if ( is_page( 'live-prices' ) ) {
+				wp_register_script( "advanced-real-time-chart-widget", "https://s3.tradingview.com/tv.js", [ 'jquery' ], false, true );
+				wp_register_script( "widgets", get_template_directory_uri() . "/assets/js/widgets.js", [ 'jquery', 'advanced-real-time-chart-widget' ], false, true );
+
+				wp_enqueue_script( "advanced-real-time-chart-widget" );
+				wp_enqueue_script( "widgets" );
+			}
+
 			wp_localize_script( 'main', 'ajax_object', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' )
 			) );

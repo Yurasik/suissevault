@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 if ( $related_products ) :
-	$heading = apply_filters( 'woocommerce_product_related_products_heading', __( 'Related products', 'woocommerce' ) );
+	//$heading = apply_filters( 'woocommerce_product_related_products_heading', __( 'Related products', 'woocommerce' ) );
 	$heading = apply_filters( 'woocommerce_product_related_products_heading', __( 'Related <br><i>Products</i>', 'suissevault' ) );
 	?>
 
@@ -52,7 +52,8 @@ if ( $related_products ) :
 				<?php if ( $heading ) : ?>
 					<div class="product_info">
 						<h2><?php echo $heading; ?></h2>
-						<a href="#" class="more-line"><?php _e( 'View all', 'suissevault' ); ?></a>
+						<?php $shop_page_url = get_permalink( wc_get_page_id( 'shop' ) ); ?>
+						<a href="<?php echo $shop_page_url; ?>" class="more-line"><?php _e( 'View all', 'suissevault' ); ?></a>
 					</div>
 				<?php endif; ?>
 			</div>
