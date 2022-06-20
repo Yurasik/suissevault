@@ -377,6 +377,10 @@ if ( !class_exists( 'Suissevault' ) ) :
 
 				wp_enqueue_script( "advanced-real-time-chart-widget" );
 				wp_enqueue_script( "widgets" );
+
+				wp_localize_script( 'widgets', 'ajax_object', array(
+					'ajaxurl' => admin_url( 'admin-ajax.php' )
+				) );
 			}
 
 			wp_localize_script( 'main', 'ajax_object', array(

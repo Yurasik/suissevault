@@ -15,145 +15,66 @@ get_header();
 					<?php get_template_part( 'template-parts/breadcrumbs' ); ?>
 					<h1><?php the_title(); ?></h1>
 				</div>
-				<div class="filter">
+				<form class="filter">
+					<?php
+					$filters = [
+						[
+							'name'   => 'weight',
+							'title'  => 'Weight',
+							'fields' => [
+								'ounces'    => 'Ounces',
+								'grams'     => 'Grams',
+								'kilograms' => 'Kilograms',
+							]
+						],
+						[
+							'name'   => 'currency',
+							'title'  => 'Currency',
+							'fields' => [
+								'GBP' => 'GBP',
+								'USD' => 'USD',
+								'EUR' => 'EUR',
+								'JPY' => 'JPY',
+							]
+						],
+						[
+							'name'   => 'period',
+							'title'  => 'Period',
+							'fields' => [
+								'1D'   => 'Today',
+								'5D'   => 'Week',
+								'1M'   => 'Month',
+								'3M'   => '3 Month',
+								'6M'   => '6 Month',
+								'12M'  => 'Year',
+								'60M'  => '5 Year',
+								'ALL'  => 'All Time',
+							]
+						],
+					];
+					?>
 					<div class="filter_clear">Clear filters <span class="close"></span></div>
-					<div class="filter_block">
-						<div class="filter_label icon icon-arrow">Weight</div>
-						<ul class="filter_choice">
-							<li>
-								<label>
-									<input type="radio" name="weight" class="input__hidden">
-									<span>Ounces</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="weight" class="input__hidden">
-									<span>Grams</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="weight" class="input__hidden">
-									<span>Kilograms</span>
-								</label>
-							</li>
-						</ul>
-					</div>
-					<div class="filter_block">
-						<div class="filter_label icon icon-arrow">Currency</div>
-						<ul class="filter_choice">
-							<li>
-								<label>
-									<input type="radio" name="currency" class="input__hidden">
-									<span>GBP</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="currency" class="input__hidden">
-									<span>USD</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="currency" class="input__hidden">
-									<span>EUR</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="currency" class="input__hidden">
-									<span>JPY</span>
-								</label>
-							</li>
-						</ul>
-					</div>
-					<div class="filter_block">
-						<div class="filter_label icon icon-arrow">Period</div>
-						<ul class="filter_choice">
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>Live</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>Today</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>Week</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>Month</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>3 Month</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>6 Month</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>Year</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>3 Year</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>5 Year</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>10 Year</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>25 Year</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>50 Year</span>
-								</label>
-							</li>
-							<li>
-								<label>
-									<input type="radio" name="period" class="input__hidden">
-									<span>All Time</span>
-								</label>
-							</li>
-							<li class="more_items icon icon-arrow">Show more</li>
-						</ul>
-					</div>
-				</div>
+					<?php foreach ( $filters as $filter ):
+						$fields = $filter [ 'fields' ];
+						$show_more = ( count( $fields ) > 8 ) ? '<li class="more_items icon icon-arrow">Show more</li>' : ''; ?>
+						<div class="filter_block">
+							<div class="filter_label icon icon-arrow"><?php echo $filter[ 'title' ]; ?></div>
+							<ul class="filter_choice">
+								<?php foreach ( $fields as $field_value => $field_name ):
+									$array = array_values( $fields );
+									$checked = ( array_shift( $array ) == $field_name ) ? "checked" : ""; ?>
+									<li>
+										<label>
+											<input type="radio" name="<?php echo $filter[ 'name' ]; ?>" value="<?php echo $field_value; ?>" class="input__hidden filter_input" <?php echo $checked; ?>>
+											<span><?php echo $field_name; ?></span> </label>
+									</li>
+								<?php endforeach; ?>
+								<?php echo $show_more; ?>
+							</ul>
+						</div>
+					<?php endforeach; ?>
+				</form>
+
 				<div class="live_content">
 					<div class="live_content_tabs flex__align">
 						<div class="live_content_tab active">Gold</div>
@@ -219,7 +140,9 @@ get_header();
 						<!-- TradingView Widget BEGIN -->
 						<div class="tradingview-widget-container">
 							<div id="tradingview_33cdd"></div>
-							<div class="live_content_subtitle"><a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" rel="noopener" target="_blank"><span>AAPL Chart</span></a> by TradingView</div>
+							<div class="live_content_subtitle">
+								<a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" rel="noopener" target="_blank"><span>AAPL Chart</span></a> by TradingView
+							</div>
 						</div>
 						<!-- TradingView Widget END -->
 						<div class="live_content_txt">Symbol Overview Widget shows latest quotes, a simple chart and key fundamental fields for a single stock. It’s in-depth, yet detailed, and it’s a great solution for web and mobile. You can add multiple tabs to cover several stocks and use a “Chart Only” mode for a simpler look.</div>
