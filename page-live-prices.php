@@ -57,7 +57,7 @@ $api_price = get_api_price();
 					<?php foreach ( $filters as $filter ):
 						$fields = $filter [ 'fields' ];
 						$show_more = ( count( $fields ) > 8 ) ? '<li class="more_items icon icon-arrow">Show more</li>' : ''; ?>
-						<div class="filter_block">
+						<div class="filter_block is_default">
 							<div class="filter_label icon icon-arrow"><?php echo $filter[ 'title' ]; ?></div>
 							<ul class="filter_choice">
 								<?php foreach ( $fields as $field_value => $field_name ):

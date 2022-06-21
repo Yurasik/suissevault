@@ -562,8 +562,12 @@
         $('.filter_block').each(function () {
             if (!$(this).find('input:first').is(':checked')) {
                 $(this).find('input').prop('checked', false);
-                $(this).find('input:first').prop('checked', true).change();
+                $(this).find('input:first').prop('checked', true).addClass('changed');
             }
+        });
+
+        $('.filter').find('.changed').each(function(){
+            $(this).change().removeClass('changed');
         });
 
         $this.addClass('hidden');
