@@ -42,9 +42,9 @@ function suissevault_get_image_data( $id ): array {
 
 	$image_data = array();
 
-	$image_data[ 'src' ]    = esc_attr( wp_get_attachment_image_src( $id, 'full' )[ 0 ] );
+	$image_data[ 'src' ] = esc_attr( wp_get_attachment_image_src( $id, 'full' )[ 0 ] );
 	$image_data[ 'srcset' ] = esc_attr( wp_get_attachment_image_srcset( $id ) );
-	$image_data[ 'alt' ]    = esc_attr( get_post_meta( $id, '_wp_attachment_image_alt', true ) );
+	$image_data[ 'alt' ] = esc_attr( get_post_meta( $id, '_wp_attachment_image_alt', true ) );
 
 	return $image_data;
 
@@ -59,11 +59,11 @@ function suissevault_get_picture_html( $thumbnail_id ) {
 
 	if ( (bool)$thumbnail_id ) {
 		$image_data = suissevault_get_image_data( $thumbnail_id );
-		$picture    = "<picture><source srcset='$image_data[src]' type='image/webp'><img src='$image_data[src]' alt='$image_data[alt]' srcset='$image_data[srcset]'></picture>";
+		$picture = "<picture><source srcset='$image_data[src]' type='image/webp'><img src='$image_data[src]' alt='$image_data[alt]' srcset='$image_data[srcset]'></picture>";
 	}
 	else {
 		$image_data = wc_placeholder_img_src();
-		$picture    = "<picture><source srcset='$image_data' type='image/webp'><img src='$image_data' alt='$image_data' srcset='$image_data'></picture>";
+		$picture = "<picture><source srcset='$image_data' type='image/webp'><img src='$image_data' alt='$image_data' srcset='$image_data'></picture>";
 	}
 
 	return $picture;
@@ -81,8 +81,8 @@ function get_acf_link_html( $link, $link_class, $before_title = "", $after_title
 
 	$link_html = "";
 	if ( $link ) {
-		$link_url    = $link[ 'url' ];
-		$link_title  = $link[ 'title' ];
+		$link_url = $link[ 'url' ];
+		$link_title = $link[ 'title' ];
 		$link_target = $link[ 'target' ] ? $link[ 'target' ] : '_self';
 
 		$link_html = "<a class='$link_class' href='" . esc_url( $link_url ) . "' target='" . esc_attr( $link_target ) . "'>$before_title" . esc_html( $link_title ) . "$after_title</a>";
@@ -99,10 +99,38 @@ function get_acf_link_html( $link, $link_class, $before_title = "", $after_title
  */
 function abbreviated_days_of_the_week( $working_days ): string {
 
-	$full_days_of_the_week        = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', ' ' ];
+	$full_days_of_the_week = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', ' ' ];
 	$abbreviated_days_of_the_week = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', '' ];
 
 	return str_replace( $full_days_of_the_week, $abbreviated_days_of_the_week, $working_days );
+}
+
+function get_api_price( $currency = 'GBP', $with_date = false ) {
+
+	$curl = curl_init();
+
+	curl_setopt_array( $curl, array(
+		CURLOPT_URL            => "https://data-asg.goldprice.org/dbXRates/$currency",
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING       => '',
+		CURLOPT_MAXREDIRS      => 10,
+		CURLOPT_TIMEOUT        => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST  => 'GET',
+		CURLOPT_HTTPHEADER     => array(
+			'Cookie: lagrange_session=0c8e58e6-1996-4c54-8459-21163c876d4b'
+		),
+	) );
+
+	$response = curl_exec( $curl );
+
+	curl_close( $curl );
+
+	$result = json_decode( $response );
+
+	return ( $with_date ) ? $result : $result->items[ 0 ];
+
 }
 
 
@@ -115,7 +143,7 @@ function suissevault_payment_method() {
 
 	$response = [];
 
-	$payment_method             = $_POST[ 'payment_method' ];
+	$payment_method = $_POST[ 'payment_method' ];
 	$available_payment_gateways = WC()->payment_gateways()->get_available_payment_gateways();
 
 	if ( isset( $available_payment_gateways[ $payment_method ] ) ) {
@@ -133,10 +161,10 @@ function suissevault_delivery_method() {
 
 	check_ajax_referer( 'ajax-delivery-method-nonce', 'security' );
 
-	$response             = [];
+	$response = [];
 	$cart_delivery_method = [];
 
-	$delivery_method                  = sanitize_text_field( $_POST[ 'delivery_method' ] );
+	$delivery_method = sanitize_text_field( $_POST[ 'delivery_method' ] );
 	$cart_delivery_method[ 'method' ] = $delivery_method;
 
 	if ( $delivery_method == 'shipping' ) {
@@ -149,6 +177,25 @@ function suissevault_delivery_method() {
 	WC()->session->set( 'chosen_shipping_methods', array( $cart_delivery_method[ 'value' ] ) );
 	WC()->session->set( 'cart_delivery_method', $cart_delivery_method );
 	$response[ 'cart_delivery_method' ] = $cart_delivery_method;
+
+	wp_send_json( $response );
+	die();
+}
+
+add_action( 'wp_ajax_live_price_filter', 'live_price_filter' );
+add_action( 'wp_ajax_nopriv_live_price_filter', 'live_price_filter' );
+function live_price_filter() {
+
+	$response = [];
+
+	$currency = sanitize_text_field( $_POST['currency'] );
+	$weight = sanitize_text_field( $_POST['weight'] );
+
+	$api_price = get_api_price( $currency );
+
+	ob_start();
+	get_template_part( 'template-parts/ajax/live_content_steps', '', [ 'api_price' => $api_price, 'weight' => $weight ] );
+	$response['live_content_steps_html'] = ob_get_clean();
 
 	wp_send_json( $response );
 	die();

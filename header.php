@@ -76,12 +76,12 @@ $header = get_field( 'header', 'options' );
 				<div class="header_price">
 					<div class="header_price_top flex__align">
 						<div class="header_price_metal">
-							<div class="select">
+							<form id="header_api_price" class="select">
 								<select name="metal">
-									<option value="0">Gold</option>
-									<option value="1">Silver</option>
+									<option value="gold">Gold</option>
+									<option value="silver">Silver</option>
 								</select>
-							</div>
+							</form>
 						</div>
 						<div class="header_price_currency flex__align">
 							<svg class="active" data-name="fpound" width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -98,8 +98,9 @@ $header = get_field( 'header', 'options' );
 							</svg>
 						</div>
 					</div>
+					<?php $api_price = get_api_price(); ?>
 					<div class="header_price_bottom icon icon-fpound flex__center">
-						<span>1233.01</span> <span>3.60</span> <span>0.29%</span>
+						<span><?php echo wc_price( $api_price->xauPrice ); ?></span> <span><?php echo number_format( $api_price->chgXau, 2 ); ?></span> <span><?php echo number_format( $api_price->pcXau, 2 ); ?>%</span>
 					</div>
 				</div>
 				<div class="header_href flex__align">
@@ -152,7 +153,7 @@ $header = get_field( 'header', 'options' );
 		<div class="burger_bottom flex__center">
 			<p><?php echo "$contacts[phone]"; ?></p>
 			<a class="hover__line-active" href="mailto:<?php echo "$contacts[email]"; ?>"><?php echo "$contacts[email]"; ?></a>
-			<?php get_template_part( 'template-parts/social', 'links' ); ?>
+			<?php get_template_part( '`template-parts/social`', 'links' ); ?>
 		</div>
 	</div>
 </div>
