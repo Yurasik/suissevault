@@ -506,7 +506,7 @@ if ( !function_exists( 'suissevault_account_menu_items' ) ) {
 			'password'        => 'Change Password',
 			'storage'         => 'Storage',
 			'payment-methods' => 'Billing & Payments',
-			'refer'           => 'Refer a friend',
+			//'refer'           => 'Refer a friend',
 		];
 
 		$items = array_merge( $reorder_items, $items );
