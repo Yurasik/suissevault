@@ -392,7 +392,7 @@ input[type="checkbox"], input[type="radio"] {
   border-top: 1px solid #DEDEDE;
 }
 
-#billing_state_field .select:before {
+.modal-billing #billing_state_field .select:before {
   content: '';
   position: absolute;
   top: 50%;
@@ -408,7 +408,7 @@ input[type="checkbox"], input[type="radio"] {
   z-index: 1;
 }
 
-#billing_state_field .select.active:before {
+.modal-billing #billing_state_field .select.active:before {
   transform: rotate(-200grad) translate3d(0, 50%, 0px);
 }
 

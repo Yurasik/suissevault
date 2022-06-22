@@ -13,9 +13,9 @@
  * @version 3.4.0
  */
 
-defined( 'ABSPATH' ) || exit; ?>
+defined( 'ABSPATH' ) || exit;
 
-<?php get_header( 'shop' ); ?>
+get_header( 'shop' ); ?>
 
 <?php
 /**

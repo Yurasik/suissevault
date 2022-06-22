@@ -5,7 +5,9 @@
  *
  * @package suissevault
  */
-session_start();
+if ( !session_id() ) {
+	session_start();
+}
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>

@@ -233,13 +233,16 @@ $storage_delivery_method_checked = ( isset( $cart_delivery_method['method'] ) &&
 				Credit Card <br>(Payment limit £10,000)
 			</span>
 		</label>
-		<label>
+		<?php $display_bacs = false; ?>
+		<?php if( $display_bacs ): ?>
+			<label>
 				<input type="radio" data-checked="bacs" name="payment_method" value="bacs" class="input__hidden" <?php checked( 'bacs', $current_payment_method ); ?>>
-			<span>
+				<span>
 				<picture><source srcset="<?php echo get_template_directory_uri(); ?>/assets/images/svg/bank.svg" type="image/webp"><img src="<?php echo get_template_directory_uri(); ?>/assets/images/svg/bank.svg" alt></picture>
 				Bank Transfer <br>Deposit Required of 10%
 			</span>
-		</label>
+			</label>
+		<?php endif; ?>
 	</form>
 
 	<div class="lock_payment_label">For large orders please call us on 0207 889 (GOLD) 4653 <br>between 9am - 6pm Monday to Friday.</div>
