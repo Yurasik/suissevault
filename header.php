@@ -5,8 +5,7 @@
  *
  * @package suissevault
  */
-
-$header = get_field( 'header', 'options' );
+session_start();
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -29,9 +28,7 @@ $header = get_field( 'header', 'options' );
 	<meta property="og:type" content="website">
 	<meta property="og:site_name" content="<?php bloginfo( 'name' ); ?>">
 	<meta property="og:url" content="https://suisse.knott.fun">
-	<meta property="og:locale" content="<?php echo ( get_locale() )
-		? explode( '_', get_locale() )[ 0 ]
-		: "en"; ?>">
+	<meta property="og:locale" content="<?php echo ( get_locale() ) ? explode( '_', get_locale() )[ 0 ] : "en"; ?>">
 	<meta property="og:title" content="<?php bloginfo( 'name' ); ?> | <?php the_title(); ?>">
 
 	<!-- <meta property="og:description" content=""> -->
@@ -46,9 +43,9 @@ $header = get_field( 'header', 'options' );
 <body <?php body_class(); ?>>
 
 <!-- Header. -->
-<?php $header_class = is_front_page()
-	? ""
-	: "header-black"; ?>
+<?php
+$header = get_field( 'header', 'options' );
+$header_class = is_front_page() ? "" : "header-black"; ?>
 <div class="header <?php echo $header_class; ?>">
 	<div class="bone">
 		<div class="header_net flex__center">
@@ -73,35 +70,43 @@ $header = get_field( 'header', 'options' );
 				</svg>
 			</div>
 			<div class="header_right flex__align">
+				<?php
+				$api_currency = ( isset( $_SESSION[ 'suissevault_api_currency' ] ) ) ? $_SESSION[ 'suissevault_api_currency' ] : "GBP";
+				$api_metal = ( isset( $_SESSION[ 'suissevault_api_metal' ] ) ) ? $_SESSION[ 'suissevault_api_metal' ] : 'gold';
+				$api_price = ( isset( $_SESSION[ 'suissevault_api_currency' ] ) ) ? get_api_price( $_SESSION[ 'suissevault_api_currency' ] ) : get_api_price();
+				?>
 				<div class="header_price">
 					<div class="header_price_top flex__align">
 						<div class="header_price_metal">
-							<form id="header_api_price" class="select">
+							<div class="select">
+								<?php $metals = [
+									'Gold'   => 'gold',
+									'Silver' => 'silver',
+								]; ?>
 								<select name="metal">
-									<option value="gold">Gold</option>
-									<option value="silver">Silver</option>
+									<?php foreach ( $metals as $metal_name => $metal_value ):
+										$selected = ( $metal_value == $api_metal ) ? "selected" : ""; ?>
+										<option value="<?php echo "$metal_value"; ?>" <?php echo $selected; ?>><?php echo $metal_name; ?></option>
+									<?php endforeach; ?>
 								</select>
-							</form>
+							</div>
 						</div>
 						<div class="header_price_currency flex__align">
-							<svg class="active" data-name="fpound" width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<svg class="header_currency <?php echo ( $api_currency == "GBP" ) ? "active" : ""; ?>" data-name="GBP" width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M18.8012 18.7464L18.8016 18.7476L18.7035 18.7691C18.6505 18.7776 18.6071 18.7899 18.5674 18.8091L18.5261 18.8244C17.8742 19.155 17.1868 19.3247 16.4921 19.3247C16.3661 19.3247 16.1297 19.2913 15.7894 19.2255C15.4497 19.1672 15.0799 19.1018 14.6841 19.0303C14.289 18.9589 13.9007 18.8908 13.5203 18.8252C13.1363 18.759 12.8393 18.7273 12.6126 18.7273C12.4525 18.7273 12.2903 18.735 12.1302 18.7502L11.4465 18.8154L11.9138 18.3122C11.9607 18.262 12.0049 18.2119 12.0475 18.1622C12.2569 17.9173 12.4305 17.6588 12.5635 17.3929C12.6962 17.127 12.7935 16.8341 12.8524 16.5214C12.9113 16.2079 12.9415 15.8545 12.9415 15.471C12.9415 15.2961 12.921 15.1225 12.8804 14.9545L12.8024 14.6318L15.414 14.6267C15.4603 14.6228 15.5001 14.6123 15.5389 14.5943C15.8284 14.5 16.0159 14.2442 16.0159 13.9538C16.0159 13.63 15.7845 13.3527 15.4652 13.294C15.442 13.2889 15.421 13.2861 15.3998 13.2855L15.3968 13.2857C15.3887 13.2855 15.3823 13.2853 15.3773 13.285L15.3433 13.2874H12.4797L12.4223 13.1038C12.1217 12.1395 11.9697 11.325 11.9697 10.6825C11.9697 10.3682 12.0284 10.0654 12.1442 9.78249C12.2599 9.50049 12.4212 9.24868 12.6237 9.03437C12.8249 8.82099 13.0735 8.65074 13.3626 8.52849C13.6508 8.40681 13.9778 8.34493 14.334 8.34493C15.7836 8.34493 16.5505 9.0338 16.6783 10.4509C16.6806 10.4586 16.6823 10.4667 16.6838 10.4747L16.6888 10.5389L16.687 10.5522C16.6885 10.5812 16.6967 10.6257 16.7136 10.678C16.7813 11.1285 17.146 11.4449 17.584 11.4449C18.0373 11.4449 18.4116 11.0999 18.4585 10.6587H18.4581L18.4633 10.5377C18.4635 10.5359 18.4616 10.5212 18.4609 10.5049L18.4605 10.4856C18.4095 9.92311 18.2734 9.4163 18.0574 8.98318C17.8414 8.55174 17.5555 8.18518 17.2082 7.894C16.8598 7.6015 16.4406 7.37706 15.9632 7.22687C15.4849 7.07631 14.9515 7 14.3785 7C13.758 7 13.1847 7.08981 12.6741 7.267C12.1628 7.44437 11.7182 7.7005 11.3532 8.0275C10.987 8.35543 10.6982 8.7638 10.495 9.24137C10.2914 9.71986 10.188 10.2614 10.188 10.8518C10.188 11.13 10.2255 11.473 10.2996 11.8709C10.3577 12.186 10.4464 12.55 10.5636 12.9529L10.6607 13.2876L9.1718 13.2844C8.83074 13.3167 8.56281 13.6047 8.56281 13.9542C8.56281 14.2973 8.82212 14.583 9.16562 14.619L9.22974 14.6307L11.0472 14.6322L11.0922 14.8378C11.161 15.1545 11.196 15.4789 11.196 15.8012C11.196 16.2754 11.1509 16.7012 11.0618 17.0657C10.9731 17.4293 10.8439 17.7561 10.6774 18.0358C10.5113 18.3144 10.3052 18.5616 10.0641 18.7697C9.8243 18.9773 9.54586 19.164 9.23762 19.3238C8.74074 19.4889 8.18593 19.7882 8.28006 20.3119C8.35693 20.7396 8.76418 21.0508 9.19843 20.9932C9.21155 20.991 9.21193 20.9908 9.22337 20.9854C10.4374 20.4319 11.5399 20.1527 12.5059 20.1527C12.631 20.1527 12.8057 20.1737 13.0251 20.2153C13.2448 20.2569 13.488 20.3079 13.7479 20.3676C14.0095 20.4266 14.2802 20.4919 14.5594 20.5635C14.8388 20.6348 15.1077 20.7002 15.3664 20.7594C15.6252 20.8189 15.8612 20.8714 16.0751 20.9158C16.29 20.9604 16.4558 20.9822 16.5814 20.9822H16.6196C17.5954 20.9822 18.6313 20.5742 18.6752 20.5568C18.7708 20.5151 19.0633 20.4066 19.0633 20.4066C19.5278 20.3012 19.8131 19.8504 19.7117 19.3982C19.6196 18.9876 19.2212 18.7018 18.8012 18.7464Z" fill="var(--color)"/>
 								<circle cx="14" cy="14" r="13.5" stroke="var(--color)"/>
 							</svg>
-							<svg data-name="dollar" width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<svg class="header_currency <?php echo ( $api_currency == "USD" ) ? "active" : ""; ?>" data-name="USD" width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<circle cx="14" cy="14" r="13.5" stroke="var(--color)"/>
 								<path d="M14.6181 13.1252V10.0145C15.2836 10.1267 15.9111 10.3998 16.4475 10.8098C16.5544 10.8832 16.6799 10.923 16.8098 10.9247C17.2261 10.9247 17.5654 10.5898 17.5698 10.1736C17.5707 9.99505 17.5009 9.8236 17.3754 9.69634C16.6004 9.03265 15.6283 8.64117 14.6093 8.58284V7.54002C14.6093 7.24219 14.3681 7.00094 14.0702 7.00094C14.064 7.00006 14.0578 7.00006 14.0517 7.00006C13.7494 6.99563 13.5002 7.23691 13.4958 7.54002V8.54749C11.5074 8.68888 10.1553 9.91728 10.1553 11.5522C10.1553 13.5582 11.8609 14.115 13.4958 14.5569V18.0918C12.6332 17.9761 11.8202 17.6182 11.1539 17.0579C11.0284 16.958 10.8728 16.9023 10.712 16.8988C10.3046 16.9271 9.99088 17.2682 9.99616 17.6765C9.99528 17.855 10.0651 18.0265 10.1906 18.1537C11.1035 18.9756 12.2771 19.4484 13.5046 19.4882V20.4603C13.5046 20.4664 13.5055 20.4726 13.5055 20.4788C13.5196 20.7811 13.7768 21.0144 14.079 20.9993C14.3768 20.9993 14.6181 20.7581 14.6181 20.4603V19.4705C17.0307 19.3114 18.0028 17.8444 18.0028 16.289C18.0028 14.2034 16.2531 13.5671 14.6181 13.1252ZM13.5046 12.8424C12.5414 12.5596 11.7902 12.268 11.7902 11.4461C11.7902 10.6243 12.4707 10.0322 13.5046 9.95264V12.8424V12.8424ZM14.6181 18.1095V14.8927C15.6168 15.1755 16.3944 15.5555 16.3856 16.4834C16.3856 17.1551 15.9261 17.9504 14.6181 18.1095Z" fill="var(--color)"/>
 							</svg>
-							<svg data-name="euro" width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<svg class="header_currency <?php echo ( $api_currency == "EUR" ) ? "active" : ""; ?>" data-name="EUR" width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<circle cx="14" cy="14" r="13.5" stroke="var(--color)"/>
 								<path d="M19.1114 18.0844C18.2844 18.9542 17.2256 19.4334 16.13 19.4334C14.3343 19.4334 12.7794 18.1723 12.0476 16.3494H17.0356C17.4681 16.3494 17.8188 15.9988 17.8188 15.5662C17.8188 15.1337 17.4681 14.783 17.0356 14.783H11.6496C11.6188 14.527 11.602 14.2658 11.602 13.9998C11.602 13.6998 11.6231 13.4057 11.6625 13.1187H17.0356C17.4681 13.1187 17.8188 12.768 17.8188 12.3355C17.8188 11.903 17.4681 11.5522 17.0356 11.5522H12.0893C12.8368 9.78274 14.3668 8.56624 16.13 8.56624C17.2256 8.56624 18.2844 9.04542 19.1114 9.91519C19.4091 10.2285 19.9046 10.2414 20.2186 9.9434C20.5321 9.64529 20.5445 9.14955 20.2469 8.83608C19.1214 7.65205 17.6594 7 16.1302 7C13.5191 7 11.2872 8.89638 10.4211 11.5525H8.32226C7.88974 11.5525 7.53906 11.9031 7.53906 12.3357C7.53906 12.7682 7.88974 13.1189 8.32226 13.1189H10.0855C10.0537 13.4079 10.0356 13.7014 10.0356 14C10.0356 14.265 10.0494 14.5259 10.0747 14.7832H8.32226C7.88974 14.7832 7.53906 15.1339 7.53906 15.5664C7.53906 15.999 7.88974 16.3496 8.32226 16.3496H10.39C11.2325 19.0571 13.487 21 16.13 21C17.6593 21 19.121 20.3478 20.2465 19.164C20.5444 18.8504 20.5321 18.3547 20.2184 18.0566C19.905 17.7585 19.4091 17.771 19.1114 18.0844Z" fill="var(--color)"/>
 							</svg>
 						</div>
 					</div>
-					<?php $api_price = get_api_price(); ?>
-					<div class="header_price_bottom icon icon-fpound flex__center">
-						<span><?php echo wc_price( $api_price->xauPrice ); ?></span> <span><?php echo number_format( $api_price->chgXau, 2 ); ?></span> <span><?php echo number_format( $api_price->pcXau, 2 ); ?>%</span>
-					</div>
+					<?php get_template_part( 'template-parts/ajax/header', 'price', [ 'api_price' => $api_price, 'metal' => $api_metal ] ); ?>
 				</div>
 				<div class="header_href flex__align">
 					<div class="header_href_user">
@@ -111,17 +116,17 @@ $header = get_field( 'header', 'options' );
 							<path d="M7.5838 6.2464C7.61987 5.26644 7.71607 4.30453 8.01666 3.37267C8.3353 2.36266 8.87037 1.49694 9.75413 0.883715C10.4275 0.414781 11.185 0.16829 11.9906 0.0720981C12.9585 -0.0481414 13.9204 -0.0180815 14.8643 0.252457C16.3373 0.673295 17.3052 1.6292 17.8463 3.04803C18.2911 4.21435 18.3934 5.43478 18.3573 6.66723C18.3152 7.91772 17.9785 9.08405 17.3112 10.1482C16.6379 11.2243 15.7361 12.048 14.5216 12.4568C12.7541 13.052 11.1669 12.6672 9.78419 11.4528C8.61185 10.4307 7.97458 9.10208 7.72809 7.58105C7.64392 7.13617 7.62589 6.69128 7.5838 6.2464ZM9.08079 6.23437C9.12287 6.65521 9.14091 7.08206 9.21906 7.5029C9.44752 8.7113 9.99461 9.73935 10.9806 10.4969C12.1589 11.3987 13.5537 11.4528 14.7862 10.6411C15.4775 10.1842 15.9765 9.55899 16.3312 8.81952C16.698 8.04398 16.8603 7.22034 16.8603 6.36062C16.8603 5.42276 16.7761 4.50292 16.4575 3.61315C16.0547 2.50094 15.2852 1.82759 14.1188 1.60515C13.4635 1.4789 12.8022 1.47289 12.1469 1.55706C10.7882 1.7314 9.89241 2.45284 9.46555 3.76345C9.20103 4.56304 9.11686 5.39269 9.08079 6.23437Z" fill="#D2D1CF"/>
 						</svg>
 						<div class="header_href_user_wrapper">
-							<?php if (is_user_logged_in()) {
-								$myaccount_page_id = get_option('woocommerce_myaccount_page_id');
+							<?php if ( is_user_logged_in() ) {
+								$myaccount_page_id = get_option( 'woocommerce_myaccount_page_id' );
 								$myaccount_title = get_the_title( $myaccount_page_id ); ?>
 								<a href="<?php echo get_permalink( $myaccount_page_id ); ?>" title="<?php echo $myaccount_title; ?>"><?php echo $myaccount_title; ?></a>
 								<a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a>
-							<?php } else { get_template_part('ajax', 'auth'); ?>
+							<?php }
+							else {
+								get_template_part( 'ajax', 'auth' ); ?>
 								<a class="modal-link" data-modal-name="register">Register</a>
 								<a class="modal-link" data-modal-name="login">Login</a>
 							<?php } ?>
-							<!--<a class="modal-link" data-modal-name="register">Register</a>
-							<a class="modal-link" data-modal-name="login">Login</a>-->
 						</div>
 					</div>
 					<?php suissevault_header_cart_link(); ?>

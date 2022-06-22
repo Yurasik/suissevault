@@ -237,13 +237,13 @@ if ( !class_exists( 'Suissevault' ) ) :
 				'description' => '',
 			);
 
-			$rows                 = intval( apply_filters( 'suissevault_footer_widget_rows', 1 ) );
+			$rows = intval( apply_filters( 'suissevault_footer_widget_rows', 1 ) );
 			$this->widget_regions = intval( apply_filters( 'suissevault_footer_widget_columns', 4 ) );
 
 			for ( $row = 1; $row <= $rows; $row++ ) {
 				for ( $region = 1; $region <= $this->widget_regions; $region++ ) {
 					$footer_n = $region + $this->widget_regions * ( $row - 1 ); // Defines footer sidebar ID.
-					$footer   = sprintf( 'footer_%d', $footer_n );
+					$footer = sprintf( 'footer_%d', $footer_n );
 
 					if ( 1 === $rows ) {
 						/* translators: 1: column number */
@@ -337,13 +337,11 @@ if ( !class_exists( 'Suissevault' ) ) :
 			/**
 			 * Scripts
 			 */
-			$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
-				? ''
-				: '.min';
+			$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 			if ( wc_get_endpoint_url( 'payment-methods' ) == $current_url || wc_get_endpoint_url( 'payment-methods', 'billing' ) == $current_url ) {
 				wp_dequeue_style( 'select2' );
-				wp_dequeue_script( 'select2');
+				wp_dequeue_script( 'select2' );
 				wp_dequeue_script( 'selectWoo' );
 			}
 
@@ -370,7 +368,17 @@ if ( !class_exists( 'Suissevault' ) ) :
 			wp_enqueue_script( "slick" );
 			if ( is_page( 'live-prices' ) ) {
 				wp_register_script( "advanced-real-time-chart-widget", "https://s3.tradingview.com/tv.js", [ 'jquery' ], false, true );
+				wp_register_script( "widgets", get_template_directory_uri() . "/assets/js/widgets.js", [
+					'jquery',
+					'advanced-real-time-chart-widget'
+				], false, true );
+
 				wp_enqueue_script( "advanced-real-time-chart-widget" );
+				wp_enqueue_script( "widgets" );
+
+				wp_localize_script( 'widgets', 'ajax_object', array(
+					'ajaxurl' => admin_url( 'admin-ajax.php' )
+				) );
 			}
 			wp_enqueue_script( "main" );
 

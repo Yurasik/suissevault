@@ -81,7 +81,7 @@ $api_price = get_api_price();
 						<div class="live_content_tab" data-tabs="live" data-tab="silver">Silver</div>
 						<div class="live_content_tab" data-tabs="live" data-tab="all">All</div>
 					</div>
-					<?php get_template_part( 'template-parts/ajax/live_content_steps', '', [ 'api_price' => $api_price ] ); ?>
+					<?php get_template_part( 'template-parts/ajax/live', 'price', [ 'api_price' => $api_price ] ); ?>
 					<div class="live_content_more">
 						<div class="more-line"> View Metal Ratio Graphs</div>
 					</div>

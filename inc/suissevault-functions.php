@@ -188,14 +188,38 @@ function live_price_filter() {
 
 	$response = [];
 
-	$currency = sanitize_text_field( $_POST['currency'] );
-	$weight = sanitize_text_field( $_POST['weight'] );
+	$currency = sanitize_text_field( $_POST[ 'currency' ] );
+	$weight = sanitize_text_field( $_POST[ 'weight' ] );
 
 	$api_price = get_api_price( $currency );
 
 	ob_start();
-	get_template_part( 'template-parts/ajax/live_content_steps', '', [ 'api_price' => $api_price, 'weight' => $weight ] );
-	$response['live_content_steps_html'] = ob_get_clean();
+	get_template_part( 'template-parts/ajax/live', 'price', [ 'api_price' => $api_price, 'weight' => $weight ] );
+	$response[ 'live_content_steps_html' ] = ob_get_clean();
+
+	wp_send_json( $response );
+	die();
+}
+
+
+add_action( 'wp_ajax_header_price', 'header_price' );
+add_action( 'wp_ajax_nopriv_header_price', 'header_price' );
+function header_price() {
+
+	$response = [];
+
+	$currency = sanitize_text_field( $_POST[ 'currency' ] );
+	$metal = sanitize_text_field( $_POST[ 'metal' ] );
+
+	$api_price = get_api_price( $currency );
+
+	session_start();
+	$_SESSION['suissevault_api_metal'] = $metal;
+	$_SESSION['suissevault_api_currency'] = $currency;
+
+	ob_start();
+	get_template_part( 'template-parts/ajax/header', 'price', [ 'api_price' => $api_price, 'metal' => $metal ] );
+	$response[ 'header_price_html' ] = ob_get_clean();
 
 	wp_send_json( $response );
 	die();
