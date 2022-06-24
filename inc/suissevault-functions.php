@@ -133,6 +133,57 @@ function get_api_price( $currency = 'GBP', $with_date = false ) {
 
 }
 
+function get_dynamic_price( $product ) {
+
+	$result = [];
+	$api_price = get_api_price();
+
+	// Product data
+	$markup_percentage = ( get_field( 'markup_percentage', $product ) ) ? : 0;
+	$weight = $product->get_attribute( 'Weight' );
+	$metal = $product->get_attribute( 'Metal' );
+	$weight_number = (int)preg_replace( '/[^\d+]/', '', $weight );
+	$weight_symbol = str_replace( $weight_number, '', $weight );
+	$exploded_weight = explode( '/', $weight );
+	if ( count( $exploded_weight ) > 1 ) {
+		$weight_number = (int)preg_replace( '/[^\d+]/', '', $exploded_weight[0] ) / (int)preg_replace( '/[^\d+]/', '', $exploded_weight[1] );
+	}
+	$price = ( $metal == 'Gold' ) ? $api_price->xauPrice : $api_price->xagPrice;
+
+	// Weight
+	if ( $weight_symbol == 'g' ) {
+		$price = $price / 28.3495231 * $weight_number;
+	}
+	elseif ( $weight_symbol == 'kg' ) {
+		$price = $price * 35.2739619 * $weight_number;
+	}
+	else {
+		$price = $price * $weight_number;
+	}
+
+	// Markup
+	$price = ( !$markup_percentage ) ? $price : $price + ( $price / 100 * $markup_percentage );
+	$price_inc_vat = $price;
+
+	// VAT
+	$tax_rate_number = 0;
+	if ( $product->get_tax_status() == 'taxable' ) {
+		$tax_rates = WC_Tax::get_rates( $product->get_tax_class() );
+		if ( !empty( $tax_rates ) ) {
+			$tax_rate = reset( $tax_rates );
+			$tax_rate_number = $tax_rate[ 'rate' ];
+		}
+	}
+	if ( $tax_rate_number ) {
+		$price_inc_vat = $price + ( $price / 100 * $tax_rate_number );
+	}
+
+	$result[ 'price' ] = $price;
+	$result[ 'vat' ] = $tax_rate_number;
+	$result[ 'price_inc_vat' ] = $price_inc_vat;
+
+	return $result;
+}
 
 // AJAX
 add_action( 'wp_ajax_suissevault_payment_method', 'suissevault_payment_method' );
@@ -228,49 +279,22 @@ add_action( 'wp_ajax_dynamic_price', 'dynamic_price' );
 add_action( 'wp_ajax_nopriv_dynamic_price', 'dynamic_price' );
 function dynamic_price() {
 
-	//price: "5750"
-	//price_inc_vat: "5750"
-	//valid: true
-	//vat: "0.00"
 	$response = [];
-	$api_price = get_api_price();
 	$products = wc_get_products( [
 		'limit'  => -1,
 		'status' => 'publish'
 	] );
 
 	foreach ( $products as $product ) {
-		$product_id = $product->get_id();
-		$markup_percentage = get_field( 'markup_percentage', $product_id );
-		$weight = $product->get_attribute( 'Weight' );
-		$metal = $product->get_attribute( 'Metal' );
-		$measure_of_weight = preg_replace( '/[^\d+]/', '', $weight );
-		$weight_without_measure_of_weight = str_replace( $measure_of_weight, '', $weight );
-		$tax_rate_number = 0;
-		if ( $product->get_tax_status() == 'taxable' ) {
-			$tax_rates = WC_Tax::get_rates( $product->get_tax_class() );
-			if ( !empty( $tax_rates ) ) {
-				$tax_rate = reset( $tax_rates );
-				$tax_rate_number = $tax_rate[ 'rate' ];
-			}
-		}
-		$price = ( $metal == 'Gold' ) ? $api_price->xauPrice : $api_price->xagPrice;
-		if ( $measure_of_weight == 'g' ) {
-			$price = $price / 28.3495231;
-		}
-		elseif ( $measure_of_weight == 'kg' ) {
-			$price = $price * 35.2739619;
-		}
-		$price = ( !$markup_percentage ) ? $price : $price * $markup_percentage;
-		$price_inc_vat = $price;
-		if ( $tax_rate_number ) {
-			$price_inc_vat = $price + ( ( $price / 100 ) * $tax_rate_number );
-		}
 
-		$response[ $product_id ][ 'price' ] = number_format( $price, 2 );
-		$response[ $product_id ][ 'price_inc_vat' ] = number_format( $price_inc_vat, 2 );
-		$response[ $product_id ][ 'vat' ] = number_format( $tax_rate_number, 2 );
-		$response[ $product_id ][ 'valid' ] = true;
+		$dynamic_price = get_dynamic_price( $product );
+
+		$response[ $product->get_id() ] = [
+			'price'         => number_format( $dynamic_price[ 'price' ], 2 ),
+			'price_inc_vat' => number_format( $dynamic_price[ 'price_inc_vat' ], 2 ),
+			'vat'           => number_format( $dynamic_price[ 'vat' ], 2 ),
+			'valid'         => true
+		];
 	}
 
 	wp_send_json( $response );
