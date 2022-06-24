@@ -501,5 +501,26 @@
         }
     });
 
+    function dynamic_price() {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: ajax_object.ajaxurl,
+            data: {
+                'action': 'dynamic_price'
+            },
+            success: function (response) {
+                console.log(response);
+                setTimeout(dynamic_price, 30000);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+    }
+
+    $(document).ready(function (){
+        //dynamic_price();
+    });
 
 }(jQuery));
