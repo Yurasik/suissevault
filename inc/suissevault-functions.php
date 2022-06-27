@@ -184,6 +184,39 @@ function get_dynamic_price( $api_price, $product ) {
 	return $result;
 }
 
+function get_min_dynamic_price_by_cat( $term_id ) {
+
+	$api_price = get_api_price();
+	$cat_products = new WP_Query( [
+		'post_type'      => 'product',
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'tax_query'      => [
+			[
+				'taxonomy' => 'product_cat',
+				'field'    => 'term_id',
+				'terms'    => $term_id,
+				'operator' => 'IN'
+			]
+		]
+	] );
+
+	$min_price = 0;
+	if ( $cat_products->have_posts() ) {
+		while ( $cat_products->have_posts() ) {
+			$cat_products->the_post();
+			$product_id = get_the_ID();
+			$product = wc_get_product( $product_id );
+			$dynamic_price = get_dynamic_price( $api_price, $product );
+
+			$min_price_conditions = $min_price == 0 || $min_price > $dynamic_price[ 'price_inc_vat' ] && $dynamic_price[ 'price_inc_vat' ] != 0;
+			$min_price = ( $min_price_conditions ) ? $dynamic_price[ 'price_inc_vat' ] : $min_price;
+		}
+	}
+
+	return $min_price;
+}
+
 // AJAX
 add_action( 'wp_ajax_suissevault_payment_method', 'suissevault_payment_method' );
 add_action( 'wp_ajax_nopriv_suissevault_payment_method', 'suissevault_payment_method' );
@@ -301,6 +334,29 @@ function dynamic_price() {
 		ob_start();
 		get_template_part( 'template-parts/ajax/quantities', 'discount', [ 'api_price' => $api_price, 'product' => $product ] );
 		$response[ 'quantities_discount_html' ] = ob_get_clean();
+	}
+
+	wp_send_json( $response );
+	die();
+}
+
+add_action( 'wp_ajax_dynamic_min_price', 'dynamic_min_price' );
+add_action( 'wp_ajax_nopriv_dynamic_min_price', 'dynamic_min_price' );
+function dynamic_min_price() {
+
+	$response = [];
+	$api_price = get_api_price();
+
+	$terms = get_terms( [
+		'taxonomy'   => 'product_cat',
+		'hide_empty' => true,
+	] );
+
+	foreach ( $terms as $term ) {
+		$min_dynamic_price_by_cat = get_min_dynamic_price_by_cat( $term->term_id );
+		$response[ $term->term_id ] = [
+			'price' => "from " . wc_price( $min_dynamic_price_by_cat )
+		];
 	}
 
 	wp_send_json( $response );

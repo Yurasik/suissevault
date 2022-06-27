@@ -505,8 +505,7 @@
     // Dynamic Prices
     function dynamic_price() {
         let data = {
-            'action': 'dynamic_price',
-            'page': ajax_object['page']
+            'action': 'dynamic_price'
         };
 
         let quantities_discount = $('#quantities_discount').length;
@@ -543,9 +542,40 @@
         }
     }
 
+    function dynamic_min_price() {
+        let data = {
+            'action': 'dynamic_min_price'
+        };
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: ajax_object.ajaxurl,
+            data: data,
+            success: function (response) {
+                update_dynamic_min_price(response);
+                setTimeout(dynamic_min_price, dynamic_price_timer);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+    }
+
+    function update_dynamic_min_price(price_data) {
+        $('.min_price').each(function () {
+            let term_id = $(this).data('min-price-term-id'),
+                new_price = price_data[term_id].price;
+
+            $(this).html(new_price);
+        });
+    }
+
     $(document).ready(function () {
         if (ajax_object.dynamic_price) {
             setTimeout(dynamic_price, dynamic_price_timer);
+        } else if (ajax_object.dynamic_min_price) {
+            setTimeout(dynamic_min_price, dynamic_price_timer);
         }
     });
 
