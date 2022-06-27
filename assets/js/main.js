@@ -1,5 +1,6 @@
 (function ($) {
     var a = 'active';
+    var dynamic_price_timer = 5000;
 
     // no skroll
     var block = $('<div>').css({'height': '50px', 'width': '50px'}),
@@ -501,17 +502,27 @@
         }
     });
 
+    // Dynamic Prices
     function dynamic_price() {
+        let data = {
+            'action': 'dynamic_price',
+            'page': ajax_object['page']
+        };
+
+        let quantities_discount = $('#quantities_discount').length;
+        if (quantities_discount > 0) {
+            data.quantities_discount = quantities_discount;
+            data.product_id = ajax_object.product_id;
+        }
+
         $.ajax({
             type: 'POST',
             dataType: 'json',
             url: ajax_object.ajaxurl,
-            data: {
-                'action': 'dynamic_price'
-            },
+            data: data,
             success: function (response) {
-                console.log(response);
-                setTimeout(dynamic_price, 30000);
+                update_dynamic_price(response);
+                setTimeout(dynamic_price, dynamic_price_timer);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus);
@@ -519,8 +530,23 @@
         });
     }
 
-    $(document).ready(function (){
-        //dynamic_price();
+    function update_dynamic_price(price_data) {
+        $('.price').each(function () {
+            let product_id = $(this).data('price-product-id'),
+                new_price = price_data[product_id].price_inc_vat;
+
+            $(this).html(new_price);
+        });
+
+        if (price_data.quantities_discount_html) {
+            $('#quantities_discount').replaceWith(price_data.quantities_discount_html);
+        }
+    }
+
+    $(document).ready(function () {
+        if (ajax_object.dynamic_price) {
+            setTimeout(dynamic_price, dynamic_price_timer);
+        }
     });
 
 }(jQuery));

@@ -382,9 +382,18 @@ if ( !class_exists( 'Suissevault' ) ) :
 			}
 			wp_enqueue_script( "main" );
 
-			wp_localize_script( 'main', 'ajax_object', array(
-				'ajaxurl' => admin_url( 'admin-ajax.php' )
-			) );
+			$main_localized_data[ 'ajaxurl' ] = admin_url( 'admin-ajax.php' );
+			$main_localized_data[ 'dynamic_price' ] = false;
+
+			if ( is_shop() || is_product() || is_page( 'live-prices' ) || is_page( 'catalogue' ) ) {
+				$main_localized_data[ 'dynamic_price' ] = true;
+			}
+
+			if ( is_product() ) {
+				$main_localized_data[ 'product_id' ] = get_the_ID();
+			}
+
+			wp_localize_script( 'main', 'ajax_object', $main_localized_data );
 
 			if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 				wp_enqueue_script( 'comment-reply' );

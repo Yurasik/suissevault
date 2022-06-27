@@ -18,7 +18,8 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 if ( $related_products ) :
-	//$heading = apply_filters( 'woocommerce_product_related_products_heading', __( 'Related products', 'woocommerce' ) );
+	$api_price = get_api_price();
+
 	$heading = apply_filters( 'woocommerce_product_related_products_heading', __( 'Related <br><i>Products</i>', 'suissevault' ) );
 	?>
 
@@ -28,9 +29,12 @@ if ( $related_products ) :
 				<div class="product_items grid grid__three">
 					<?php woocommerce_product_loop_start( false ); ?>
 
-					<?php foreach ( $related_products as $related_product ) : ?>
+					<?php foreach ( $related_products as $related_product ) :
+						$dynamic_price = get_dynamic_price( $api_price, $related_product );
+						$related_product_id = $related_product->get_id();
+						?>
 
-						<?php $post_object = get_post( $related_product->get_id() );
+						<?php $post_object = get_post( $related_product_id );
 						setup_postdata( $GLOBALS[ 'post' ] =& $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found ?>
 
 						<div class="product_item">
@@ -38,7 +42,7 @@ if ( $related_products ) :
 								<?php echo suissevault_get_picture_html( $related_product->get_image_id() ); ?>
 							</div>
 							<div class="product_item_name"><?php the_title(); ?></div>
-							<div class="product_item_price"><?php echo $related_product->get_price_html(); ?></div>
+							<div class="product_item_price price" data-price-product-id="<?php echo $related_product_id; ?>"><?php echo wc_price( $dynamic_price[ 'price_inc_vat' ] ); ?></div>
 							<div class="product_item_btn">
 								<?php woocommerce_template_loop_add_to_cart( [ 'class' => 'btn btn-line' ] ); ?>
 							</div>

@@ -133,10 +133,9 @@ function get_api_price( $currency = 'GBP', $with_date = false ) {
 
 }
 
-function get_dynamic_price( $product ) {
+function get_dynamic_price( $api_price, $product ) {
 
 	$result = [];
-	$api_price = get_api_price();
 
 	// Product data
 	$markup_percentage = ( get_field( 'markup_percentage', $product ) ) ? : 0;
@@ -146,7 +145,7 @@ function get_dynamic_price( $product ) {
 	$weight_symbol = str_replace( $weight_number, '', $weight );
 	$exploded_weight = explode( '/', $weight );
 	if ( count( $exploded_weight ) > 1 ) {
-		$weight_number = (int)preg_replace( '/[^\d+]/', '', $exploded_weight[0] ) / (int)preg_replace( '/[^\d+]/', '', $exploded_weight[1] );
+		$weight_number = (int)preg_replace( '/[^\d+]/', '', $exploded_weight[ 0 ] ) / (int)preg_replace( '/[^\d+]/', '', $exploded_weight[ 1 ] );
 	}
 	$price = ( $metal == 'Gold' ) ? $api_price->xauPrice : $api_price->xagPrice;
 
@@ -179,8 +178,8 @@ function get_dynamic_price( $product ) {
 	}
 
 	$result[ 'price' ] = $price;
-	$result[ 'vat' ] = $tax_rate_number;
 	$result[ 'price_inc_vat' ] = $price_inc_vat;
+	$result[ 'vat' ] = $tax_rate_number;
 
 	return $result;
 }
@@ -280,21 +279,28 @@ add_action( 'wp_ajax_nopriv_dynamic_price', 'dynamic_price' );
 function dynamic_price() {
 
 	$response = [];
+	$api_price = get_api_price();
 	$products = wc_get_products( [
 		'limit'  => -1,
 		'status' => 'publish'
 	] );
 
 	foreach ( $products as $product ) {
-
-		$dynamic_price = get_dynamic_price( $product );
-
+		$dynamic_price = get_dynamic_price( $api_price, $product );
 		$response[ $product->get_id() ] = [
-			'price'         => number_format( $dynamic_price[ 'price' ], 2 ),
-			'price_inc_vat' => number_format( $dynamic_price[ 'price_inc_vat' ], 2 ),
+			'price'         => wc_price( $dynamic_price[ 'price' ] ),
+			'price_inc_vat' => wc_price( $dynamic_price[ 'price_inc_vat' ] ),
 			'vat'           => number_format( $dynamic_price[ 'vat' ], 2 ),
 			'valid'         => true
 		];
+	}
+
+	if ( isset( $_POST[ 'quantities_discount' ] ) && intval( $_POST[ 'quantities_discount' ] ) ) {
+		$product_id = intval( $_POST[ 'product_id' ] );
+		$product = wc_get_product( $product_id );
+		ob_start();
+		get_template_part( 'template-parts/ajax/quantities', 'discount', [ 'api_price' => $api_price, 'product' => $product ] );
+		$response[ 'quantities_discount_html' ] = ob_get_clean();
 	}
 
 	wp_send_json( $response );

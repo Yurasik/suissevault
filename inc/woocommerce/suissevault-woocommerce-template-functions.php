@@ -154,35 +154,10 @@ if ( !function_exists( 'suissevault_quantities_list' ) ) {
 
 	function suissevault_quantities_list() {
 
-		$output_html = "
-		<table>
-			<tr>
-				<td>Quantity</td>
-				<td>Each</td>
-			</tr>
-			<tr>
-				<td>1</td>
-				<td>£329.50</td>
-			</tr>
-			<tr>
-				<td>2+</td>
-				<td>£329.17</td>
-			</tr>
-			<tr>
-				<td>5+</td>
-				<td>£329.00</td>
-			</tr>
-			<tr>
-				<td>10+</td>
-				<td>£329.17</td>
-			</tr>
-			<tr>
-				<td>20+</td>
-				<td>£329.00</td>
-			</tr>
-		</table>";
+		global $product;
+		$api_price = get_api_price();
 
-		echo $output_html;
+		get_template_part( 'template-parts/ajax/quantities', 'discount', [ 'api_price' => $api_price, 'product' => $product ] );
 	}
 }
 

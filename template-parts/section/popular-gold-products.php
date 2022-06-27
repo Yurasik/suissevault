@@ -1,28 +1,38 @@
 <?php
 $args = array(
-	'post_type'      => array( 'product' ),
+	'post_type'      => [ 'product' ],
+	'posts_per_page' => 3,
+	'tax_query'      => [
+		[
+			'taxonomy' => 'pa_metal',
+			'field'    => 'slug',
+			'terms'    => [ 'gold' ]
+		]
+	],
 	'meta_key'       => 'total_sales',
 	'orderby'        => 'meta_value_num',
 	'order'          => 'desc',
-	'posts_per_page' => 3
 );
 
 $popular_products = new WP_Query( $args );
+$api_price = get_api_price();
 ?>
 <div class="product">
 	<div class="bone">
 		<div class="product_net flex__start">
 			<div class="product_items grid grid__three">
-				<?php if( $popular_products->have_posts() ) : ?>
+				<?php if ( $popular_products->have_posts() ) : ?>
 					<?php while ( $popular_products->have_posts() ) : $popular_products->the_post();
 						$product_id = get_the_ID();
+						$product = wc_get_product( $product_id );
+						$dynamic_price = get_dynamic_price( $api_price, $product );
 						?>
 						<div class="product_item">
 							<div class="product_item_img">
 								<?php echo suissevault_get_picture_html( get_post_thumbnail_id() ); ?>
 							</div>
 							<div class="product_item_name"><?php the_title(); ?></div>
-							<div class="product_item_price"><?php echo wc_price( get_post_meta( $product_id, '_price', true ) ); ?></div>
+							<div class="product_item_price price" data-price-product-id="<?php echo $product->get_id(); ?>"><?php echo wc_price( $dynamic_price[ 'price_inc_vat' ] ); ?></div>
 							<div class="product_item_btn">
 								<?php woocommerce_template_loop_add_to_cart( [ 'class' => 'btn btn-line' ] ); ?>
 							</div>

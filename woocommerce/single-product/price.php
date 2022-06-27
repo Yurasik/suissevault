@@ -19,6 +19,8 @@ if ( !defined( 'ABSPATH' ) ) {
 
 global $product;
 
+$api_price = get_api_price();
+$dynamic_price = get_dynamic_price( $api_price, $product );
 ?>
 <div class="subtitle"><?php _e( 'Price', 'suissevault' ); ?></div>
-<div class="<?php echo esc_attr( apply_filters( 'woocommerce_product_price_class', 'price' ) ); ?>"><?php echo $product->get_price_html(); ?></div>
+<div class="<?php echo esc_attr( apply_filters( 'woocommerce_product_price_class', 'price' ) ); ?>" data-price-product-id="<?php echo $product->get_id(); ?>"><?php echo wc_price( $dynamic_price[ 'price_inc_vat' ] ); ?></div>

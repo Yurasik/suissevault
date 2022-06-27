@@ -1,9 +1,7 @@
 <?php
 /**
  * Loop Price
- *
  * This template can be overridden by copying it to yourtheme/woocommerce/loop/price.php.
- *
  * HOWEVER, on occasion WooCommerce will need to update template files and you
  * (the theme developer) will need to copy the new files to your theme to
  * maintain compatibility. We try to do this as little as possible, but it does
@@ -15,13 +13,13 @@
  * @version     1.6.4
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( !defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
 global $product;
-?>
 
-<?php if ( $dynamic_price = get_dynamic_price( $product ) ) : ?>
-	<span class="price" data-price-product-id="<?php echo $product->get_id(); ?>"><?php echo wc_price($dynamic_price['price_inc_vat']); ?></span>
-<?php endif; ?>
+$api_price = get_api_price();
+$dynamic_price = get_dynamic_price( $api_price, $product );
+?>
+<span class="price" data-price-product-id="<?php echo $product->get_id(); ?>"><?php echo wc_price( $dynamic_price[ 'price_inc_vat' ] ); ?></span>
