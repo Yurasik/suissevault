@@ -105,6 +105,13 @@ function abbreviated_days_of_the_week( $working_days ): string {
 	return str_replace( $full_days_of_the_week, $abbreviated_days_of_the_week, $working_days );
 }
 
+function suissevault_is_checkout() {
+	$checkout_path = wp_parse_url( wc_get_checkout_url(), PHP_URL_PATH );
+	$current_url_path = wp_parse_url( "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", PHP_URL_PATH );
+
+	return ( $checkout_path !== null && $current_url_path !== null && trailingslashit( $checkout_path ) === trailingslashit( $current_url_path ) );
+}
+
 function get_api_price( $currency = 'GBP', $with_date = false ) {
 
 	$curl = curl_init();
@@ -345,7 +352,6 @@ add_action( 'wp_ajax_nopriv_dynamic_min_price', 'dynamic_min_price' );
 function dynamic_min_price() {
 
 	$response = [];
-	$api_price = get_api_price();
 
 	$terms = get_terms( [
 		'taxonomy'   => 'product_cat',
@@ -358,19 +364,6 @@ function dynamic_min_price() {
 			'price' => "from " . wc_price( $min_dynamic_price_by_cat )
 		];
 	}
-
-	wp_send_json( $response );
-	die();
-}
-
-add_action( 'wp_ajax_dynamic_cart_price', 'dynamic_cart_price' );
-add_action( 'wp_ajax_nopriv_dynamic_cart_price', 'dynamic_cart_price' );
-function dynamic_cart_price() {
-
-	$response = [];
-
-	global $woocommerce;
-	$cart_object = $woocommerce->cart;
 
 	wp_send_json( $response );
 	die();
