@@ -8,6 +8,7 @@
 get_header();
 
 $api_price = get_api_price();
+$live_content_more_display = false;
 ?>
 
 	<div class="page live">
@@ -82,9 +83,12 @@ $api_price = get_api_price();
 						<div class="live_content_tab" data-tabs="live" data-tab="all">All</div>
 					</div>
 					<?php get_template_part( 'template-parts/ajax/live', 'price', [ 'api_price' => $api_price ] ); ?>
-					<div class="live_content_more">
-						<div class="more-line"> View Metal Ratio Graphs</div>
-					</div>
+
+					<?php if( $live_content_more_display ): ?>
+						<div class="live_content_more">
+							<div class="more-line"> View Metal Ratio Graphs</div>
+						</div>
+					<?php endif; ?>
 					<div class="live_content_tabs flex__align">
 						<div class="live_content_tab active" data-tabs="widget" data-tab="1">Advanced Real-Time Chart Widget</div>
 						<div class="live_content_tab" data-tabs="widget" data-tab="2">Market Data Widget</div>

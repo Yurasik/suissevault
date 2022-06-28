@@ -1,6 +1,6 @@
 (function ($) {
     var a = 'active';
-    var dynamic_price_timer = 5000;
+    var dynamic_price_timer = 30000;
 
     // no skroll
     var block = $('<div>').css({'height': '50px', 'width': '50px'}),
