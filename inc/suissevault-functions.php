@@ -362,3 +362,16 @@ function dynamic_min_price() {
 	wp_send_json( $response );
 	die();
 }
+
+add_action( 'wp_ajax_dynamic_cart_price', 'dynamic_cart_price' );
+add_action( 'wp_ajax_nopriv_dynamic_cart_price', 'dynamic_cart_price' );
+function dynamic_cart_price() {
+
+	$response = [];
+
+	global $woocommerce;
+	$cart_object = $woocommerce->cart;
+
+	wp_send_json( $response );
+	die();
+}

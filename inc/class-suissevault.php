@@ -385,12 +385,16 @@ if ( !class_exists( 'Suissevault' ) ) :
 			$main_localized_data[ 'ajaxurl' ] = admin_url( 'admin-ajax.php' );
 			$main_localized_data[ 'dynamic_price' ] = false;
 			$main_localized_data[ 'dynamic_min_price' ] = false;
+			$main_localized_data[ 'dynamic_cart_price' ] = false;
 
 			if ( is_front_page() ) {
 				$main_localized_data[ 'dynamic_min_price' ] = true;
 			}
 			elseif ( is_shop() || is_product() || is_page( 'live-prices' ) || is_page( 'catalogue' ) ) {
 				$main_localized_data[ 'dynamic_price' ] = true;
+			}
+			elseif ( is_cart() ) {
+				$main_localized_data[ 'dynamic_cart_price' ] = true;
 			}
 
 			if ( is_product() ) {

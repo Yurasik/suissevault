@@ -291,15 +291,6 @@
         }
     }
 
-    // Total price
-    /*$(document).ready(function () {
-        let price = Number($('.checkout_total_price').text().replace(/[^+\d\.]/g, ''));
-
-        if (price >= 5000) {
-            $('.checkout_total_left').addClass('icon icon-total');
-        }
-    })*/
-
     // Modal
     $(document).on('click', '.modal-link', function (e) {
         e.preventDefault();
@@ -571,11 +562,18 @@
         });
     }
 
+    function dynamic_cart_price() {
+        $('#update_cart_btn').prop('disabled', false).prop('aria-disabled', false).click();
+        setTimeout(dynamic_cart_price, dynamic_price_timer);
+    }
+
     $(document).ready(function () {
         if (ajax_object.dynamic_price) {
             setTimeout(dynamic_price, dynamic_price_timer);
         } else if (ajax_object.dynamic_min_price) {
             setTimeout(dynamic_min_price, dynamic_price_timer);
+        } else if (ajax_object.dynamic_cart_price) {
+            setTimeout(dynamic_cart_price, dynamic_price_timer);
         }
     });
 
