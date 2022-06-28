@@ -287,6 +287,20 @@ if ( !function_exists( 'suissevault_checkout_fields' ) ) {
 	}
 }
 
+if ( !function_exists( 'suissevault_checkout_field_update_user_meta' ) ) {
+	function suissevault_checkout_field_update_user_meta( $customer_id, $posted ) {
+		if ( !empty( $_POST[ 'birth_day' ] ) ) {
+			update_user_meta( $customer_id, 'birth_day', sanitize_text_field( $posted[ 'birth_day' ] ) );
+		}
+		if ( !empty( $_POST[ 'birth_month' ] ) ) {
+			update_user_meta( $customer_id, 'birth_month', sanitize_text_field( $posted[ 'birth_month' ] ) );
+		}
+		if ( !empty( $_POST[ 'birth_year' ] ) ) {
+			update_user_meta( $customer_id, 'birth_year', sanitize_text_field( $posted[ 'birth_year' ] ) );
+		}
+	}
+}
+
 if ( !function_exists( 'suissevault_checkout_field_update_order_meta' ) ) {
 	function suissevault_checkout_field_update_order_meta( $order_id ) {
 

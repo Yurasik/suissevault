@@ -83,6 +83,7 @@ remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_login_f
 remove_action( 'woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20 );
 add_action( 'suissevault_payment_details', 'woocommerce_checkout_payment', 10 );
 add_filter( 'woocommerce_checkout_fields', 'suissevault_checkout_fields', 10, 1 );
+add_filter( 'woocommerce_checkout_update_user_meta', 'suissevault_checkout_field_update_user_meta', 10, 2 );
 add_action( 'woocommerce_checkout_update_order_meta', 'suissevault_checkout_field_update_order_meta', 10, 1 );
 add_action( 'woocommerce_checkout_process', 'suissevault_checkout_fields_process' );
 add_filter( 'woocommerce_form_field', 'suissevault_customize_form_field', 10, 4 );
