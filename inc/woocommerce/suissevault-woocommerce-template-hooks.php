@@ -90,7 +90,6 @@ add_filter( 'woocommerce_form_field', 'suissevault_customize_form_field', 10, 4 
 add_filter( 'wp_footer', 'suissevault_remove_checkout_optional_fields_label_script' );
 add_filter( 'woocommerce_form_field_args', 'suissevault_add_form_field_args', 10, 3 );
 
-
 /**
  * My Account
  */

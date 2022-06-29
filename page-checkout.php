@@ -7,8 +7,8 @@
 
 get_header();
 
-$page_class = ( !empty( is_wc_endpoint_url( 'order-received' ) ) ) ? "thank" : "checkout";
 $checkout_time = checkout_time();
+$page_class = ( !empty( is_wc_endpoint_url( 'order-received' ) ) ) ? "thank" : "checkout";
 ?>
 
 	<div class="page <?php echo $page_class; ?>">

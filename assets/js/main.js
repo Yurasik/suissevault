@@ -345,14 +345,7 @@ jQuery(document).ready(function ($) {
     });
 
     function update_cart() {
-        let update_cart_btn = $('[name=update_cart]'),
-            is_disabled = update_cart_btn.attr('aria-disabled');
-
-        if (is_disabled === 'true') {
-            setTimeout(update_cart, 250);
-        } else {
-            update_cart_btn.trigger('click');
-        }
+        $('[name=update_cart]').prop('disabled', false).prop('aria-disabled', false).trigger('click');
     }
 
     // Cart terms validation
@@ -416,7 +409,7 @@ jQuery(document).ready(function ($) {
             url: ajax_object.ajaxurl,
             data: data,
             success: function (response) {
-
+                update_cart();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus);
@@ -562,7 +555,7 @@ jQuery(document).ready(function ($) {
     }
 
     function dynamic_cart_price() {
-        $('#update_cart_btn').prop('disabled', false).prop('aria-disabled', false).click();
+        update_cart();
         setTimeout(dynamic_cart_price, dynamic_price_timer);
     }
     if (ajax_object.dynamic_cart_price) {

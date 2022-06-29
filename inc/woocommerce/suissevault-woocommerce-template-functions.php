@@ -590,7 +590,11 @@ if ( !function_exists( 'dynamic_price_totals' ) ) {
 
 		foreach ( $cart_object->get_cart() as $hash => $value ) {
 			$dynamic_price = get_dynamic_price( $api_price, $value[ 'data' ] );
+			if ( is_storage() ) {
+				$value[ 'data' ]->set_tax_status( 'none' );
+			}
 			$value[ 'data' ]->set_price( $dynamic_price[ 'price_inc_vat' ] );
+
 		}
 	}
 }

@@ -226,7 +226,7 @@ function get_min_dynamic_price_by_cat( $term_id ) {
 }
 
 function get_checkout_time_limit() {
-	return 5 * 60; // 5 minutes
+	return 10; // 5 minutes
 }
 
 function checkout_time() {
@@ -243,11 +243,27 @@ function checkout_time() {
 	if ( $time_left < 0 ) {
 		WC()->session->__unset( 'api_price' );
 		WC()->session->__unset( 'api_price_time' );
-		wp_safe_redirect( esc_url( wc_get_cart_url() ) );
-		die();
+
+		if ( wp_doing_ajax() ) {
+			global $woocommerce;
+			$woocommerce->cart->empty_cart();
+			wc_add_notice( '<div class="woocommerce-error">' . __( 'Sorry, time to buy with a locked price is over.', 'woocommerce' ) . ' <a href="' . esc_url( wc_get_page_permalink( 'shop' ) ) . '" class="wc-backward">' . __( 'Return to shop', 'woocommerce' ) . '</a></div>', 'error' );
+		}
+		else {
+			wp_safe_redirect( esc_url( wc_get_cart_url() ) );
+			exit();
+		}
 	}
 
 	return $time_left;
+}
+
+function is_storage() {
+
+	$chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
+
+	return ( $chosen_shipping_methods[ 0 ] == 'local_pickup:6' );
+
 }
 
 // AJAX
