@@ -219,9 +219,35 @@ function get_min_dynamic_price_by_cat( $term_id ) {
 			$min_price_conditions = $min_price == 0 || $min_price > $dynamic_price[ 'price_inc_vat' ] && $dynamic_price[ 'price_inc_vat' ] != 0;
 			$min_price = ( $min_price_conditions ) ? $dynamic_price[ 'price_inc_vat' ] : $min_price;
 		}
+		wp_reset_postdata();
 	}
 
 	return $min_price;
+}
+
+function get_checkout_time_limit() {
+	return 5 * 60; // 5 minutes
+}
+
+function checkout_time() {
+
+	$time_limit = get_checkout_time_limit();
+
+	if ( !$api_price_time = WC()->session->get( 'api_price_time' ) )
+		return $time_limit;
+
+	$current_time = time();
+	$time_passed = $current_time - $api_price_time;
+	$time_left = $time_limit - $time_passed;
+
+	if ( $time_left < 0 ) {
+		WC()->session->__unset( 'api_price' );
+		WC()->session->__unset( 'api_price_time' );
+		wp_safe_redirect( esc_url( wc_get_cart_url() ) );
+		die();
+	}
+
+	return $time_left;
 }
 
 // AJAX
