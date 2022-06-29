@@ -589,11 +589,26 @@ if ( !function_exists( 'suissevault_customer_save_address' ) ) {
 
 if ( !function_exists( 'dynamic_price_totals' ) ) {
 	function dynamic_price_totals( $cart_object ) {
+
 		$api_price = get_api_price();
+
+		if ( is_checkout() ) {
+			if ( WC()->session->get( 'api_price' ) ) {
+				checkout_time();
+				$api_price = WC()->session->get( 'api_price' );
+			} else {
+				WC()->session->set( 'api_price', $api_price );
+				WC()->session->set( 'api_price_time', time() );
+			}
+		}
 
 		foreach ( $cart_object->get_cart() as $hash => $value ) {
 			$dynamic_price = get_dynamic_price( $api_price, $value[ 'data' ] );
+			if ( is_storage() ) {
+				$value[ 'data' ]->set_tax_status( 'none' );
+			}
 			$value[ 'data' ]->set_price( $dynamic_price[ 'price_inc_vat' ] );
+
 		}
 	}
 }

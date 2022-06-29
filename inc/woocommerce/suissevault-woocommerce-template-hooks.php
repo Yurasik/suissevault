@@ -91,7 +91,6 @@ add_filter( 'woocommerce_form_field', 'suissevault_customize_form_field', 10, 4 
 add_filter( 'wp_footer', 'suissevault_remove_checkout_optional_fields_label_script' );
 add_filter( 'woocommerce_form_field_args', 'suissevault_add_form_field_args', 10, 3 );
 
-
 /**
  * My Account
  */
@@ -115,5 +114,5 @@ add_filter( 'woocommerce_customer_save_address', 'suissevault_customer_save_addr
 
 
 /** Dynamic Price */
-add_action( 'woocommerce_before_calculate_totals', 'dynamic_price_totals' );
+add_action( 'woocommerce_before_calculate_totals', 'dynamic_price_totals', 10, 1 );
 

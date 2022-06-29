@@ -1,4 +1,4 @@
-(function ($) {
+jQuery(document).ready(function ($) {
     var a = 'active';
     var dynamic_price_timer = 30000;
 
@@ -43,53 +43,48 @@
     });
 
     // Slider
-    $(document).ready(function () {
-        if ($('.main_slider').length) {
-            $('.main_slider').slick({
-                arrows: true,
-                dots: true,
-                infinite: true,
-                slidesToShow: 1,
-                // autoplay: true,
-                autoplaySpeed: 4000,
-                pauseOnFocus: false,
-                pauseOnHover: false,
-                // fade: true,
-                responsive: [
-                    {
-                        breakpoint: 0,
-                        settings: {
-                            arrows: false,
-                        }
-                    },
-                ]
-            });
-        }
-        ;
+    if ($('.main_slider').length) {
+        $('.main_slider').slick({
+            arrows: true,
+            dots: true,
+            infinite: true,
+            slidesToShow: 1,
+            // autoplay: true,
+            autoplaySpeed: 4000,
+            pauseOnFocus: false,
+            pauseOnHover: false,
+            // fade: true,
+            responsive: [
+                {
+                    breakpoint: 0,
+                    settings: {
+                        arrows: false,
+                    }
+                },
+            ]
+        });
+    }
 
-        if ($('.buy_name .active_slider').length) {
-            $('.buy_name .active_slider').slick({
-                arrows: false,
-                dots: false,
-                infinite: true,
-                slidesToShow: 1,
-                fade: true,
-                asNavFor: '.buy_name .slider'
-            });
-        }
-        ;
+    if ($('.buy_name .active_slider').length) {
+        $('.buy_name .active_slider').slick({
+            arrows: false,
+            dots: false,
+            infinite: true,
+            slidesToShow: 1,
+            fade: true,
+            asNavFor: '.buy_name .slider'
+        });
+    }
 
-        if ($('.buy_name .slider').length) {
-            $('.buy_name .slider').slick({
-                arrows: true,
-                dots: false,
-                infinite: true,
-                slidesToShow: 4,
-                asNavFor: '.buy_name .active_slider'
-            });
-        }
-        ;
-    });
+    if ($('.buy_name .slider').length) {
+        $('.buy_name .slider').slick({
+            arrows: true,
+            dots: false,
+            infinite: true,
+            slidesToShow: 4,
+            asNavFor: '.buy_name .active_slider'
+        });
+    }
 
     var slidStart = 0;
 
@@ -350,14 +345,7 @@
     });
 
     function update_cart() {
-        let update_cart_btn = $('[name=update_cart]'),
-            is_disabled = update_cart_btn.attr('aria-disabled');
-
-        if (is_disabled === 'true') {
-            setTimeout(update_cart, 250);
-        } else {
-            update_cart_btn.trigger('click');
-        }
+        $('[name=update_cart]').prop('disabled', false).prop('aria-disabled', false).trigger('click');
     }
 
     // Cart terms validation
@@ -421,7 +409,7 @@
             url: ajax_object.ajaxurl,
             data: data,
             success: function (response) {
-
+                update_cart();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus);
@@ -519,7 +507,6 @@
             }
         });
     }
-
     function update_dynamic_price(price_data) {
         $('.price').each(function () {
             let product_id = $(this).data('price-product-id'),
@@ -531,6 +518,9 @@
         if (price_data.quantities_discount_html) {
             $('#quantities_discount').replaceWith(price_data.quantities_discount_html);
         }
+    }
+    if (ajax_object.dynamic_price) {
+        setTimeout(dynamic_price, dynamic_price_timer);
     }
 
     function dynamic_min_price() {
@@ -552,7 +542,6 @@
             }
         });
     }
-
     function update_dynamic_min_price(price_data) {
         $('.min_price').each(function () {
             let term_id = $(this).data('min-price-term-id'),
@@ -561,20 +550,16 @@
             $(this).html(new_price);
         });
     }
-
-    function dynamic_cart_price() {
-        $('#update_cart_btn').prop('disabled', false).prop('aria-disabled', false).click();
-        setTimeout(dynamic_cart_price, dynamic_price_timer);
+    if (ajax_object.dynamic_min_price) {
+        setTimeout(dynamic_min_price, dynamic_price_timer);
     }
 
-    $(document).ready(function () {
-        if (ajax_object.dynamic_price) {
-            setTimeout(dynamic_price, dynamic_price_timer);
-        } else if (ajax_object.dynamic_min_price) {
-            setTimeout(dynamic_min_price, dynamic_price_timer);
-        } else if (ajax_object.dynamic_cart_price) {
-            setTimeout(dynamic_cart_price, dynamic_price_timer);
-        }
-    });
+    function dynamic_cart_price() {
+        update_cart();
+        setTimeout(dynamic_cart_price, dynamic_price_timer);
+    }
+    if (ajax_object.dynamic_cart_price) {
+        setTimeout(dynamic_cart_price, dynamic_price_timer);
+    }
 
 }(jQuery));

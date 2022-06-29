@@ -105,6 +105,13 @@ function abbreviated_days_of_the_week( $working_days ): string {
 	return str_replace( $full_days_of_the_week, $abbreviated_days_of_the_week, $working_days );
 }
 
+function suissevault_is_checkout() {
+	$checkout_path = wp_parse_url( wc_get_checkout_url(), PHP_URL_PATH );
+	$current_url_path = wp_parse_url( "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", PHP_URL_PATH );
+
+	return ( $checkout_path !== null && $current_url_path !== null && trailingslashit( $checkout_path ) === trailingslashit( $current_url_path ) );
+}
+
 function get_api_price( $currency = 'GBP', $with_date = false ) {
 
 	$curl = curl_init();
@@ -212,9 +219,51 @@ function get_min_dynamic_price_by_cat( $term_id ) {
 			$min_price_conditions = $min_price == 0 || $min_price > $dynamic_price[ 'price_inc_vat' ] && $dynamic_price[ 'price_inc_vat' ] != 0;
 			$min_price = ( $min_price_conditions ) ? $dynamic_price[ 'price_inc_vat' ] : $min_price;
 		}
+		wp_reset_postdata();
 	}
 
 	return $min_price;
+}
+
+function get_checkout_time_limit() {
+	return 10; // 5 minutes
+}
+
+function checkout_time() {
+
+	$time_limit = get_checkout_time_limit();
+
+	if ( !$api_price_time = WC()->session->get( 'api_price_time' ) )
+		return $time_limit;
+
+	$current_time = time();
+	$time_passed = $current_time - $api_price_time;
+	$time_left = $time_limit - $time_passed;
+
+	if ( $time_left < 0 ) {
+		WC()->session->__unset( 'api_price' );
+		WC()->session->__unset( 'api_price_time' );
+
+		if ( wp_doing_ajax() ) {
+			global $woocommerce;
+			$woocommerce->cart->empty_cart();
+			wc_add_notice( '<div class="woocommerce-error">' . __( 'Sorry, time to buy with a locked price is over.', 'woocommerce' ) . ' <a href="' . esc_url( wc_get_page_permalink( 'shop' ) ) . '" class="wc-backward">' . __( 'Return to shop', 'woocommerce' ) . '</a></div>', 'error' );
+		}
+		else {
+			wp_safe_redirect( esc_url( wc_get_cart_url() ) );
+			exit();
+		}
+	}
+
+	return $time_left;
+}
+
+function is_storage() {
+
+	$chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
+
+	return ( $chosen_shipping_methods[ 0 ] == 'local_pickup:6' );
+
 }
 
 // AJAX
@@ -345,7 +394,6 @@ add_action( 'wp_ajax_nopriv_dynamic_min_price', 'dynamic_min_price' );
 function dynamic_min_price() {
 
 	$response = [];
-	$api_price = get_api_price();
 
 	$terms = get_terms( [
 		'taxonomy'   => 'product_cat',
@@ -358,19 +406,6 @@ function dynamic_min_price() {
 			'price' => "from " . wc_price( $min_dynamic_price_by_cat )
 		];
 	}
-
-	wp_send_json( $response );
-	die();
-}
-
-add_action( 'wp_ajax_dynamic_cart_price', 'dynamic_cart_price' );
-add_action( 'wp_ajax_nopriv_dynamic_cart_price', 'dynamic_cart_price' );
-function dynamic_cart_price() {
-
-	$response = [];
-
-	global $woocommerce;
-	$cart_object = $woocommerce->cart;
 
 	wp_send_json( $response );
 	die();

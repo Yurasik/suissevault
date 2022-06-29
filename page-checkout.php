@@ -7,6 +7,7 @@
 
 get_header();
 
+$checkout_time = checkout_time();
 $page_class = ( !empty( is_wc_endpoint_url( 'order-received' ) ) ) ? "thank" : "checkout";
 ?>
 
@@ -16,8 +17,7 @@ $page_class = ( !empty( is_wc_endpoint_url( 'order-received' ) ) ) ? "thank" : "
 
 			<?php if ( empty( is_wc_endpoint_url( 'order-received' ) ) ) : ?>
 				<h1><?php the_title(); ?></h1>
-
-				<div class="checkout_time">Time to confirm your order: <b>11m 17s</b></div>
+				<div class="checkout_time">Time to confirm your order: <b><?php echo date( 'i', $checkout_time ) . "m " . date( 's', $checkout_time ) . "s"; ?></b></div>
 			<?php endif; ?>
 
 			<?php the_content(); ?>
