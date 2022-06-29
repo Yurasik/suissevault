@@ -226,7 +226,7 @@ function get_min_dynamic_price_by_cat( $term_id ) {
 }
 
 function get_checkout_time_limit() {
-	return 10; // 5 minutes
+	return 5 * 60; // 5 minutes
 }
 
 function checkout_time() {
