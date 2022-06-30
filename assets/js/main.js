@@ -510,7 +510,7 @@ jQuery(document).ready(function ($) {
     function update_dynamic_price(price_data) {
         $('.price').each(function () {
             let product_id = $(this).data('price-product-id'),
-                new_price = price_data[product_id].price_inc_vat;
+                new_price = price_data[product_id].price;
 
             $(this).html(new_price);
         });

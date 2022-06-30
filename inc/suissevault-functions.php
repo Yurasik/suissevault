@@ -105,13 +105,6 @@ function abbreviated_days_of_the_week( $working_days ): string {
 	return str_replace( $full_days_of_the_week, $abbreviated_days_of_the_week, $working_days );
 }
 
-function suissevault_is_checkout() {
-	$checkout_path = wp_parse_url( wc_get_checkout_url(), PHP_URL_PATH );
-	$current_url_path = wp_parse_url( "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", PHP_URL_PATH );
-
-	return ( $checkout_path !== null && $current_url_path !== null && trailingslashit( $checkout_path ) === trailingslashit( $current_url_path ) );
-}
-
 function get_api_price( $currency = 'GBP', $with_date = false ) {
 
 	$curl = curl_init();
@@ -264,6 +257,39 @@ function is_storage() {
 
 	return ( $chosen_shipping_methods[ 0 ] == 'local_pickup:6' );
 
+}
+
+function get_quantities_discount() {
+
+	return [
+		1  => 0,
+		2  => 1,
+		5  => 2,
+		10 => 3,
+		20 => 5
+	];
+}
+
+function get_quantity_discount_price( $product, $current_quantity, $api_price ) {
+
+	$quantities_discount = get_quantities_discount();
+	$dynamic_price = get_dynamic_price( $api_price, $product );
+	$discount_price = $dynamic_price[ 'price' ];
+
+	foreach ( $quantities_discount as $quantity => $discount ) {
+		if ( $current_quantity >= $quantity ) {
+			$discount_for_price = $dynamic_price[ 'price' ] / 100 * $discount;
+			$discount_price = $dynamic_price[ 'price' ] - $discount_for_price;
+
+			if ( $current_quantity == $quantity ) {
+				continue;
+			}
+		} else {
+			continue;
+		}
+	}
+
+	return $discount_price;
 }
 
 // AJAX

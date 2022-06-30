@@ -592,6 +592,7 @@ if ( !function_exists( 'dynamic_price_totals' ) ) {
 
 		$api_price = get_api_price();
 
+		// Checkout Locked Price Validation
 		if ( is_checkout() ) {
 			if ( WC()->session->get( 'api_price' ) ) {
 				checkout_time();
@@ -602,15 +603,15 @@ if ( !function_exists( 'dynamic_price_totals' ) ) {
 			}
 		}
 
+		// Cart Dynamic Price
 		foreach ( $cart_object->get_cart() as $hash => $value ) {
-			$dynamic_price = get_dynamic_price( $api_price, $value[ 'data' ] );
+			//$dynamic_price = get_dynamic_price( $api_price, $value[ 'data' ] );
+			$dynamic_price = get_quantity_discount_price( $value[ 'data' ], $value['quantity'], $api_price );
+			$value[ 'data' ]->set_price( $dynamic_price );
 
+			// Cart Storage Validation
 			if ( is_storage() ) {
 				$value[ 'data' ]->set_tax_status( 'none' );
-				$value[ 'data' ]->set_price( $dynamic_price[ 'price' ] );
-			}
-			else {
-				$value[ 'data' ]->set_price( $dynamic_price[ 'price_inc_vat' ] );
 			}
 		}
 	}
