@@ -17,7 +17,7 @@ $quantities = [
 		<td>Each</td>
 	</tr>
 	<?php foreach ( $quantities as $quantity => $discount ) {
-		$quantity_price = $dynamic_price[ 'price_inc_vat' ] * $quantity;
+		$quantity_price = $dynamic_price[ 'price' ] * $quantity;
 		$discount_for_price = ( $quantity == 1 ) ? 0 : $quantity_price / 100 * $discount;
 		$discount_price = wc_price( $quantity_price - $discount_for_price );
 		$plus = ( $quantity == 1 ) ? "" : "+";

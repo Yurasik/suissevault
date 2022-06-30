@@ -22,4 +22,4 @@ global $product;
 $api_price = get_api_price();
 $dynamic_price = get_dynamic_price( $api_price, $product );
 ?>
-<span class="price" data-price-product-id="<?php echo $product->get_id(); ?>"><?php echo wc_price( $dynamic_price[ 'price_inc_vat' ] ); ?></span>
+<span class="price" data-price-product-id="<?php echo $product->get_id(); ?>"><?php echo wc_price( $dynamic_price[ 'price' ] ); ?></span>

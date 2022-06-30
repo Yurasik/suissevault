@@ -145,7 +145,7 @@ function get_dynamic_price( $api_price, $product ) {
 	$result = [];
 
 	// Product data
-	$markup_percentage = ( get_field( 'markup_percentage', $product ) ) ? : 0;
+	$markup_percentage = ( get_field( 'markup_percentage', $product->get_id() ) ) ? : 0;
 	$weight = $product->get_attribute( 'Weight' );
 	$metal = $product->get_attribute( 'Metal' );
 	$weight_number = (int)preg_replace( '/[^\d+]/', '', $weight );

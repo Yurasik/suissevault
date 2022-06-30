@@ -235,6 +235,14 @@ if ( !class_exists( 'Suissevault' ) ) :
 				'name'        => __( 'Sidebar', 'suissevault' ),
 				'id'          => 'sidebar-1',
 				'description' => '',
+				'before_widget' => '<div id="%1$s" class="widget %2$s">',
+			);
+
+			$sidebar_args[ 'sidebar-shop' ] = array(
+				'name'        => __( 'Shop Sidebar', 'suissevault' ),
+				'id'          => 'sidebar-shop',
+				'description' => '',
+				'before_widget' => '<div id="%1$s" class="widget %2$s">',
 			);
 
 			$rows = intval( apply_filters( 'suissevault_footer_widget_rows', 1 ) );
@@ -264,6 +272,7 @@ if ( !class_exists( 'Suissevault' ) ) :
 						'name'        => $footer_region_name,
 						'id'          => sprintf( 'footer-%d', $footer_n ),
 						'description' => $footer_region_description,
+						'before_widget' => '<div id="%1$s" class="footer_column widget %2$s">',
 					);
 				}
 			}
@@ -272,7 +281,6 @@ if ( !class_exists( 'Suissevault' ) ) :
 
 			foreach ( $sidebar_args as $sidebar => $args ) {
 				$widget_tags = array(
-					'before_widget' => '<div id="%1$s" class="footer_column widget %2$s">',
 					'after_widget'  => '</div>',
 					'before_title'  => '<div class="subtitle">',
 					'after_title'   => '</div>',
