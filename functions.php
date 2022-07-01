@@ -8,7 +8,7 @@
 /**
  * Assign the suissevault version to a var
  */
-$theme               = wp_get_theme( 'suissevault' );
+$theme = wp_get_theme( 'suissevault' );
 $suissevault_version = $theme[ 'Version' ];
 
 $suissevault = (object)array(
@@ -20,11 +20,12 @@ $suissevault = (object)array(
 	'main'    => require 'inc/class-suissevault.php'
 );
 
+require 'inc/class-suissevault-form-handler.php';
 require 'inc/suissevault-functions.php';
 require 'inc/suissevault-template-hooks.php';
 require 'inc/suissevault-template-functions.php';
 require 'inc/suissevault-shortcodes.php';
-require 'inc/class-suissevault-form-handler.php';
+require 'inc/suissevault-ajax.php';
 
 if ( suissevault_is_woocommerce_activated() ) {
 	$suissevault->woocommerce = require 'inc/woocommerce/class-suissevault-woocommerce.php';
@@ -38,4 +39,5 @@ if ( is_admin() ) {
 	$suissevault->admin = require 'inc/admin/class-suissevault-admin.php';
 }
 
-require 'inc/lib/suissevault-ajax-auth.php';
+require 'inc/lib/ajax-auth.php';
+require 'inc/lib/dynamic-price.php';
