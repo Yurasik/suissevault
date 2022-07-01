@@ -299,71 +299,118 @@ function get_currencies() {
 	];
 }
 
-/**
- * Register new route for cron task
- */
-add_action( 'init', 'dynamic_price_route' );
-function dynamic_price_route() {
+$dynamic_price_route_needed = false;
+if ( $dynamic_price_route_needed ) {
+	/**
+	 * Register new route for cron task
+	 */
+	add_action( 'init', 'dynamic_price_route' );
+	function dynamic_price_route() {
 
-	add_rewrite_rule( '^(dynamic-price)/([^/]+)/?$', 'index.php?request=$matches[1]&action=$matches[2]', 'top' );
+		add_rewrite_rule( '^(dynamic-price)/([^/]+)/?$', 'index.php?request=$matches[1]&action=$matches[2]', 'top' );
 
-	add_filter( 'query_vars', function ( $vars ) {
-		$vars[] = 'request';
-		$vars[] = 'action';
+		add_filter( 'query_vars', function ( $vars ) {
+			$vars[] = 'request';
+			$vars[] = 'action';
 
-		return $vars;
-	} );
-}
-
-// Route for Cron task
-add_action( "template_redirect", 'dynamic_price_route_template_redirect' );
-function dynamic_price_route_template_redirect() {
-	$request = get_query_var( 'request' );
-	$action = get_query_var( 'action' );
-
-	if ( $request && $request == 'dynamic-price' && false ) {
-		if ( $action == 'update' ) {
-			$api_price_additional = api_price_additional();
-			$api_price_main_data = (object)array(
-				'updated_time' => time()
-			);
-			$api_price_additional_data = (object)array(
-				'updated_time' => strtotime( $api_price_additional[ 'gold' ]->d )
-			);
-
-			$currencies = get_currencies();
-			$api_price_additional_data_currency_key = 1; // 0 => USD, 1 => GBP, 2 => EUR
-			foreach ( $currencies as $key => $currency ) {
-				$api_price_main = api_price_main( $currency );
-
-				if ( $currency == 'USD' ) {
-					$api_price_additional_data_currency_key = 0;
-				}
-				elseif ( $currency == 'EUR' ) {
-					$api_price_additional_data_currency_key = 2;
-				}
-
-				$api_price_main_data->$currency = $api_price_main;
-				$api_price_additional_data->$currency = [
-					'curr'     => $currency,
-					'xauPrice' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
-					'xagPrice' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
-					'chgXau'   => 0,
-					'chgXag'   => 0,
-					'pcXau'    => 0,
-					'pcXag'    => 0,
-					'xauClose' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
-					'xagClose' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
-				];
-			}
-
-			update_option( 'api_price_main_data', $api_price_main_data );
-			update_option( 'api_price_additional_data', $api_price_additional_data );
-		}
+			return $vars;
+		} );
 	}
 
+	// Route for Cron task
+	add_action( "template_redirect", 'dynamic_price_route_template_redirect' );
+	function dynamic_price_route_template_redirect() {
+		$request = get_query_var( 'request' );
+		$action = get_query_var( 'action' );
+
+		if ( $request && $request == 'dynamic-price' && false ) {
+			if ( $action == 'update' ) {
+				$api_price_additional = api_price_additional();
+				$api_price_main_data = (object)array(
+					'updated_time' => time()
+				);
+				$api_price_additional_data = (object)array(
+					'updated_time' => strtotime( $api_price_additional[ 'gold' ]->d )
+				);
+
+				$currencies = get_currencies();
+				$api_price_additional_data_currency_key = 1; // 0 => USD, 1 => GBP, 2 => EUR
+				foreach ( $currencies as $key => $currency ) {
+					$api_price_main = api_price_main( $currency );
+
+					if ( $currency == 'USD' ) {
+						$api_price_additional_data_currency_key = 0;
+					}
+					elseif ( $currency == 'EUR' ) {
+						$api_price_additional_data_currency_key = 2;
+					}
+
+					$api_price_main_data->$currency = $api_price_main;
+					$api_price_additional_data->$currency = [
+						'curr'     => $currency,
+						'xauPrice' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
+						'xagPrice' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
+						'chgXau'   => 0,
+						'chgXag'   => 0,
+						'pcXau'    => 0,
+						'pcXag'    => 0,
+						'xauClose' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
+						'xagClose' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
+					];
+				}
+
+				update_option( 'api_price_main_data', $api_price_main_data );
+				update_option( 'api_price_additional_data', $api_price_additional_data );
+			}
+		}
+
+	}
+}
+
+// Preservation of spare dynamic prices in case of API failure
+function dynamic_price_cron() {
+	$api_price_additional = api_price_additional();
+	$api_price_main_data = (object)array(
+		'updated_time' => time()
+	);
+	$api_price_additional_data = (object)array(
+		'updated_time' => strtotime( $api_price_additional[ 'gold' ]->d )
+	);
+
+	$currencies = get_currencies();
+	$api_price_additional_data_currency_key = 1; // 0 => USD, 1 => GBP, 2 => EUR
+	foreach ( $currencies as $key => $currency ) {
+		$api_price_main = api_price_main( $currency );
+
+		if ( $currency == 'USD' ) {
+			$api_price_additional_data_currency_key = 0;
+		}
+		elseif ( $currency == 'EUR' ) {
+			$api_price_additional_data_currency_key = 2;
+		}
+
+		$api_price_main_data->$currency = $api_price_main;
+		$api_price_additional_data->$currency = [
+			'curr'     => $currency,
+			'xauPrice' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
+			'xagPrice' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
+			'chgXau'   => 0,
+			'chgXag'   => 0,
+			'pcXau'    => 0,
+			'pcXag'    => 0,
+			'xauClose' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
+			'xagClose' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
+		];
+	}
+
+	update_option( 'api_price_main_data', $api_price_main_data );
+	update_option( 'api_price_additional_data', $api_price_additional_data );
 }
 
 if ( !wp_next_scheduled( 'suissevault_cron_hook' ) ) {
 	wp_schedule_event( time(), 'twicedaily', 'suissevault_cron_hook' );
+}
+
+function suissevault_cron_hook() {
+	dynamic_price_cron();
 }
