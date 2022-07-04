@@ -369,42 +369,64 @@ if ( $dynamic_price_route_needed ) {
 
 // Preservation of spare dynamic prices in case of API failure
 function dynamic_price_cron() {
-	$api_price_additional = api_price_additional();
-	$api_price_main_data = (object)array(
-		'updated_time' => time()
-	);
-	$api_price_additional_data = (object)array(
-		'updated_time' => strtotime( $api_price_additional[ 'gold' ]->d )
-	);
 
-	$currencies = get_currencies();
-	$api_price_additional_data_currency_key = 1; // 0 => USD, 1 => GBP, 2 => EUR
-	foreach ( $currencies as $key => $currency ) {
-		$api_price_main = api_price_main( $currency );
-
-		if ( $currency == 'USD' ) {
-			$api_price_additional_data_currency_key = 0;
-		}
-		elseif ( $currency == 'EUR' ) {
-			$api_price_additional_data_currency_key = 2;
-		}
-
-		$api_price_main_data->$currency = $api_price_main;
-		$api_price_additional_data->$currency = [
-			'curr'     => $currency,
-			'xauPrice' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
-			'xagPrice' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
-			'chgXau'   => 0,
-			'chgXag'   => 0,
-			'pcXau'    => 0,
-			'pcXag'    => 0,
-			'xauClose' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
-			'xagClose' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
-		];
+	$api_price_main_gbp = api_price_main();
+	if ( $api_price_main_gbp ) {
+		$api_price_main_data = (object)array(
+			'updated_time' => time()
+		);
+		$current_api_price_main_data = get_option( 'api_price_main_data' );
 	}
 
-	update_option( 'api_price_main_data', $api_price_main_data );
-	update_option( 'api_price_additional_data', $api_price_additional_data );
+	$api_price_additional = api_price_additional();
+	if ( $api_price_additional ) {
+		$api_price_additional_data = (object)array(
+			'updated_time' => strtotime( $api_price_additional[ 'gold' ]->d )
+		);
+		$api_price_additional_data_currency_key = 1; // 0 => USD, 1 => GBP, 2 => EUR
+	}
+
+	if ( $api_price_additional || $api_price_main_gbp ) {
+		foreach ( get_currencies() as $key => $currency ) {
+			if ( $api_price_main_gbp ) {
+				$api_price_main = api_price_main( $currency );
+				if ( $api_price_main ) {
+					$api_price_main_data->$currency = $api_price_main;
+				}
+				else {
+					$api_price_main_data->$currency = $current_api_price_main_data->$currency;
+				}
+			}
+
+			if ( $api_price_additional ) {
+				if ( $currency == 'USD' ) {
+					$api_price_additional_data_currency_key = 0;
+				}
+				elseif ( $currency == 'EUR' ) {
+					$api_price_additional_data_currency_key = 2;
+				}
+				$api_price_additional_data->$currency = [
+					'curr'     => $currency,
+					'xauPrice' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
+					'xagPrice' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
+					'chgXau'   => 0,
+					'chgXag'   => 0,
+					'pcXau'    => 0,
+					'pcXag'    => 0,
+					'xauClose' => $api_price_additional[ 'gold' ]->v[ $api_price_additional_data_currency_key ],
+					'xagClose' => $api_price_additional[ 'silver' ]->v[ $api_price_additional_data_currency_key ],
+				];
+			}
+		}
+
+		if ( $api_price_main_gbp ) {
+			update_option( 'api_price_main_data', $api_price_main_data );
+		}
+
+		if ( $api_price_additional ) {
+			update_option( 'api_price_additional_data', $api_price_additional_data );
+		}
+	}
 }
 
 if ( !wp_next_scheduled( 'suissevault_cron_hook' ) ) {
