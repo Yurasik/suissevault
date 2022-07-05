@@ -417,42 +417,6 @@ jQuery(document).ready(function ($) {
         });
     });
 
-    // Header api price
-    $(document).on('change', '.header_price_metal select[name="metal"]', function () {
-        let metal = $(this).val(),
-            currency = $('.header_price_currency .active').data('name');
-
-        header_api_rice_ajax(metal, currency);
-    });
-
-    $(document).on('click', '.header_price_currency .header_currency', function () {
-        if ($(this).hasClass('active')) return;
-
-        let currency = $(this).data('name'),
-            metal = $('.header_price_metal select[name="metal"]').val();
-
-        header_api_rice_ajax(metal, currency);
-    });
-
-    function header_api_rice_ajax(metal, currency) {
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: ajax_object.ajaxurl,
-            data: {
-                'action': 'header_price',
-                'metal': metal,
-                'currency': currency,
-            },
-            success: function (response) {
-                $('.header_price_bottom').replaceWith(response.header_price_html);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus);
-            }
-        });
-    }
-
     // Currency click
     $(document).on('click', '.header_price_currency svg', function () {
         var e = $(this);
@@ -507,6 +471,7 @@ jQuery(document).ready(function ($) {
             }
         });
     }
+
     function update_dynamic_price(price_data) {
         $('.price').each(function () {
             let product_id = $(this).data('price-product-id'),
@@ -519,6 +484,7 @@ jQuery(document).ready(function ($) {
             $('#quantities_discount').replaceWith(price_data.quantities_discount_html);
         }
     }
+
     if (ajax_object.dynamic_price) {
         setTimeout(dynamic_price, dynamic_price_timer);
     }
@@ -542,6 +508,7 @@ jQuery(document).ready(function ($) {
             }
         });
     }
+
     function update_dynamic_min_price(price_data) {
         $('.min_price').each(function () {
             let term_id = $(this).data('min-price-term-id'),
@@ -550,6 +517,7 @@ jQuery(document).ready(function ($) {
             $(this).html(new_price);
         });
     }
+
     if (ajax_object.dynamic_min_price) {
         setTimeout(dynamic_min_price, dynamic_price_timer);
     }
@@ -558,8 +526,58 @@ jQuery(document).ready(function ($) {
         update_cart();
         setTimeout(dynamic_cart_price, dynamic_price_timer);
     }
+
     if (ajax_object.dynamic_cart_price) {
         setTimeout(dynamic_cart_price, dynamic_price_timer);
+    }
+
+    // Header dynamic price
+    var header_dynamic_price_timer;
+    $(document).on('change', '.header_price_metal select[name="metal"]', function () {
+        let metal = $(this).val(),
+            currency = $('.header_price_currency .active').data('name');
+
+        update_header_dynamic_price(metal, currency);
+    });
+    $(document).on('click', '.header_price_currency .header_currency', function () {
+        if ($(this).hasClass('active')) return;
+
+        let currency = $(this).data('name'),
+            metal = $('.header_price_metal select[name="metal"]').val();
+
+        update_header_dynamic_price(metal, currency);
+    });
+
+    function header_dynamic_price() {
+        let metal = $('.header_price_metal select[name="metal"]').val(),
+            currency = $('.header_price_currency .active').data('name');
+
+        update_header_dynamic_price(metal, currency);
+    }
+
+    function update_header_dynamic_price(metal, currency) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: ajax_object.ajaxurl,
+            data: {
+                'action': 'header_price',
+                'metal': metal,
+                'currency': currency,
+            },
+            success: function (response) {
+                $('.header_price_bottom').replaceWith(response.header_price_html);
+                clearTimeout(header_dynamic_price_timer);
+                header_dynamic_price_timer = setTimeout(header_dynamic_price, dynamic_price_timer);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+    }
+
+    if ($('.header_price')) {
+        setTimeout(header_dynamic_price, dynamic_price_timer);
     }
 
 }(jQuery));
