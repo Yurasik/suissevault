@@ -26,7 +26,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
 <p>Thank you for shopping with Suisse Vault!</p>
 <p>Please check that your personal details and product information are correct.</p>
-<p>If you would like to change your order, please <a href="<?php echo home_url( '/contact-us/' ); ?>">contact us</a> within 1 hour. Please note your request will be processed from 10 am until 5 pm GMT, Monday to Friday.</p>
+<p>If you would like to change your order, please <a class="link" href="<?php echo home_url( '/contact-us/' ); ?>">contact us</a> within 1 hour. Please note your request will be processed from 10 am until 5 pm GMT, Monday to Friday.</p>
 <p>Your order will be completed once security checks have taken place. If item(s) you have ordered are not currently in stock you will be contacted by our customer service team. </p>
 
 <?php
