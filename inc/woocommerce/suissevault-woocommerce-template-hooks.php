@@ -49,6 +49,7 @@ remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_pr
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10 );
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
+add_action( 'woocommerce_before_shop_loop_item_title', 'suissevault_product_stock_status', 10 );
 add_action( 'woocommerce_before_shop_loop_item_title', 'suissevault_template_loop_product_thumbnail', 10 );
 add_action( 'woocommerce_before_single_product_summary', 'suissevault_show_product_images', 10 );
 add_action( 'woocommerce_single_product_summary', 'suissevault_breadcrumb', 1 );
@@ -64,7 +65,11 @@ add_filter( 'woocommerce_output_related_products_args', 'suissevault_related_pro
 
 add_filter( 'wc_price', 'suissevault_price_filter', 10, 3 );
 add_filter( 'woocommerce_cart_totals_order_total_html', 'suissevault_totals_order_total_html_filter', 10, 1 );
-
+// Stock Status
+add_filter( 'woocommerce_product_stock_status_options', 'suissevault_product_stock_status_options', 10, 1 );
+add_filter( 'woocommerce_get_availability_text', 'suissevault_get_availability_text', 10, 2 );
+add_filter( 'woocommerce_get_availability_class', 'suissevault_get_availability_class', 10, 2 );
+add_filter( 'woocommerce_admin_stock_html', 'suissevault_admin_stock_html', 10, 2 );
 
 /**
  * Cart

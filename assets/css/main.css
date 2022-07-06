@@ -3010,6 +3010,7 @@ table.black tr td:not(:first-child) {
 }
 
 .buy_content_item {
+  position: relative;
   font-size: 18px;
 }
 
@@ -3162,6 +3163,10 @@ table.black tr td:not(:first-child) {
 
 .buy_name_left .slider .slick-arrow {
   --arrow_ind: 0px;
+}
+
+.buy_name_right {
+  position: relative;
 }
 
 .buy_name_right p {

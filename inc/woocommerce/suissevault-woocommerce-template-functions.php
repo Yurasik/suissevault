@@ -97,6 +97,14 @@ if ( !function_exists( 'suissevault_template_loop_product_thumbnail' ) ) {
 	}
 }
 
+if ( !function_exists( 'suissevault_product_stock_status' ) ) {
+	function suissevault_product_stock_status() {
+
+		global $product;
+		echo wc_get_stock_html( $product );
+	}
+}
+
 if ( !function_exists( 'suissevault_show_product_images' ) ) {
 
 	/**
@@ -239,6 +247,85 @@ if ( !function_exists( 'suissevault_totals_order_total_html_filter' ) ) {
 		}
 
 		return $price;
+	}
+}
+
+if ( !function_exists( 'suissevault_product_stock_status_options' ) ) {
+	function suissevault_product_stock_status_options( $status ) {
+
+		$status[ 'onbackorder' ] = __( 'On back order', 'suissevault' );
+		$status[ 'awaitingstock' ] = __( 'Awaiting stock', 'suissevault' );
+
+		return $status;
+	}
+}
+
+if ( !function_exists( 'suissevault_get_availability_text' ) ) {
+	function suissevault_get_availability_text( $availability, $product ) {
+
+		switch ( $product->get_stock_status() ) {
+			case 'awaiting_stock':
+				$availability = __( 'Awaiting stock', 'woocommerce' );
+				break;
+		}
+
+		return $availability;
+	}
+}
+
+if ( !function_exists( 'suissevault_get_availability_class' ) ) {
+	function suissevault_get_availability_class( $class, $product ) {
+
+		switch ( $product->get_stock_status() ) {
+			case 'awaiting_stock':
+				$class = 'awaiting-stock';
+				break;
+		}
+
+		return $class;
+	}
+}
+
+if ( !function_exists( 'suissevault_admin_stock_html' ) ) {
+	function suissevault_admin_stock_html( $stock_html, $product ) {
+
+		// Simple
+		if ( $product->is_type( 'simple' ) ) {
+			// Get stock status
+			$product_stock_status = $product->get_stock_status();
+			// Variable
+		}
+		elseif ( $product->is_type( 'variable' ) ) {
+			foreach ( $product->get_visible_children() as $variation_id ) {
+				// Get product
+				$variation = wc_get_product( $variation_id );
+
+				// Get stock status
+				$product_stock_status = $variation->get_stock_status();
+
+				/*
+				Currently the status of the last variant in the loop will be displayed.
+
+				So from here you need to add your own logic, depending on what you expect from your custom stock status.
+
+				By default, for the existing statuses. The status displayed on the admin products list table for variable products is determined as:
+
+				- Product should be in stock if a child is in stock.
+				- Product should be out of stock if all children are out of stock.
+				- Product should be on backorder if all children are on backorder.
+				- Product should be on backorder if at least one child is on backorder and the rest are out of stock.
+				*/
+			}
+		}
+
+		// Stock status
+		switch ( $product_stock_status ) {
+			case 'awaiting_stock':
+				$stock_html = '<mark class="awaiting-stock">' . __( 'Awaiting stock', 'suissevault' ) . '</mark>';
+				break;
+		}
+
+		return $stock_html;
 	}
 }
 
@@ -597,7 +684,8 @@ if ( !function_exists( 'dynamic_price_totals' ) ) {
 			if ( WC()->session->get( 'api_price' ) ) {
 				checkout_time();
 				$api_price = WC()->session->get( 'api_price' );
-			} else {
+			}
+			else {
 				WC()->session->set( 'api_price', $api_price );
 				WC()->session->set( 'api_price_time', time() );
 			}
@@ -606,7 +694,7 @@ if ( !function_exists( 'dynamic_price_totals' ) ) {
 		// Cart Dynamic Price
 		foreach ( $cart_object->get_cart() as $hash => $value ) {
 			//$dynamic_price = get_dynamic_price( $api_price, $value[ 'data' ] );
-			$dynamic_price = get_quantity_discount_price( $value[ 'data' ], $value['quantity'], $api_price );
+			$dynamic_price = get_quantity_discount_price( $value[ 'data' ], $value[ 'quantity' ], $api_price );
 			$value[ 'data' ]->set_price( $dynamic_price );
 
 			// Cart Storage Validation
