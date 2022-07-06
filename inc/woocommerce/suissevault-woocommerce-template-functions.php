@@ -320,8 +320,8 @@ if ( !function_exists( 'suissevault_admin_stock_html' ) ) {
 
 		// Stock status
 		switch ( $product_stock_status ) {
-			case 'awaiting_stock':
-				$stock_html = '<mark class="awaiting-stock">' . __( 'Awaiting stock', 'suissevault' ) . '</mark>';
+			case 'awaitingstock':
+				$stock_html = '<mark class="awaitingstock" style="font-weight: 700; background: transparent none; line-height: 1; color: #004eff;">' . __( 'Awaiting stock', 'suissevault' ) . '</mark>';
 				break;
 		}
 
