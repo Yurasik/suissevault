@@ -477,6 +477,10 @@ jQuery(document).ready(function ($) {
             let product_id = $(this).data('price-product-id'),
                 new_price = price_data[product_id].price;
 
+            if($(this).hasClass('price_inc_vat')) {
+                new_price = price_data[product_id].price_inc_vat;
+            }
+
             $(this).html(new_price);
         });
 

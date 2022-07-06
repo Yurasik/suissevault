@@ -164,6 +164,16 @@ input[type=checkbox], input[type=radio] {
   text-transform: uppercase;
 }
 
+/* Single Product */
+.price_wrapper {
+  color: #969797;
+}
+
+.price_wrapper .price {
+  display: inline-block;
+}
+
+/* Single Product */
 /* Pagination. */
 .pagination span {
   display: flex;
