@@ -245,20 +245,6 @@ function is_storage() {
 }
 
 /**
- * @return int[]
- */
-function get_quantities_discount() {
-
-	return [
-		1  => 0,
-		2  => 1,
-		5  => 2,
-		10 => 3,
-		20 => 5
-	];
-}
-
-/**
  * @param $product
  * @param $current_quantity
  * @param $api_price
@@ -267,16 +253,16 @@ function get_quantities_discount() {
  */
 function get_quantity_discount_price( $product, $current_quantity, $api_price ) {
 
-	$quantities_discount = get_quantities_discount();
+	$quantities_discount = get_field( 'quantities_discount', 'options' );
 	$dynamic_price = get_dynamic_price( $api_price, $product );
 	$discount_price = $dynamic_price[ 'price' ];
 
-	foreach ( $quantities_discount as $quantity => $discount ) {
-		if ( $current_quantity >= $quantity ) {
-			$discount_for_price = $dynamic_price[ 'price' ] / 100 * $discount;
+	foreach ( $quantities_discount as $values ) {
+		if ( $current_quantity >= $values['quantity'] ) {
+			$discount_for_price = $dynamic_price[ 'price' ] / 100 * $values['discount'];
 			$discount_price = $dynamic_price[ 'price' ] - $discount_for_price;
 
-			if ( $current_quantity == $quantity ) {
+			if ( $current_quantity == $values['quantity'] ) {
 				continue;
 			}
 		}
