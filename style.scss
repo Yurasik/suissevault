@@ -172,10 +172,15 @@ input[type="checkbox"], input[type="radio"] {
 
 .price_wrapper {
   color: #969797;
+  font-size: 14px;
 }
 
 .price_wrapper .price {
   display: inline-block;
+}
+
+.price {
+  font-size: 18px;
 }
 
 /* Single Product */

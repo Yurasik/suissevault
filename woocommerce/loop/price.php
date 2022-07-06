@@ -21,5 +21,21 @@ global $product;
 
 $api_price = get_api_price();
 $dynamic_price = get_dynamic_price( $api_price, $product );
+$metal = $product->get_attribute( 'Metal' );
 ?>
-<span class="price" data-price-product-id="<?php echo $product->get_id(); ?>"><?php echo wc_price( $dynamic_price[ 'price' ] ); ?></span>
+<?php if ( $metal == 'Silver' ): ?>
+	<div class="price_wrapper">Total (inc. VAT):
+		<div class="price price_inc_vat" data-price-product-id="<?php echo $product->get_id(); ?>">
+			<?php echo wc_price( $dynamic_price[ 'price_inc_vat' ] ); ?>
+		</div>
+	</div>
+	<div class="price_wrapper">(excl. VAT):
+		<div class="price" data-price-product-id="<?php echo $product->get_id(); ?>">
+			<?php echo wc_price( $dynamic_price[ 'price' ] ); ?>
+		</div>
+	</div>
+<?php else: ?>
+	<div class="price" data-price-product-id="<?php echo $product->get_id(); ?>">
+		<?php echo wc_price( $dynamic_price[ 'price' ] ); ?>
+	</div>
+<?php endif; ?>
