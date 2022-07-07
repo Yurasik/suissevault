@@ -120,6 +120,8 @@ add_filter( 'woocommerce_billing_fields', 'suissevault_billing_fields_conditions
 add_filter( 'woocommerce_customer_save_address', 'suissevault_customer_save_address', 10, 2 );
 
 
-/** Dynamic Price */
+/**
+ * Dynamic Price
+ */
 add_action( 'woocommerce_before_calculate_totals', 'dynamic_price_totals', 10, 1 );
 

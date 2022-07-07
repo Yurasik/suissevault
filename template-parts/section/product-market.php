@@ -9,7 +9,7 @@
 					</picture>
 				</div>
 				<h2 class="market_name"><span>Secure</span> <i>Gold</i></h2>
-				<a href="<?php echo get_post_type_archive_link( 'product' ); ?>" class="more-line">Shop Gold</a>
+				<a href="<?php echo get_post_type_archive_link( 'product' ); ?>?filter_metal=gold" class="more-line">Shop Gold</a>
 			</div>
 			<div class="market_item">
 				<div class="market_bg">
@@ -19,7 +19,7 @@
 					</picture>
 				</div>
 				<h2 class="market_name"><span>Secure</span> <i>Silver</i></h2>
-				<a href="<?php echo get_post_type_archive_link( 'product' ); ?>" class="more-line">Shop Silver</a>
+				<a href="<?php echo get_post_type_archive_link( 'product' ); ?>?filter_metal=silver" class="more-line">Shop Silver</a>
 			</div>
 		</div>
 	</div>
