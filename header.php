@@ -66,11 +66,17 @@ $header_class = is_front_page() ? "" : "header-black"; ?>
 					</form>
 				</div>
 			</div>
-			<div class="header_logo">
-				<svg>
-					<image href="<?php echo "$header[logo]"; ?>"/>
-				</svg>
-			</div>
+			<?php if( is_front_page() ): ?>
+				<div class="header_logo">
+					<svg><image href="<?php echo "$header[logo]"; ?>"/></svg>
+				</div>
+			<?php else: ?>
+				<a class="header_logo_link" href="<?php echo home_url(); ?>">
+					<div class="header_logo">
+						<svg><image href="<?php echo "$header[logo]"; ?>"/></svg>
+					</div>
+				</a>
+			<?php endif; ?>
 			<div class="header_right flex__align">
 				<?php
 				$api_currency = ( isset( $_SESSION[ 'suissevault_api_currency' ] ) ) ? $_SESSION[ 'suissevault_api_currency' ] : "GBP";
