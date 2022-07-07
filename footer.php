@@ -14,7 +14,7 @@ $footer = get_field( 'footer', 'options' );
 
 <?php get_template_part( 'template-parts/modal/identification' ) ?>
 
-<?php get_template_part( 'template-parts/modal/allocated' ) ?>
+<?php get_template_part( 'template-parts/modal/storage' ) ?>
 
 <?php get_template_part( 'template-parts/modal/account' ) ?>
 
