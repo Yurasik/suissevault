@@ -124,17 +124,16 @@ $header_class = is_front_page() ? "" : "header-black"; ?>
 							<path d="M7.5838 6.2464C7.61987 5.26644 7.71607 4.30453 8.01666 3.37267C8.3353 2.36266 8.87037 1.49694 9.75413 0.883715C10.4275 0.414781 11.185 0.16829 11.9906 0.0720981C12.9585 -0.0481414 13.9204 -0.0180815 14.8643 0.252457C16.3373 0.673295 17.3052 1.6292 17.8463 3.04803C18.2911 4.21435 18.3934 5.43478 18.3573 6.66723C18.3152 7.91772 17.9785 9.08405 17.3112 10.1482C16.6379 11.2243 15.7361 12.048 14.5216 12.4568C12.7541 13.052 11.1669 12.6672 9.78419 11.4528C8.61185 10.4307 7.97458 9.10208 7.72809 7.58105C7.64392 7.13617 7.62589 6.69128 7.5838 6.2464ZM9.08079 6.23437C9.12287 6.65521 9.14091 7.08206 9.21906 7.5029C9.44752 8.7113 9.99461 9.73935 10.9806 10.4969C12.1589 11.3987 13.5537 11.4528 14.7862 10.6411C15.4775 10.1842 15.9765 9.55899 16.3312 8.81952C16.698 8.04398 16.8603 7.22034 16.8603 6.36062C16.8603 5.42276 16.7761 4.50292 16.4575 3.61315C16.0547 2.50094 15.2852 1.82759 14.1188 1.60515C13.4635 1.4789 12.8022 1.47289 12.1469 1.55706C10.7882 1.7314 9.89241 2.45284 9.46555 3.76345C9.20103 4.56304 9.11686 5.39269 9.08079 6.23437Z" fill="#D2D1CF"/>
 						</svg>
 						<div class="header_href_user_wrapper">
-							<?php if ( is_user_logged_in() ) {
+							<?php if ( is_user_logged_in() ) :
 								$myaccount_page_id = get_option( 'woocommerce_myaccount_page_id' );
 								$myaccount_title = get_the_title( $myaccount_page_id ); ?>
 								<a href="<?php echo get_permalink( $myaccount_page_id ); ?>" title="<?php echo $myaccount_title; ?>"><?php echo $myaccount_title; ?></a>
 								<a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a>
-							<?php }
-							else {
+							<?php else :
 								get_template_part( 'ajax', 'auth' ); ?>
 								<a class="modal-link" data-modal-name="register">Register</a>
 								<a class="modal-link" data-modal-name="login">Login</a>
-							<?php } ?>
+							<?php endif; ?>
 						</div>
 					</div>
 					<?php suissevault_header_cart_link(); ?>

@@ -46,26 +46,33 @@ function remove_excerpt_more( $more ) {
 	return '';
 }
 
-if ( ! function_exists( 'suissevault_edit_post_link' ) ) {
+if ( !function_exists( 'suissevault_edit_post_link' ) ) {
 	/**
 	 * Display the edit link
 	 */
 	function suissevault_edit_post_link() {
-		edit_post_link(
-			sprintf(
-				wp_kses(
-				/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Edit <span class="screen-reader-text">%s</span>', 'suissevault' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
+		edit_post_link( sprintf( wp_kses( /* translators: %s: Name of current post. Only visible to screen readers */ __( 'Edit <span class="screen-reader-text">%s</span>', 'suissevault' ), array(
+				'span' => array(
+					'class' => array(),
 				),
-				get_the_title()
-			),
-			'<div class="edit-link">',
-			'</div>'
-		);
+			) ), get_the_title() ), '<div class="edit-link">', '</div>' );
 	}
 }
+
+if ( !function_exists( 'suissevault_auth_menu_atts' ) ) {
+
+	function suissevault_auth_menu_atts( $atts, $item, $args ) {
+
+		if ( $item->post_title == "Login" ) {
+			$atts[ 'data-modal-name' ] = 'login';
+			$atts[ 'class' ] = 'modal-link';
+		}
+		elseif ( $item->post_title == "Signup" ) {
+			$atts[ 'data-modal-name' ] = 'register';
+			$atts[ 'class' ] = 'modal-link';
+		}
+
+		return $atts;
+	}
+}
+

@@ -409,7 +409,26 @@ $current_url = ( isset( $_SERVER[ 'HTTPS' ] ) ? "https" : "http" ) . "://$_SERVE
 			<?php endif; ?>
 
 			<?php if ( is_active_sidebar( 'footer-4' ) ): ?>
-				<?php dynamic_sidebar( 'footer-4' ); ?>
+				<?php if ( ( !is_user_logged_in() ) ): ?>
+					<?php dynamic_sidebar( 'footer-4' ); ?>
+				<?php else :
+					$myaccount_page_id = get_option( 'woocommerce_myaccount_page_id' );
+					$myaccount_title = get_the_title( $myaccount_page_id );
+					?>
+					<div class="footer_column widget widget_nav_menu">
+						<div class="subtitle">Account</div>
+						<div class="menu-account-container">
+							<ul id="menu-account" class="nav">
+								<li class="menu-item">
+									<a href="<?php echo get_permalink( $myaccount_page_id ); ?>" title="<?php echo $myaccount_title; ?>"><?php echo $myaccount_title; ?></a>
+								</li>
+								<li class="menu-item">
+									<a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				<?php endif; ?>
 			<?php endif; ?>
 
 			<div class="footer_column">
