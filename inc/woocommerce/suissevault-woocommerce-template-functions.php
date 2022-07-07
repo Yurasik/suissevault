@@ -260,11 +260,28 @@ if ( !function_exists( 'suissevault_product_stock_status_options' ) ) {
 	}
 }
 
+if ( !function_exists( 'suissevault_save_custom_stock_status' ) ) {
+	function suissevault_save_custom_stock_status( $product_id ) {
+		update_post_meta( $product_id, '_stock_status', wc_clean( $_POST[ '_stock_status' ] ) );
+	}
+}
+
+if ( !function_exists( 'suissevault_product_is_in_stock' ) ) {
+	function suissevault_product_is_in_stock( $is_in_stock, $product ) {
+
+		if ( $product->stock_status == 'awaitingstock' ) {
+			$is_in_stock = false;
+		}
+
+		return $is_in_stock;
+	}
+}
+
 if ( !function_exists( 'suissevault_get_availability_text' ) ) {
 	function suissevault_get_availability_text( $availability, $product ) {
 
 		switch ( $product->get_stock_status() ) {
-			case 'awaiting_stock':
+			case 'awaitingstock':
 				$availability = __( 'Awaiting stock', 'woocommerce' );
 				break;
 		}
@@ -277,7 +294,7 @@ if ( !function_exists( 'suissevault_get_availability_class' ) ) {
 	function suissevault_get_availability_class( $class, $product ) {
 
 		switch ( $product->get_stock_status() ) {
-			case 'awaiting_stock':
+			case 'awaitingstock':
 				$class = 'awaiting-stock';
 				break;
 		}

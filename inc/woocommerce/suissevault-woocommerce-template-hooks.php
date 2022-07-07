@@ -67,6 +67,8 @@ add_filter( 'wc_price', 'suissevault_price_filter', 10, 3 );
 add_filter( 'woocommerce_cart_totals_order_total_html', 'suissevault_totals_order_total_html_filter', 10, 1 );
 // Stock Status
 add_filter( 'woocommerce_product_stock_status_options', 'suissevault_product_stock_status_options', 10, 1 );
+add_action( 'woocommerce_process_product_meta', 'suissevault_save_custom_stock_status', 99, 1 );
+add_action( 'woocommerce_product_is_in_stock', 'suissevault_product_is_in_stock', 10, 2 );
 add_filter( 'woocommerce_get_availability_text', 'suissevault_get_availability_text', 10, 2 );
 add_filter( 'woocommerce_get_availability_class', 'suissevault_get_availability_class', 10, 2 );
 add_filter( 'woocommerce_admin_stock_html', 'suissevault_admin_stock_html', 10, 2 );
