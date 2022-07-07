@@ -526,6 +526,20 @@ if ( !function_exists( 'suissevault_add_form_field_args' ) ) {
 	}
 }
 
+if ( !function_exists( 'suissevault_clean_temporary_data' ) ) {
+	function suissevault_clean_temporary_data( $order_id ) {
+
+		if ( ! $order_id )
+			return;
+
+		WC()->session->__unset( 'api_price' );
+		WC()->session->__unset( 'api_price_time' );
+		WC()->session->__unset( 'chosen_payment_method' );
+		WC()->session->__unset( 'chosen_shipping_methods' );
+		WC()->session->__unset( 'cart_delivery_method' );
+	}
+}
+
 if ( !function_exists( 'suissevault_customize_cart_shipping_method_full_label' ) ) {
 	function suissevault_customize_cart_shipping_method_full_label( $label, $method ) {
 

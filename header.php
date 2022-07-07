@@ -79,9 +79,9 @@ $header_class = is_front_page() ? "" : "header-black"; ?>
 			<?php endif; ?>
 			<div class="header_right flex__align">
 				<?php
-				$api_currency = ( isset( $_SESSION[ 'suissevault_api_currency' ] ) ) ? $_SESSION[ 'suissevault_api_currency' ] : "GBP";
-				$api_metal = ( isset( $_SESSION[ 'suissevault_api_metal' ] ) ) ? $_SESSION[ 'suissevault_api_metal' ] : 'gold';
-				$api_price = ( isset( $_SESSION[ 'suissevault_api_currency' ] ) ) ? get_api_price( $_SESSION[ 'suissevault_api_currency' ] ) : get_api_price();
+				$api_currency = ( isset( $_SESSION[ 'suissevault_api_currency' ] ) && $_SESSION[ 'suissevault_api_currency' ] ) ? $_SESSION[ 'suissevault_api_currency' ] : "GBP";
+				$api_metal = ( isset( $_SESSION[ 'suissevault_api_metal' ] ) && $_SESSION[ 'suissevault_api_metal' ] ) ? $_SESSION[ 'suissevault_api_metal' ] : 'gold';
+				$api_price = ( isset( $_SESSION[ 'suissevault_api_currency' ] ) && $_SESSION[ 'suissevault_api_currency' ] ) ? get_api_price( $_SESSION[ 'suissevault_api_currency' ] ) : get_api_price();
 				?>
 				<div class="header_price">
 					<div class="header_price_top flex__align">

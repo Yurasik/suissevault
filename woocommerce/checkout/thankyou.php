@@ -80,10 +80,8 @@ $display_default_order_result = false;
 			<?php endif; ?>
 		<?php endif; ?>
 
-		<?php if( $display_default_order_result ): ?>
-			<?php do_action( 'woocommerce_thankyou_' . $order->get_payment_method(), $order->get_id() ); ?>
-			<?php do_action( 'woocommerce_thankyou', $order->get_id() ); ?>
-		<?php endif; ?>
+		<?php do_action( 'woocommerce_thankyou_' . $order->get_payment_method(), $order->get_id() ); ?>
+		<?php do_action( 'woocommerce_thankyou', $order->get_id() ); ?>
 
 	<?php else : ?>
 

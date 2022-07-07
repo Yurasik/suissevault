@@ -102,7 +102,7 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 									</div>
 								</td>
 								<td class="_price">
-									<span>Unit price:</span> <?php echo wc_price( $product->get_price_including_tax() ); ?>
+									<span>Unit price:</span> <?php echo wc_price( $order->get_item_subtotal( $item, true, true ), array( 'currency' => $order->get_currency() ) ); ?>
 								</td>
 							</tr>
 						<?php endforeach; ?>

@@ -88,6 +88,7 @@ add_action( 'woocommerce_cart_item_subtotal', 'suissecault_cart_item_subtotal', 
 remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
 remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_login_form', 10 );
 remove_action( 'woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20 );
+remove_action( 'woocommerce_thankyou', 'woocommerce_order_details_table', 10 );
 add_action( 'suissevault_payment_details', 'woocommerce_checkout_payment', 10 );
 add_filter( 'woocommerce_checkout_fields', 'suissevault_checkout_fields', 10, 1 );
 add_filter( 'woocommerce_checkout_update_user_meta', 'suissevault_checkout_field_update_user_meta', 10, 2 );
@@ -97,6 +98,8 @@ add_filter( 'woocommerce_form_field', 'suissevault_customize_form_field', 10, 4 
 // JQuery: Needed for checkout fields to Remove "(optional)" from our non required fields
 add_filter( 'wp_footer', 'suissevault_remove_checkout_optional_fields_label_script' );
 add_filter( 'woocommerce_form_field_args', 'suissevault_add_form_field_args', 10, 3 );
+// After Order Create
+add_action('woocommerce_thankyou', 'suissevault_clean_temporary_data', 10, 1);
 
 /**
  * My Account
