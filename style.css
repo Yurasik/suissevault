@@ -287,6 +287,19 @@ input[type=checkbox], input[type=radio] {
 
 /* Pagination. */
 /* Modals */
+.modals {
+  --bone_w: 600px;
+}
+
+.modals > h1 {
+  margin-top: 132px;
+}
+
+.modals > .btn {
+  --btn_w: 100%;
+  margin-top: 40px;
+}
+
 .modal-link {
   cursor: pointer;
 }

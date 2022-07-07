@@ -74,6 +74,13 @@ if ( !class_exists( 'Suissevault_Admin' ) ) :
 					'menu_title'  => 'Products',
 					'parent_slug' => 'theme-general-settings',
 				) );
+
+				// Modals
+				acf_add_options_sub_page( array(
+					'page_title'  => 'Modals',
+					'menu_title'  => 'Modals',
+					'parent_slug' => 'theme-general-settings',
+				) );
 			}
 
 		}
