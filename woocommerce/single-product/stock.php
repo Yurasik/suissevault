@@ -17,14 +17,15 @@ if ( !defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+$stock_status = $product->get_stock_status();
 $status_text = "Coins will be shipped fully insured within 3-5 business days.";
-if ( $product->stock_status == "outofstock" ) {
+if ( $stock_status == "outofstock" ) {
 	$status_text = "Coins are items which are currently not available for purchase.";
 }
-elseif ( $product->stock_status == "awaitingstock" ) {
+elseif ( $stock_status == "awaitingstock" ) {
 	$status_text = "Means we are awaiting a delivery of items.";
 }
-elseif ( $product->stock_status == "onbackorder" ) {
+elseif ( $stock_status == "onbackorder" ) {
 	$status_text = "Coins are items which can be bought at the live spot price on the day but can take 4-8 weeks to source and deliver.";
 }
 ?>

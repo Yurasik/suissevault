@@ -39,9 +39,9 @@ if ( $related_products ) :
 
 						<div class="product_item">
 							<div class="product_item_img">
-								<?php echo suissevault_get_picture_html( $related_product->get_image_id() ); ?>
+								<a href="<?php the_permalink(); ?>"><?php echo suissevault_get_picture_html( $related_product->get_image_id() ); ?></a>
 							</div>
-							<div class="product_item_name"><?php the_title(); ?></div>
+							<div class="product_item_name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></div>
 							<div class="product_item_price price" data-price-product-id="<?php echo $related_product_id; ?>"><?php echo wc_price( $dynamic_price[ 'price_inc_vat' ] ); ?></div>
 							<div class="product_item_btn">
 								<?php woocommerce_template_loop_add_to_cart( [ 'class' => 'btn btn-line' ] ); ?>

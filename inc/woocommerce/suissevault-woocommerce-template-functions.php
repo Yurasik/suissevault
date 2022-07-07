@@ -269,7 +269,7 @@ if ( !function_exists( 'suissevault_save_custom_stock_status' ) ) {
 if ( !function_exists( 'suissevault_product_is_in_stock' ) ) {
 	function suissevault_product_is_in_stock( $is_in_stock, $product ) {
 
-		if ( $product->stock_status == 'awaitingstock' ) {
+		if ( $product->get_stock_status() == 'awaitingstock' ) {
 			$is_in_stock = false;
 		}
 
