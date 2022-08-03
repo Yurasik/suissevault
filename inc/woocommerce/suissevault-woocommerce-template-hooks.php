@@ -128,3 +128,7 @@ add_filter( 'woocommerce_customer_save_address', 'suissevault_customer_save_addr
  */
 add_action( 'woocommerce_before_calculate_totals', 'dynamic_price_totals', 10, 1 );
 
+/** Mailchimp */
+add_filter( 'mailchimp_woocommerce_newsletter_field', 'suissevault_mailchimp_woocommerce_newsletter_field', 10, 3);
+
+

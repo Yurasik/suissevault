@@ -736,6 +736,27 @@ if ( !function_exists( 'dynamic_price_totals' ) ) {
 	}
 }
 
+if ( !function_exists( 'suissevault_mailchimp_woocommerce_newsletter_field' ) ) {
+	function suissevault_mailchimp_woocommerce_newsletter_field( $checkbox, $status, $label ) {
+
+		$checkbox = str_replace( [
+			'<p class="form-row form-row-wide mailchimp-newsletter">',
+			'</p>',
+			'<input class="woocommerce-form__input',
+			'<label for="mailchimp_woocommerce_newsletter" class="woocommerce-form__label woocommerce-form__label-for-checkbox inline"><span>' . $label . '</span></label>'
+		], [
+			'<div class="input mailchimp-newsletter"><label>',
+			'</label></div>',
+			'<input class="input__hidden woocommerce-form__input',
+			'<span>' . $label . '</span>'
+		], $checkbox );
+
+		$checkbox = '<div class="form_wrapper">' . $checkbox . '</div>';
+
+		return $checkbox;
+	}
+}
+
 
 if ( false ) {
 	if ( !function_exists( 'suissevault_cart_link_fragment' ) ) {

@@ -187,12 +187,7 @@
 								</div>
 							</div>
 
-							<div class="form_wrapper">
-								<div class="input">
-									<label> <input type="checkbox" name="newsletter" id="newsletter" checked class="input__hidden">
-										<span>Sign Up for Newsletter</span> </label>
-								</div>
-							</div>
+							<?php do_action( 'mailchimp_subscribe_checkbox_output', '' ); ?>
 
 							<div class="modal_btn">
 								<!--<div class="btn">sign in</div>-->
