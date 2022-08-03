@@ -253,21 +253,23 @@ function is_storage() {
  */
 function get_quantity_discount_price( $product, $current_quantity, $api_price ) {
 
-	$quantities_discount = get_field( 'quantities_discount', 'options' );
+	$quantities_discount = get_field( 'quantities_discount', $product->id );
 	$dynamic_price = get_dynamic_price( $api_price, $product );
 	$discount_price = $dynamic_price[ 'price' ];
 
-	foreach ( $quantities_discount as $values ) {
-		if ( $current_quantity >= $values['quantity'] ) {
-			$discount_for_price = $dynamic_price[ 'price' ] / 100 * $values['discount'];
-			$discount_price = $dynamic_price[ 'price' ] - $discount_for_price;
+	if ( $quantities_discount ) {
+		foreach ( $quantities_discount as $values ) {
+			if ( $current_quantity >= $values['quantity'] ) {
+				$discount_for_price = $dynamic_price[ 'price' ] / 100 * $values['discount'];
+				$discount_price = $dynamic_price[ 'price' ] - $discount_for_price;
 
-			if ( $current_quantity == $values['quantity'] ) {
+				if ( $current_quantity == $values['quantity'] ) {
+					continue;
+				}
+			}
+			else {
 				continue;
 			}
-		}
-		else {
-			continue;
 		}
 	}
 

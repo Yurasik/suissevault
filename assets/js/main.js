@@ -584,9 +584,7 @@ jQuery(document).ready(function ($) {
         setTimeout(header_dynamic_price, dynamic_price_timer);
     }
 
-
     // Filter slide
-
     $(document).on('click', '.filter__title', function () {
         $(this).toggleClass('_hide')
             .parent().siblings().slideToggle();

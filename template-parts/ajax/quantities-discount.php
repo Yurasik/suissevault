@@ -1,7 +1,7 @@
 <?php
 $product = $args[ 'product' ];
 $api_price = $args[ 'api_price' ];
-$quantities_discount = get_field( 'quantities_discount', 'options' );
+$quantities_discount = get_field( 'quantities_discount', $product->id );
 ?>
 
 <table id='quantities_discount'>
@@ -9,10 +9,16 @@ $quantities_discount = get_field( 'quantities_discount', 'options' );
 		<td>Quantity</td>
 		<td>Each</td>
 	</tr>
-	<?php foreach ( $quantities_discount as $values ) {
-		$discount_price = get_quantity_discount_price( $product, $values['quantity'], $api_price );
-		$plus = ( $values['quantity'] == 1 ) ? "" : "+";
+	<tr>
+		<td>1</td>
+		<td><?php echo wc_price( get_quantity_discount_price( $product, 1, $api_price ) ); ?></td>
+	</tr>
+	<?php if ( $quantities_discount ): ?>
+		<?php foreach ( $quantities_discount as $values ) {
+			$discount_price = get_quantity_discount_price( $product, $values[ 'quantity' ], $api_price );
+			$plus = "+";
 
-		echo "<tr><td>$values[quantity]{$plus}</td><td>" . wc_price( $discount_price * $values['quantity'] ) . "</td></tr>";
-	} ?>
+			echo "<tr><td>$values[quantity]{$plus}</td><td>" . wc_price( $discount_price * $values[ 'quantity' ] ) . "</td></tr>";
+		} ?>
+	<?php endif; ?>
 </table>
