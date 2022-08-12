@@ -16,21 +16,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $current_payment_method = WC()->session->get( 'chosen_payment_method' );
-if ( !$current_payment_method ) {
-	$current_payment_method = 'stripe';
-	WC()->session->set( 'chosen_payment_method', $current_payment_method );
-}
 $cart_delivery_method = WC()->session->get( 'cart_delivery_method' );
-if ( !$cart_delivery_method ) {
-	$cart_delivery_method['method'] = 'storage';
-	$cart_delivery_method['value'] = 'local_pickup:6';
-	WC()->session->set( 'chosen_shipping_methods', array( $cart_delivery_method[ 'value' ] ) );
-	WC()->session->set( 'cart_delivery_method', $cart_delivery_method );
-} else {
-	WC()->session->set( 'chosen_shipping_methods', array( $cart_delivery_method[ 'value' ] ) );
-}
-$shipping_delivery_method_checked = ( isset( $cart_delivery_method['method'] ) && $cart_delivery_method['method'] == 'shipping' ) ? "checked" : "";
-$storage_delivery_method_checked = ( isset( $cart_delivery_method['method'] ) && $cart_delivery_method['method'] == 'storage' ) ? "checked" : "";
 ?>
 
 <?php do_action( 'woocommerce_before_cart' ); ?>
@@ -167,14 +153,14 @@ $storage_delivery_method_checked = ( isset( $cart_delivery_method['method'] ) &&
 <form id="cart-delivery-form" class="lock_radio lock_radio-small flex__align">
 	<?php wp_nonce_field( 'ajax-delivery-method-nonce', 'delivery-security' ); ?>
 	<label>
-		<input type="radio" name="delivery_method" value="shipping" data-checked="shipping" class="input__hidden" <?php echo $shipping_delivery_method_checked; ?>>
+		<input type="radio" name="delivery_method" value="shipping" data-checked="shipping" class="input__hidden" <?php checked( 'shipping', $cart_delivery_method['method'] ); ?>>
 		<span>
 			<picture><source srcset="<?php echo get_template_directory_uri(); ?>/assets/images/svg/car.svg" type="image/webp"><img src="<?php echo get_template_directory_uri(); ?>/assets/images/svg/car.svg" alt="Delivery"></picture>
 			Delivery
 		</span>
 	</label>
 	<label>
-		<input type="radio" name="delivery_method" value="storage" data-checked="storage" class="input__hidden" <?php echo $storage_delivery_method_checked; ?>>
+		<input type="radio" name="delivery_method" value="storage" data-checked="storage" class="input__hidden" <?php checked( 'storage', $cart_delivery_method['method'] ); ?>>
 		<span>
 			<picture><source srcset="<?php echo get_template_directory_uri(); ?>/assets/images/svg/safe.svg" type="image/webp"><img src="<?php echo get_template_directory_uri(); ?>/assets/images/svg/safe.svg" alt="Storage"></picture>
 			Storage

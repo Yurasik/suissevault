@@ -33,7 +33,6 @@ add_action( 'suissevault_breadcrumb', 'suissevault_breadcrumb', 10 );
 add_action( 'suissevault_result_count', 'woocommerce_result_count', 10 );
 add_action( 'suissevault_catalog_ordering', 'woocommerce_catalog_ordering', 10 );
 
-
 /**
  * Products
  *
@@ -62,7 +61,6 @@ add_action( 'woocommerce_after_quantity_input_field', 'suissevault_after_quantit
 add_filter( 'woocommerce_product_tabs', 'suissevault_terms_delivery_tab', 10, 1 );
 add_action( 'suissevault_output_related_products', 'woocommerce_output_related_products', 10 );
 add_filter( 'woocommerce_output_related_products_args', 'suissevault_related_products_args', 20 );
-
 add_filter( 'wc_price', 'suissevault_price_filter', 10, 3 );
 add_filter( 'woocommerce_cart_totals_order_total_html', 'suissevault_totals_order_total_html_filter', 10, 1 );
 // Stock Status
@@ -72,6 +70,8 @@ add_action( 'woocommerce_product_is_in_stock', 'suissevault_product_is_in_stock'
 add_filter( 'woocommerce_get_availability_text', 'suissevault_get_availability_text', 10, 2 );
 add_filter( 'woocommerce_get_availability_class', 'suissevault_get_availability_class', 10, 2 );
 add_filter( 'woocommerce_admin_stock_html', 'suissevault_admin_stock_html', 10, 2 );
+// Exclude Storage from shop page
+add_action( 'woocommerce_product_query', 'exclude_storage_from_shop' );
 
 /**
  * Cart
@@ -80,7 +80,8 @@ add_filter( 'woocommerce_cart_shipping_method_full_label', 'suissevault_customiz
 remove_action( 'woocommerce_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20 );
 add_action( 'woocommerce_after_cart', 'woocommerce_button_proceed_to_checkout', 10 );
 add_action( 'woocommerce_cart_item_subtotal', 'suissecault_cart_item_subtotal', 10, 3 );
-
+// Adding Storage price in cart in the cart total
+add_filter( 'woocommerce_cart_get_total', 'suissevault_cart_total_with_storage' );
 
 /**
  * Checkout
@@ -95,6 +96,7 @@ add_filter( 'woocommerce_checkout_update_user_meta', 'suissevault_checkout_field
 add_action( 'woocommerce_checkout_update_order_meta', 'suissevault_checkout_field_update_order_meta', 10, 1 );
 add_action( 'woocommerce_checkout_process', 'suissevault_checkout_fields_process' );
 add_filter( 'woocommerce_form_field', 'suissevault_customize_form_field', 10, 4 );
+add_action( 'template_redirect', 'checkout_pre_settings' );
 // JQuery: Needed for checkout fields to Remove "(optional)" from our non required fields
 add_filter( 'wp_footer', 'suissevault_remove_checkout_optional_fields_label_script' );
 add_filter( 'woocommerce_form_field_args', 'suissevault_add_form_field_args', 10, 3 );
@@ -130,5 +132,4 @@ add_action( 'woocommerce_before_calculate_totals', 'dynamic_price_totals', 10, 1
 
 /** Mailchimp */
 add_filter( 'mailchimp_woocommerce_newsletter_field', 'suissevault_mailchimp_woocommerce_newsletter_field', 10, 3);
-
 

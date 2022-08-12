@@ -253,7 +253,7 @@ function is_storage() {
  */
 function get_quantity_discount_price( $product, $current_quantity, $api_price ) {
 
-	$quantities_discount = get_field( 'quantities_discount', $product->id );
+	$quantities_discount = get_field( 'quantities_discount', $product->get_id() );
 	$dynamic_price = get_dynamic_price( $api_price, $product );
 	$discount_price = $dynamic_price[ 'price' ];
 

@@ -1,7 +1,7 @@
 <?php
 $product = $args[ 'product' ];
 $api_price = $args[ 'api_price' ];
-$quantities_discount = get_field( 'quantities_discount', $product->id );
+$quantities_discount = get_field( 'quantities_discount', $product->get_id() );
 ?>
 
 <table id='quantities_discount'>
