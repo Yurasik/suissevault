@@ -596,6 +596,7 @@ if ( !function_exists( 'suissevault_account_menu_items' ) ) {
 
 		// Unnecessary
 		unset( $items[ 'downloads' ] );
+		unset( $items[ 'subscriptions' ] );
 
 		// Reorder
 		unset( $items[ 'dashboard' ] );
@@ -630,6 +631,7 @@ if ( !function_exists( 'suissevault_password_content' ) ) {
 
 if ( !function_exists( 'suissevault_storage_content' ) ) {
 	function suissevault_storage_content( $current_page ) {
+		// Orders
 		$current_page = empty( $current_page ) ? 1 : absint( $current_page );
 		$customer_orders = wc_get_orders( array(
 			'customer' => get_current_user_id(),
@@ -637,10 +639,14 @@ if ( !function_exists( 'suissevault_storage_content' ) ) {
 			'paginate' => true,
 		) );
 
+		// Subscriptions
+		$subscriptions = wcs_get_users_subscriptions();
+
 		wc_get_template( 'myaccount/storage.php', array(
 			'current_page'    => absint( $current_page ),
 			'customer_orders' => $customer_orders,
 			'has_orders'      => 0 < $customer_orders->total,
+			'subscriptions'   => $subscriptions
 		) );
 	}
 }

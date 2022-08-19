@@ -78,19 +78,6 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 		<?php } ?>
 	</div>
 
-	<h2>Storage Invoices</h2>
-	<div class="cabinet_info">
-		<div class="cabinet_head grid">
-			<div class="cabinet_col">References</div>
-			<div class="cabinet_col">Date</div>
-			<div class="cabinet_col">Period</div>
-			<div class="cabinet_col">Total</div>
-		</div>
-		<div class="cabinet_row grid _one">
-			<div class="cabinet_col">You don’t have any storage invoices.</div>
-		</div>
-	</div>
-
 	<?php do_action( 'woocommerce_before_account_orders_pagination' ); ?>
 
 	<?php if ( 1 < $customer_orders->max_num_pages ) : ?>
@@ -104,6 +91,70 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
+
+	<h2>Storage Invoices</h2>
+	<!--woocommerce_account_subscriptions-->
+	<div class="cabinet_info my_account_subscriptions my_account_orders woocommerce-orders-table woocommerce-MyAccount-subscriptions shop_table shop_table_responsive woocommerce-orders-table--subscriptions">
+		<?php if ( ! empty( $subscriptions ) ) : ?>
+			<div class="cabinet_head grid">
+				<div class="cabinet_col subscription-id order-number woocommerce-orders-table__header woocommerce-orders-table__header-order-number woocommerce-orders-table__header-subscription-id">
+					<?php esc_html_e( 'Order', 'suissevault' ); ?>
+				</div>
+				<div class="cabinet_col subscription-next-payment order-date woocommerce-orders-table__header woocommerce-orders-table__header-order-date woocommerce-orders-table__header-subscription-next-payment">
+					<?php echo _x( 'Start date', 'customer subscription table header', 'woocommerce-subscriptions' ) . " / " . esc_html_x( 'Next payment', 'table heading', 'woocommerce-subscriptions' ); ?>
+				</div>
+				<div class="cabinet_col subscription-actions order-actions woocommerce-orders-table__header woocommerce-orders-table__header-order-actions woocommerce-orders-table__header-subscription-actions">
+					<?php esc_html_e( 'Actions', 'woocommerce-subscriptions' ); ?>
+				</div>
+				<div class="cabinet_col subscription-total order-total woocommerce-orders-table__header woocommerce-orders-table__header-order-total woocommerce-orders-table__header-subscription-total">
+					<?php echo esc_html_x( 'Total', 'table heading', 'woocommerce-subscriptions' ); ?>
+				</div>
+				<div class="cabinet_col subscription-status order-status woocommerce-orders-table__header woocommerce-orders-table__header-order-status woocommerce-orders-table__header-subscription-status">
+					<?php esc_html_e( 'Status', 'woocommerce-subscriptions' ); ?>
+				</div>
+			</div>
+
+			<?php /** @var WC_Subscription $subscription */ ?>
+			<?php foreach ( $subscriptions as $subscription_id => $subscription ) :
+				$subscription_orders = $subscription->get_related_orders();
+				$subscription_order = array_shift( $subscription_orders );
+				$order = wc_get_order( $subscription_order );
+				$order_date = $order->get_date_created();
+				$actions = wcs_get_all_user_actions_for_subscription( $subscription, get_current_user_id() );
+				?>
+				<div class="cabinet_row grid order woocommerce-orders-table__row woocommerce-orders-table__row--status-<?php echo esc_attr( $subscription->get_status() ); ?>">
+					<div class="cabinet_col subscription-order-id order-number woocommerce-orders-table__cell woocommerce-orders-table__cell-order-id woocommerce-orders-table__cell-order-number" data-title="<?php esc_attr_e( 'ID', 'woocommerce-subscriptions' ); ?>">
+						<?php echo sprintf( esc_html_x( '#%s', 'hash before order number', 'woocommerce-subscriptions' ), esc_html( $order->get_order_number() ) ); ?>
+					</div>
+					<div class="cabinet_col subscription-next-payment order-date woocommerce-orders-table__cell woocommerce-orders-table__cell-subscription-next-payment woocommerce-orders-table__cell-order-date" data-title="<?php echo esc_attr_x( 'Next Payment', 'table heading', 'woocommerce-subscriptions' ); ?>">
+						<time datetime="<?php echo esc_attr( $order_date->date( 'Y-m-d' ) ); ?>" title="<?php echo esc_attr( $order_date->getTimestamp() ); ?>">
+							<?php echo esc_attr( $order_date->date( 'd.m.Y' ) ); ?>
+						</time> /
+						<?php echo esc_attr( date_i18n( 'd.m.Y', $subscription->get_time( 'next_payment', 'site' ) ) ); ?>
+						<?php if ( ! $subscription->is_manual() && $subscription->has_status( 'active' ) && $subscription->get_time( 'next_payment' ) > 0 ) : ?>
+							<br/><small><?php echo esc_attr( $subscription->get_payment_method_to_display( 'customer' ) ); ?></small>
+						<?php endif; ?>
+					</div>
+					<div class="cabinet_col subscription-actions order-actions woocommerce-orders-table__cell woocommerce-orders-table__cell-subscription-actions woocommerce-orders-table__cell-order-actions">
+						<?php foreach ( $actions as $key => $action ) : ?>
+							<a href="<?php echo esc_url( $action['url'] ); ?>" class="button <?php echo sanitize_html_class( $key ) ?>"><?php echo esc_html( $action['name'] ); ?></a><br/>
+						<?php endforeach; ?>
+						<?php do_action( 'woocommerce_my_subscriptions_actions', $subscription ); ?>
+					</div>
+					<div class="cabinet_col subscription-total order-total woocommerce-orders-table__cell woocommerce-orders-table__cell-subscription-total woocommerce-orders-table__cell-order-total" data-title="<?php echo esc_attr_x( 'Total', 'Used in data attribute. Escaped', 'woocommerce-subscriptions' ); ?>">
+						<?php echo wp_kses_post( $subscription->get_formatted_order_total() ); ?>
+					</div>
+					<div class="subscription-status order-status woocommerce-orders-table__cell woocommerce-orders-table__cell-subscription-status woocommerce-orders-table__cell-order-status" data-title="<?php esc_attr_e( 'Status', 'woocommerce-subscriptions' ); ?>">
+						<?php echo esc_attr( wcs_get_subscription_status_name( $subscription->get_status() ) ); ?>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		<?php else : ?>
+			<div class="cabinet_row grid _one no_subscriptions woocommerce-message woocommerce-message--info woocommerce-Message woocommerce-Message--info woocommerce-info">
+				<div class="cabinet_col">You don’t have any storage invoices.</div>
+			</div>
+		<?php endif; ?>
+	</div>
 
 <?php else : ?>
 	<div class="woocommerce-message woocommerce-message--info woocommerce-Message woocommerce-Message--info woocommerce-info">
