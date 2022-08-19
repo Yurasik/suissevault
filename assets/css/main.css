@@ -3743,7 +3743,7 @@ table.black tr td:not(:first-child) {
   font-family: var(--font2);
 }
 
-.checkout_totals p span {
+.checkout_totals p > span:first-of-type {
   color: #868686;
   font-family: var(--family);
 }
@@ -3788,7 +3788,7 @@ table.black tr td:not(:first-child) {
   text-align: right;
 }
 
-.checkout_totals_item_right p span {
+.checkout_totals_item_right p > span:first-of-type {
   font-size: 13px;
   margin-right: 12px;
 }

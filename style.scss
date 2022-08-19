@@ -544,7 +544,10 @@ input[type="checkbox"], input[type="radio"] {
   width: 100%;
   max-width: calc(var(--bone_w) + var(--bone) * 2);
   margin: 0 auto;
-  padding: 15px var(--bone);
   font-size: 1.3em;
   font-family: var(--font2);
+
+  .woocommerce-message {
+    padding: 15px var(--bone);
+  }
 }

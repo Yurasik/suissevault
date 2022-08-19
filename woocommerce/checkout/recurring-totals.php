@@ -11,6 +11,9 @@
 
 defined( 'ABSPATH' ) || exit;
 $display_th = true;
+
+$display_recurring = false;
+if ( !$display_recurring ) return;
 ?>
 
 <tr class="recurring-totals">

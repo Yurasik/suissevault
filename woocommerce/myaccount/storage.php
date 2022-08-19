@@ -42,7 +42,10 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 			$order_shipping_method = $order->get_shipping_method();
 			if ( $order_shipping_method != 'Storage' ) continue; ?>
 			<?php foreach ( $order->get_items() as $item_id => $item ):
-				$product = $item->get_product();
+				$product           = $item->get_product();
+				if ( class_exists( 'WC_Subscriptions_Product' ) && WC_Subscriptions_Product::is_subscription( $product ) ) {
+					continue;
+				}
 				$qty               = $item->get_quantity();
 				$refunded_qty      = $order->get_qty_refunded_for_item( $item_id );
 				$qty_display       = ( $refunded_qty )
