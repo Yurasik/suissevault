@@ -23,6 +23,7 @@ $api_price = get_api_price();
 			<div class="product_items grid grid__three">
 				<?php if ( $popular_products->have_posts() ) : ?>
 					<?php while ( $popular_products->have_posts() ) : $popular_products->the_post();
+						global $product;
 						$product_id = get_the_ID();
 						$product = wc_get_product( $product_id );
 						$dynamic_price = get_dynamic_price( $api_price, $product );
@@ -34,12 +35,14 @@ $api_price = get_api_price();
 							<div class="product_item_name"><?php the_title(); ?></div>
 							<div class="product_item_price price" data-price-product-id="<?php echo $product->get_id(); ?>"><?php echo wc_price( $dynamic_price[ 'price_inc_vat' ] ); ?></div>
 							<div class="product_item_btn">
-								<?php woocommerce_template_loop_add_to_cart( [ 'class' => 'btn btn-line' ] ); ?>
+								<form class="cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data'>
+									<button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="btn btn-line single_add_to_cart_button button alt"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
+								</form>
 							</div>
 						</div>
 					<?php endwhile; ?>
+					<?php wp_reset_postdata(); ?>
 				<?php endif; ?>
-				<?php wp_reset_postdata(); ?>
 			</div>
 
 			<div class="product_info">

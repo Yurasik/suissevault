@@ -160,6 +160,13 @@ input[type=checkbox], input[type=radio] {
 
 .buy_name_right .product_title {
   font-size: 36px;
+  padding-right: 100px;
+}
+.buy_name_right .buy_content_item_info {
+  position: absolute;
+  top: 44px;
+  left: auto;
+  right: 0;
 }
 
 .buy_name_drops li table th {
@@ -370,6 +377,13 @@ input[type=checkbox], input[type=radio] {
 
 .checkout #place_order {
   display: none;
+}
+
+.woocommerce-order-pay .checkout #place_order {
+  display: block;
+  cursor: pointer;
+  color: #000;
+  margin-top: 25px;
 }
 
 .select2-container .select2-selection--single {

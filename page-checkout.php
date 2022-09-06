@@ -15,7 +15,7 @@ $page_class = ( !empty( is_wc_endpoint_url( 'order-received' ) ) ) ? "thank" : "
 		<div class="bone">
 			<?php get_template_part( 'template-parts/breadcrumbs' ); ?>
 
-			<?php if ( empty( is_wc_endpoint_url( 'order-received' ) ) ) : ?>
+			<?php if ( ! is_wc_endpoint_url() ) : ?>
 				<h1><?php the_title(); ?></h1>
 				<div class="checkout_time">Time to confirm your order: <b><?php echo date( 'i', $checkout_time ) . "m " . date( 's', $checkout_time ) . "s"; ?></b></div>
 			<?php endif; ?>
