@@ -187,7 +187,7 @@
 								</div>
 							</div>
 
-							<?php do_action( 'mailchimp_subscribe_checkbox_output', '' ); ?>
+							<?php do_action( 'mailchimp_subscribe_checkbox_output' ); ?>
 
 							<div class="modal_btn">
 								<!--<div class="btn">sign in</div>-->

@@ -76,3 +76,12 @@ if ( !function_exists( 'suissevault_auth_menu_atts' ) ) {
 	}
 }
 
+
+/****/
+function walker_nav_menu_start_el_filter( $item_output, $menu_item, $depth, $args ){
+    if($menu_item->ID==562){
+        $item_output .= '<span class="menu-arrow"><span></span><span></span></span>';
+    }
+	return $item_output;
+}
+
