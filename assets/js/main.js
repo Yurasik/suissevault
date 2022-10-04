@@ -589,8 +589,7 @@ jQuery(document).ready(function ($) {
         $(this).toggleClass('_hide')
             .parent().siblings().slideToggle();
     })
-    
-    
+
     /*************/
     $(document).on('click','#menu-header-menu .menu-arrow',function(e){
         var open = $(this).hasClass('open');
