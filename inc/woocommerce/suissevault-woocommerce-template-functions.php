@@ -792,6 +792,75 @@ if ( !function_exists( 'suissevault_mailchimp_woocommerce_newsletter_field' ) ) 
 	}
 }
 
+
+
+if ( !function_exists( 'exclude_storage_from_shop' ) ) {
+	function exclude_storage_from_shop( $q ) {
+		if ( !is_admin() && $q->is_main_query() && ( is_shop() || is_product_category() || is_product_tag() ) ) {
+			$storage_product = get_field( 'storage_product', 'options' );
+			$q->set( 'post__not_in', [ $storage_product->ID ] );
+		}
+	}
+}
+
+if ( !function_exists( 'suissevault_cart_total_with_storage' ) ) {
+	function suissevault_cart_total_with_storage( $total ) {
+		if ( is_cart() ) {
+			$cart_delivery_method = WC()->session->get( 'cart_delivery_method' );
+			if ( $cart_delivery_method[ 'method' ] == 'storage' ) {
+				$storage_product = get_field( 'storage_product', 'options' );
+				$storage_product_id = $storage_product->ID;
+				$product_cart_id = WC()->cart->generate_cart_id( $storage_product_id );
+
+				if ( ! WC()->cart->find_product_in_cart( $product_cart_id ) ) {
+					$product = wc_get_product( $storage_product_id );
+					$total = $total + intval( $product->get_price() );
+				}
+			}
+		}
+
+		return $total;
+	}
+}
+
+if ( !function_exists( 'checkout_pre_settings' ) ) {
+	function checkout_pre_settings() {
+		if (  is_checkout() || is_cart() ) {
+			/* Payment */
+			if ( !WC()->session->get( 'chosen_payment_method' ) ) {
+				WC()->session->set( 'chosen_payment_method', 'stripe' );
+			}
+
+			/* Delivery */
+			$cart_delivery_method = WC()->session->get( 'cart_delivery_method' );
+			if ( !$cart_delivery_method ) {
+				$cart_delivery_method[ 'method' ] = 'storage';
+				$cart_delivery_method[ 'value' ] = 'local_pickup:6';
+
+				WC()->session->set( 'chosen_shipping_methods', array( $cart_delivery_method[ 'value' ] ) );
+				WC()->session->set( 'cart_delivery_method', $cart_delivery_method );
+			}
+			else {
+				WC()->session->set( 'chosen_shipping_methods', array( $cart_delivery_method[ 'value' ] ) );
+			}
+
+			$storage_product = get_field( 'storage_product', 'options' );
+			$storage_product_id = $storage_product->ID;
+			$product_cart_id = WC()->cart->generate_cart_id( $storage_product_id );
+			if ( $cart_delivery_method[ 'method' ] == 'storage' ) {
+				if ( !WC()->cart->find_product_in_cart( $product_cart_id ) ) {
+					WC()->cart->add_to_cart( $storage_product_id );
+				}
+			}
+			else {
+				if ( WC()->cart->find_product_in_cart( $product_cart_id ) ) {
+					WC()->cart->remove_cart_item( $product_cart_id );
+				}
+			}
+		}
+	}
+}
+
 if ( false ) {
 	if ( !function_exists( 'suissevault_cart_link_fragment' ) ) {
 		/**
