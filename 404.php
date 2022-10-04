@@ -10,7 +10,7 @@ get_header();
 $page_404 = get_field( 'page_404', 'options' );
 ?>
 
-	<div class="page four">
+	<div class="page four test">
 		<div class="bone">
 			<div class="four_content">
 				<?php if ( $page_404[ 'image' ] ) {
