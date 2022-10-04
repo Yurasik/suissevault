@@ -4,7 +4,20 @@
  *
  * @package suissevault
  */
-
+function remove_bacs_from_thank_you_page() {
+	if ( ! function_exists( 'WC' ) ) {
+		return;
+	}
+	$available_gateways = WC()->payment_gateways()->get_available_payment_gateways();
+	$gateway = isset( $available_gateways['bacs'] ) ? $available_gateways['bacs'] : false;
+	if ( false == $gateway ) {
+		return;
+	}
+	remove_action( 'woocommerce_thankyou_bacs', array( $gateway, 'thankyou_page' ) );
+    add_action( 'woocommerce_thankyou_bacs', function($order_id){
+        include __DIR__.'/class-wc-gateway-bacs.php';
+    });
+}
 if ( !function_exists( 'suissevault_customer_login_redirect' ) ) {
 	function suissevault_customer_login_redirect( $redirect, $user ) {
 
@@ -708,6 +721,12 @@ if ( !function_exists( 'suissevault_customer_save_address' ) ) {
 if ( !function_exists( 'dynamic_price_totals' ) ) {
 	function dynamic_price_totals( $cart_object ) {
 
+ 		//calculate storage 13 333
+        $storage_product = get_field( 'storage_product', 'options' );
+        $storage_product_id = $storage_product->ID;
+        $storage_price = 0;
+        $cart_storage = false;
+
 		$api_price = get_api_price();
 
 		// Checkout Locked Price Validation
@@ -724,18 +743,54 @@ if ( !function_exists( 'dynamic_price_totals' ) ) {
 
 		// Cart Dynamic Price
 		foreach ( $cart_object->get_cart() as $hash => $value ) {
+			if( $value['product_id'] == $storage_product_id ) {
+                $cart_storage = $value; 
+			}
+
+			// Skip storage
+			if ( class_exists( 'WC_Subscriptions_Product' ) && WC_Subscriptions_Product::is_subscription( $value[ 'data' ] ) ) continue;
+
 			//$dynamic_price = get_dynamic_price( $api_price, $value[ 'data' ] );
-			$dynamic_price = get_quantity_discount_price( $value[ 'data' ], $value[ 'quantity' ], $api_price );
+			$dynamic_price = get_quantity_discount_price( $value[ 'data' ], $value[ 'quantity' ], $api_price )."<br>";
 			$value[ 'data' ]->set_price( $dynamic_price );
+            
+            if($dynamic_price>13333){
+                $storage_price += $dynamic_price*0.0065;
+            }
 
 			// Cart Storage Validation
 			if ( is_storage() ) {
 				$value[ 'data' ]->set_tax_status( 'none' );
 			}
 		}
+        
+        //calculate storage 13 333
+        if($cart_storage && $storage_price>0){
+            $cart_storage['data']->set_price($storage_price);
+        }
 	}
 }
 
+if ( !function_exists( 'suissevault_mailchimp_woocommerce_newsletter_field' ) ) {
+	function suissevault_mailchimp_woocommerce_newsletter_field( $checkbox, $status, $label ) {
+
+		$checkbox = str_replace( [
+			'<p class="form-row form-row-wide mailchimp-newsletter">',
+			'</p>',
+			'<input class="woocommerce-form__input',
+			'<label for="mailchimp_woocommerce_newsletter" class="woocommerce-form__label woocommerce-form__label-for-checkbox inline"><span>' . $label . '</span></label>'
+		], [
+			'<div class="input mailchimp-newsletter"><label>',
+			'</label></div>',
+			'<input class="input__hidden woocommerce-form__input',
+			'<span>' . $label . '</span>'
+		], $checkbox );
+
+		$checkbox = '<div class="form_wrapper">' . $checkbox . '</div>';
+
+		return $checkbox;
+	}
+}
 
 if ( false ) {
 	if ( !function_exists( 'suissevault_cart_link_fragment' ) ) {
