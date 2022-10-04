@@ -233,7 +233,7 @@ $storage_delivery_method_checked = ( isset( $cart_delivery_method['method'] ) &&
 				Credit Card <br>(Payment limit £10,000)
 			</span>
 		</label>
-		<?php $display_bacs = false; ?>
+		<?php $display_bacs = true; ?>
 		<?php if( $display_bacs ): ?>
 			<label>
 				<input type="radio" data-checked="bacs" name="payment_method" value="bacs" class="input__hidden" <?php checked( 'bacs', $current_payment_method ); ?>>
