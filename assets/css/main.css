@@ -3743,7 +3743,7 @@ table.black tr td:not(:first-child) {
   font-family: var(--font2);
 }
 
-.checkout_totals p span {
+.checkout_totals p > span:first-of-type {
   color: #868686;
   font-family: var(--family);
 }
@@ -3788,7 +3788,7 @@ table.black tr td:not(:first-child) {
   text-align: right;
 }
 
-.checkout_totals_item_right p span {
+.checkout_totals_item_right p > span:first-of-type {
   font-size: 13px;
   margin-right: 12px;
 }
@@ -6023,4 +6023,49 @@ table.black tr td:not(:first-child) {
 
 .pc-active-filter__list {
   margin-bottom: 20px;
+}
+
+/*****************/
+#menu-header-menu .menu-arrow {
+    position: relative;
+    height: 16px;
+    width: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 9px;
+    padding: 16px;
+    transition: background .43s, transform .43s;
+    display: inline-block;
+}
+#menu-header-menu .menu-arrow:hover {
+    transform: scale(1.2);
+    background-color: rgba(255, 255, 255, .1);
+}
+#menu-header-menu .menu-arrow span {
+    display: block;
+    height: 2px;
+    width: 16px;
+    background: #fff;
+    position: absolute;
+    top: calc(50% - 1px);
+    left: calc(50% - 8px);
+    transition: all 0.5s;
+}
+#menu-header-menu .menu-arrow span:last-child {
+    transform: rotate(90deg);
+    left: calc(50% - 8px);
+}
+#menu-header-menu .menu-arrow.open span:last-child {
+    transform: rotate(0deg);
+}
+#menu-header-menu .sub-menu {
+    display: none;
+    margin-top: var(--inner_top);
+    width: 100%;
+}
+#menu-header-menu li.menu-item-has-children{
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
 }
