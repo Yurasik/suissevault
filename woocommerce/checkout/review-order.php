@@ -110,8 +110,7 @@ $cart_delivery_method = WC()->session->get( 'cart_delivery_method' );
 
 		<?php do_action( 'woocommerce_review_order_before_order_total' ); ?>
 
-		<?php if ( isset( $cart_delivery_method[ 'method' ] ) ):
-			$display_storage_method = false; ?>
+		<?php if ( isset( $cart_delivery_method[ 'method' ] ) ): ?>
 			<?php if ( $cart_delivery_method[ 'method' ] == 'shipping' && $cart_delivery_method[ 'value' ] == 'free_shipping:4' ): ?>
 				<li>
 					<p class="flex__center"><span>Delivery (Free Insured UK Delivery)</span>Free</p>
@@ -120,7 +119,7 @@ $cart_delivery_method = WC()->session->get( 'cart_delivery_method' );
 				<li>
 					<p class="flex__center"><span>Fast Delivery</span><?php echo wc_price( 10 ); ?></p>
 				</li>
-			<?php elseif ( $display_storage_method && $cart_delivery_method[ 'method' ] == 'storage' && $cart_delivery_method[ 'value' ] == 'local_pickup:6' ): ?>
+			<?php elseif ( $cart_delivery_method[ 'method' ] == 'storage' && $cart_delivery_method[ 'value' ] == 'local_pickup:6' ): ?>
 				<li>
 					<p class="flex__center"><span>Storage</span><?php echo wc_price( 10 ); ?> per month</p>
 				</li>

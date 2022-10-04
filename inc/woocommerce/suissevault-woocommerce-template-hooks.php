@@ -102,6 +102,7 @@ add_filter( 'wp_footer', 'suissevault_remove_checkout_optional_fields_label_scri
 add_filter( 'woocommerce_form_field_args', 'suissevault_add_form_field_args', 10, 3 );
 // After Order Create
 add_action('woocommerce_thankyou', 'suissevault_clean_temporary_data', 10, 1);
+add_action( 'init', 'remove_bacs_from_thank_you_page', 100 );
 
 /**
  * My Account

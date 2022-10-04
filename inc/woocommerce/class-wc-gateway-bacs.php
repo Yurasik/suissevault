@@ -82,4 +82,3 @@ function bacs_thankyou_page($gateway,$order_id){
 	}
     
 }
-?>
