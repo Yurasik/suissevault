@@ -589,5 +589,16 @@ jQuery(document).ready(function ($) {
         $(this).toggleClass('_hide')
             .parent().siblings().slideToggle();
     })
+    
+    
+    /*************/
+    $(document).on('click','#menu-header-menu .menu-arrow',function(e){
+        var open = $(this).hasClass('open');
+        if(open){
+            $(this).removeClass('open').next('.sub-menu').slideUp(400);
+        }else{
+            $(this).addClass('open').next('.sub-menu').slideDown(400);
+        }
+    });
 
 }(jQuery));
