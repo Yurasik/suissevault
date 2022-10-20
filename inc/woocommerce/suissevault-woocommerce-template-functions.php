@@ -764,7 +764,7 @@ if ( !function_exists( 'dynamic_price_totals' ) ) {
 			$value[ 'data' ]->set_price( $dynamic_price );
             
             if( $dynamic_price > 13333 ){
-                $storage_price += $dynamic_price * 0.0065;
+                $storage_price += $dynamic_price * 0.00065;
             }
 
 			// Cart Storage Validation
